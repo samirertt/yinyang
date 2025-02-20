@@ -1,13 +1,17 @@
 .navBarContainer * {
     border-radius: 50px;
     padding: 10px 20px;
+    
 }
 
 .navBarContainer input {
     width: 50px;
     height: 50px;
-    transition: width 0.5s ease;
+    transition: width 1s ease;
+    
 }
+
+
 
 .navBarContainer input.expanded {
     width: 250px;
@@ -16,4 +20,3 @@
 .navBarContainer input:focus {
     width: 250px;
 }
-
