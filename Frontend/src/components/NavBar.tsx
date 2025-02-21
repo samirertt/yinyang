@@ -1,6 +1,6 @@
 import { SetStateAction, useState } from 'react';
 import "./Styles/NavBar.css";
-import "../../public/MaginifyingGlass.png";
+import "../MaginifyingGlass.png";
 
 function NavBar(props: { logged: any; })
 {
