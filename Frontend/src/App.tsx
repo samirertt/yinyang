@@ -2,18 +2,13 @@ import './App.css'
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AdminDashboard from './pages/AdminDashboard'
-import Login from './pages/login'
-const App: React.FC = () => {
+
+function App() {
+  
   return (
-    <Router>
-      <Routes>
-        
-        {/* <Route path="/chat" element={<Chat />} /> */}
-        {/* <Route path="/moderator" element={< Login/>} />*/}
-        <Route path="/Login" element={<Login />} />
-        <Route path="/AdminDashboard" element={<AdminDashboard/>}/>
-      </Routes>
-    </Router>
-  );
+    <>
+	    <AdminDashboard/>
+    </>
+  )
 }
 export default App

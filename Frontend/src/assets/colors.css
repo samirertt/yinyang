@@ -1,0 +1,21 @@
+:root {
+    --gray-light: #a9a9a9;
+    --gray-medium-light: #989898;
+    --gray-medium: #878787;
+    --gray-medium-dark: #767676;
+    --gray-dark: #656565;
+    --gray-darker: #555555;
+    --gray-even-darker: #444444;
+    --gray-almost-black: #333333;
+    --gray-near-black: #222222;
+    --gray-black: #111111;
+    --white: #ffffff;
+    --white-greyish: #f7f7f7;
+    --black: #000000;
+  }
+  
+  body {
+    background-color: var(--gray-near-black);
+    color: var(--gray-light);
+  }
+  
