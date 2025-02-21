@@ -6,7 +6,7 @@ function AdminDashboard()
 {
     return(
         <div >
-            <NavBar/>
+            <NavBar logged={true}/>
             <div className='pageContainer' style={{display:'flex', gap:'71px', alignItems:'center', justifyContent:'center'}}>
                 <SmallBoxesBox/>
                 <MostUsedBox/>
