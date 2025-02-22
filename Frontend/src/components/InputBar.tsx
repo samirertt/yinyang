@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import SendIcon from "../assets/SendIcon.svg";  // Adjust the path if needed
+import SendIcon from "../assets/SendIcon.svg"; 
 import SpeakIcon from "../assets/SpeakIcon.svg";
 
 interface InputBarProps {
@@ -22,22 +22,20 @@ export default function InputBar({ sendMessage }: InputBarProps) {
     speechSynthesis.speak(speech);
   };
 
-  // Adjust the height of the textarea based on its content
   const adjustTextareaHeight = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto"; // Reset height to recalculate
+      textareaRef.current.style.height = "auto"; 
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   };
 
-  // Adjust the textarea height whenever the message changes
   useEffect(() => {
     adjustTextareaHeight();
   }, [message]);
 
   return (
     <div 
-      className="fixed bottom-4 w-[90%] md:w-[80%] p-3 flex items-end rounded-xl shadow-lg"
+      className="fixed bottom-4 p-3 max-w-xs min-w-[510px] flex items-center rounded-xl shadow-lg"
       style={{ 
         backgroundColor: "var(--black)", 
         color: "var(--gray-light)", 
@@ -52,7 +50,7 @@ export default function InputBar({ sendMessage }: InputBarProps) {
           backgroundColor: "var(--gray-near-black)", 
           color: "var(--white)", 
           border: "1px solid var(--gray-darker)",
-          maxHeight: "150px" // Optional: Set a max height to prevent it from growing too much
+          maxHeight: "150px"
         }}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
@@ -78,12 +76,12 @@ export default function InputBar({ sendMessage }: InputBarProps) {
         </button>
       ) : (
         <button
-          onClick={handleSend}
-          className="p-2 hover:rounded-xl ml-2"
-          style={{
-            backgroundColor: "var(--white)",
-            border: "1px solid var(--gray-even-darker)",
-          }}
+        onClick={handleSend}
+        className="p-2 hover: rounded-xl ml-2"
+        style={{
+          backgroundColor: "var(--white)",
+          border: "1px solid var(--gray-even-darker)",
+        }}
         >
           <img src={SendIcon} alt="Send" className="w-6 h-6" />
         </button>

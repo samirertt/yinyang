@@ -1,34 +1,25 @@
-import { useState } from "react";
-import Chat from "./pages/Chat";
-import ChatHistory from "./components/ChatHistory";
-
-export interface Message {
-  text: string;
-  sender: "user" | "ai";
-}
-
-export default function App() {
-  const [messages, setMessages] = useState<Message[]>([
-    { text: "Hello! How can I help you today?", sender: "ai" },
-  ]);
-  const [typing, setTyping] = useState<boolean>(false);
-
-  const sendMessage = (message: string) => {
-    setMessages([...messages, { text: message, sender: "user" }]);
-    setTyping(true);
-
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { text: "This is an AI-generated response.", sender: "ai" },
-      ]);
-      setTyping(false);
-    }, 1000);
-  };
-
+import './App.css'
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import AdminDashboard from './pages/AdminDashboard'
+import AdminEditUsers from './pages/AdminEditUsers';
+import Login from './pages/Login'
+import Moderator from './pages/Moderator'
+import UserDashboard from "./pages/UserDashboard";
+const App: React.FC = () => {
   return (
-    <>
-	<h1 className="text-xl font-bold text-red-500">Hello yinyang! team </h1>
-    </>
-  )
+    <Router>
+      <Routes>
+        
+        {/* <Route path="/chat" element={<Chat />} /> */}
+        {/* <Route path="/moderator" element={< Login/>} />*/}
+        <Route path="/Login" element={<Login />} />
+        <Route path="/AdminDashboard/Characters" element={<AdminDashboard/>}/>
+        <Route path="/AdminDashboard/Edit" element={<AdminEditUsers/>}/>
+        <Route path="/Moderator" element={<Moderator/>}/>
+        <Route path="/UserDashboard" element={<UserDashboard/>}/>
+      </Routes>
+    </Router>
+  );
 }
+export default App
