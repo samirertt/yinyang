@@ -12,10 +12,11 @@
     --white: #ffffff;
     --white-greyish: #f7f7f7;
     --black: #000000;
+    --page: #212121;
   }
   
   body {
-    background-color: var(--gray-near-black);
+    background-color: var(--page);
     color: var(--gray-light);
   }
   
