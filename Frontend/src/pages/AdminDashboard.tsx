@@ -66,9 +66,9 @@ function AdminDashboard()
 
     return(
         <div >
-            <NavBar logged={true}/>
-            <div className='pageContainer' style={{display:'flex', gap:'71px', alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
-            <input type='search' onChange={(e)=>{setInputVal(e.target.value)}} className='bg-[#2F2F2F] rounded-xl p-2 pl-4 outline-none' placeholder='Search Character'></input>
+            <NavBar admin={true} logged={true}/>
+            <div className='pageContainer' style={{display:'flex', gap:'50px', alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
+            <input type='search' onChange={(e)=>{setInputVal(e.target.value)}} className='bg-[#2F2F2F] rounded-xl p-2 pl-4 outline-none mt-10' placeholder='Search Character'></input>
                 <SmallBoxesBox characters={arrayOfCharacters} inputValue={inputVal}/>
             </div>
         </div>
