@@ -2,10 +2,7 @@ import YinYang from "../assets/yinyang.png";
 
 export default function ChatHistory() {
   return (
-    <div 
-      className="w-full h-full bg-[var(--gray-black)] p-4 border-r border-[var(--gray-medium-dark)] flex flex-col"
-      style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}
-    >
+    <div>
       <div className="flex items-center gap-2 mb-4">
         <img 
           src={YinYang} 

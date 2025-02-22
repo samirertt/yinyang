@@ -3,6 +3,7 @@ import InputBar from "../components/InputBar";
 import Typing from "../components/Typing";
 import MessageBubble from "../components/MessageBubble";
 import ChatHistory from "../components/ChatHistory";
+import "../components/Styles/colors.css"
 
 export interface Message {
   text: string;
@@ -35,22 +36,17 @@ export default function Chat() {
   }, [messages, typing]);
 
   return (
-    <div className="top-0 flex h-screen bg-[var(--gray-black)] text-[var(--gray-light)] justify-center">
-      <div className="flex-none w-50 p-4 h-full">
-        <ChatHistory />
+    <div className="top-0 flex h-screen bg-[var(--page)] justify-center">
+      <div className="flex flex-col flex-1 h-full relative p-4 overflow-y-auto space-y-4 items-center">
+        {messages.map((msg, index) => (
+          <MessageBubble key={index} text={msg.text} sender={msg.sender} />
+        ))}
+        {typing && <Typing />}
+        <div ref={messagesEndRef} />
+            <div className="flex flex-col flex-1 h-full relative p-4 overflow-y-auto space-y-4 items-center">
+          <InputBar sendMessage={sendMessage} />
+        </div>
       </div>
-        {/* Add margin-top to create space for ChatHistory */}
-        <div className="flex-1 flex-col h-full relative "></div>
-          <div className="flex-grow p-4 space-y-4 overflow-y-auto flex flex-col " style={{ maxHeight: "calc(100vh - 5rem)", marginTop: '1rem' }}>
-            {messages.map((msg, index) => (
-              <MessageBubble key={index} text={msg.text} sender={msg.sender} />
-            ))}
-            {typing && <Typing />}
-            <div ref={messagesEndRef} />
-            <div ><InputBar sendMessage={sendMessage} /></div>
-            
-          </div>
-        <div/>
-      </div>
+    </div>
   );
 }
