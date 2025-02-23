@@ -25,7 +25,7 @@ export default function MessageBubble({ text, sender }: MessageProps) {
   }, [text]);
 
   return (
-    <div className={`flex flex-col items-${sender === "user" ? "end" : "start"} max-w-xs min-w-[800px]`}>
+    <div className={`flex flex-col items-${sender === "user" ? "end" : "start"} max-w-xs min-w-[800px] `}>
       <div className={`flex items-center gap-2 ${sender === "ai" ? "justify-start" : "justify-end"}`}>
         {sender === "ai" && (
           <img

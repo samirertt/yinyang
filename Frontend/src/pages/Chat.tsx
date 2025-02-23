@@ -3,7 +3,7 @@ import InputBar from "../components/InputBar";
 import Typing from "../components/Typing";
 import MessageBubble from "../components/MessageBubble";
 import SideBar from "../components/SideBar";
-import LoginNav from '../components/LoginNav'
+import ChatNav from "../components/ChatNav";
 
 
 export interface Message {
@@ -37,9 +37,12 @@ export default function Chat() {
   }, [messages, typing]);
 
   return (
-    <div className="top-0 flex h-screen bg-[var(--page)] justify-center">
-      <SideBar/>
-      <div className="flex flex-col flex-1 h-full relative p-4 overflow-y-auto space-y-4 items-center">
+    <div className="flex h-screen bg-[var(--page)] justify-center">      
+    <SideBar/>
+      <div>
+        <ChatNav/>
+      </div>
+      <div className="pt-14 flex flex-col flex-1 h-full relative p-4 overflow-y-auto space-y-4 items-center">
         {messages.map((msg, index) => (
           <MessageBubble key={index} text={msg.text} sender={msg.sender} />
         ))}
