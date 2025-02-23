@@ -15,7 +15,7 @@ const App: React.FC = () => {
         {/* */}
         {/* <Route path="/moderator" element={< Login/>} />*/}
         <Route path="/Login" element={<Login />} />
-        <Route path="/chat" element={<Chat />} /> 
+        <Route path="/Chat" element={<Chat />} /> 
         <Route path="/AdminDashboard/Characters" element={<AdminDashboard/>}/>
         <Route path="/AdminDashboard/Edit" element={<AdminEditUsers/>}/>
         <Route path="/Moderator" element={<Moderator/>}/>

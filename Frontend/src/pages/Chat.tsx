@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import InputBar from "../components/InputBar";
 import Typing from "../components/Typing";
 import MessageBubble from "../components/MessageBubble";
-import ChatHistory from "../components/ChatHistory";
-import "../components/Styles/colors.css"
+import SideBar from "../components/SideBar";
+import LoginNav from '../components/LoginNav'
+
 
 export interface Message {
   text: string;
@@ -37,13 +38,14 @@ export default function Chat() {
 
   return (
     <div className="top-0 flex h-screen bg-[var(--page)] justify-center">
+      <SideBar/>
       <div className="flex flex-col flex-1 h-full relative p-4 overflow-y-auto space-y-4 items-center">
         {messages.map((msg, index) => (
           <MessageBubble key={index} text={msg.text} sender={msg.sender} />
         ))}
         {typing && <Typing />}
         <div ref={messagesEndRef} />
-            <div className="flex flex-col flex-1 h-full relative min-h-[90px] overflow-y-auto space-y-4 items-center">
+        <div className="flex flex-col flex-1 h-full relative min-h-[90px] overflow-y-auto space-y-4 items-center">
           <InputBar sendMessage={sendMessage} />
         </div>
       </div>
