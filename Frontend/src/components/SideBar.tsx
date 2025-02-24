@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SideBar from "../assets/SideBar.svg";
 import Search from "../assets/Search.svg";
 import NewChat from "../assets/NewChat.svg";
+import ChatNav from "../components/ChatNav";
 
 // Define TypeScript interfaces for props (if needed)
 interface SidebarProps {
@@ -19,6 +20,8 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
   return (
     <div className="flex">
+      {/* Show heading before toggle button when collapsed */}
+
       {/* Toggle Button (Only shown when sidebar is collapsed) */}
       {isCollapsed && (
         <button
@@ -31,6 +34,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
         </button>
       )}
 
+      
       {/* Sidebar Content (Only shown when sidebar is not collapsed) */}
       {!isCollapsed && (
         <div
@@ -62,6 +66,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
                 </h2>
 
                 {/* Navigation Section */}
+                
                 <nav className="flex h-full w-full flex-col px-3" aria-label="Chat History">
                   {/* Header Buttons */}
                   <div className="flex justify-between flex h-[60px] items-center md:h-header-height">

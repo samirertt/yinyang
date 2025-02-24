@@ -37,15 +37,15 @@ export default function Chat() {
   }, [messages, typing]);
 
   return (
-    <div className="flex h-screen bg-[var(--page)] justify-center">      
+    <div className=" flex h-screen bg-[var(--page)] justify-center">      
     <SideBar/>
-      <div>
-        <ChatNav/>
-      </div>
-      <div className="pt-14 flex flex-col flex-1 h-full relative p-4 overflow-y-auto space-y-4 items-center">
+      <div className="flex flex-col flex-1 h-full w-full relative p-4 overflow-y-auto space-y-4 items-center">
+      <ChatNav/>
+        <div className="pt-10">
         {messages.map((msg, index) => (
           <MessageBubble key={index} text={msg.text} sender={msg.sender} />
         ))}
+        </div>
         {typing && <Typing />}
         <div ref={messagesEndRef} />
         <div className="flex flex-col flex-1 h-full relative min-h-[90px] overflow-y-auto space-y-4 items-center">
