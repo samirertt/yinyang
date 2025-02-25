@@ -1,6 +1,6 @@
 const Navbar = () => {
   return (
-    <nav className="bg-[#212121] text-white p-3 fixed w-319 z-50 top-0">
+    <nav className="bg-[#212121] text-white p-3 fixed w-315 z-50 top-0">
       <div className="max-w-8xl mx-auto flex justify-between items-center px-4 md:px-10">
         {/* Website Name (Always at the Start) */}
         <h1 className="text-3xl font-mono font-bold tracking-wide">YinYang</h1>

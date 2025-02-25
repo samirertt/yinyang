@@ -48,7 +48,7 @@ export default function Chat() {
         </div>
         {typing && <Typing />}
         <div ref={messagesEndRef} />
-        <div className="flex flex-col flex-1 h-full relative min-h-[90px] overflow-y-auto space-y-4 items-center">
+        <div className="flex flex-col flex-1 h-full relative min-h-[50px] overflow-y-auto space-y-4 items-center">
           <InputBar sendMessage={sendMessage} />
         </div>
       </div>

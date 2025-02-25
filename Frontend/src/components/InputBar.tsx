@@ -35,7 +35,7 @@ export default function InputBar({ sendMessage }: InputBarProps) {
 
   return (
     <div 
-      className="fixed bottom-4 p-2 min-h-[80px] max-w-xs min-w-[800px] flex items-center  rounded-xl shadow-lg"
+      className="fixed bottom-4 p-2 min-h-[60px] max-w-xs min-w-[800px] flex items-center  rounded-xl shadow-lg"
       style={{ 
         backgroundColor: "var(--black)", 
         color: "var(--gray-light)", 
@@ -45,15 +45,15 @@ export default function InputBar({ sendMessage }: InputBarProps) {
 
       <textarea
         ref={textareaRef}
-        className="flex-1 rounded-xl min-h-[90px] outline-none resize-none overflow-hidden" 
+        className="flex-1 rounded-xl min-h-[20px] outline-none resize-none overflow-hidden" 
   placeholder="Type a message..."
   style={{ 
     position: "relative",
     backgroundColor: "var(--Black)", 
     color: "var(--white)", 
     border: "1px solid var(--black)",
-    maxHeight: "150px",
-    padding: "8px", 
+    maxHeight: "40px",
+    padding: "4px", 
     textAlign: "left",
     verticalAlign: "top"
   }}
