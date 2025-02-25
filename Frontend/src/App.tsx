@@ -7,7 +7,7 @@ import Login from './pages/Login';
 import Moderator from './pages/Moderator';
 import Chat from './pages/Chat';
 import SignupPage from './pages/SignUpPage';
-
+import UserDashboard from "./pages/UserDashboard";
 const App: React.FC = () => {
   return (
     <Router>
@@ -15,9 +15,10 @@ const App: React.FC = () => {
         <Route path="/Login" element={<Login />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/SignUp" element={<SignupPage />} />
-        <Route path="/AdminDashboard/Characters" element={<AdminDashboard />} />
-        <Route path="/AdminDashboard/Edit" element={<AdminEditUsers />} />
-        <Route path="/Moderator" element={<Moderator />} />
+        <Route path="/AdminDashboard/Characters" element={<AdminDashboard/>}/>
+        <Route path="/AdminDashboard/Edit" element={<AdminEditUsers/>}/>
+        <Route path="/Moderator" element={<Moderator/>}/>
+        <Route path="/UserDashboard" element={<UserDashboard/>}/>
       </Routes>
     </Router>
   );
