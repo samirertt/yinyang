@@ -18,16 +18,16 @@ const UserAvatar = ({
   return (
     <div className="flex flex-col items-start gap-2 pl-6 ">
       <div>
-        <p>Welcome back,</p>
+        <p className="text-xm">Welcome back,</p>
       </div>
-      <div className="flex flex-row space-x-4">
+      <div className="flex flex-row space-x-4 ">
         <img
           src={image_path}
           alt={name}
-          className="w-10 h-10 rounded-full object-cover bg-white"
+          className="w-7 h-7 rounded-full object-cover bg-white"
         />
         <p
-          className="text-3xl text-[var(--white)] mt-1 whitespace-pre-wrap break-words cursor-pointer"
+          className="text-xl text-[var(--white)] mt-1 whitespace-pre-wrap break-words cursor-pointer"
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
         >

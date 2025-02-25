@@ -1,17 +1,22 @@
 import { useState } from "react";
 import YinYang from "../../assets/yinyang.png";
 import { Trash2, Menu, X } from "lucide-react";
-import Avatar from "../../assets/Avatar.png";
+
+type Chat = {
+  name: string;
+  image: string;
+};
 
 
 //This is the chat history of the user
-const UserRecentChats = () => {
+const UserRecentChats = ({
+  chatList,
+  handleDelete,
+}: {
+  chatList: Chat[];
+  handleDelete: (name: string) => void;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [buttons, setButtons] = useState(["Ustaz","Teca","Samir","Luay", "Ustaz"]);
-
-  const handleDelete = (buttonName: string) => {
-    setButtons((prevButtons) => prevButtons.filter((name) => name !== buttonName));
-  };
 
   return (
     <div className="relative ">
@@ -19,7 +24,10 @@ const UserRecentChats = () => {
         onClick={() => setIsOpen(true)}
         className="fixed top-4 left-4 text-[var(--white)] px-4 py-2 rounded hover:bg-[#3a3a3a]"
       >
-        <Menu size={24} className="text-white hover:text-gray-300 cursor-pointer"/>
+        <Menu
+          size={24}
+          className="text-white hover:text-gray-300 cursor-pointer"
+        />
       </button>
 
       {isOpen && (
@@ -35,7 +43,7 @@ const UserRecentChats = () => {
           onClick={() => setIsOpen(false)}
           className="absolute top-4 right-4 bg-[var(--gray-darker)] text-[var(--white)] px-2 py-1 rounded hover:bg-[var(--gray-medium-dark)]"
         >
-          <X/>
+          <X />
         </button>
 
         <div className="w-full h-full p-4 flex flex-col">
@@ -51,6 +59,7 @@ const UserRecentChats = () => {
               </h2>
             </div>
           </div>
+
           <div
             style={{
               maxHeight: "300px",
@@ -59,18 +68,19 @@ const UserRecentChats = () => {
               scrollbarWidth: "none",
             }}
           >
-            {buttons.map((name) => (
-        <ChatCard key={name} name={name} onDelete={() => handleDelete(name)} image_path={Avatar}/>
-      ))}
+            {chatList.map((chat, index) => (
+              <ChatCard
+                key={index}
+                name={chat.name}
+                image_path={chat.image}
+                onDelete={() => handleDelete(chat.name)}
+              />
+            ))}
           </div>
 
           <div className="flex flex-col">
-            <button>
-              Settings
-            </button>
-            <button>
-              Logout
-            </button>
+            <button>Settings</button>
+            <button>Logout</button>
           </div>
         </div>
       </div>
@@ -81,11 +91,11 @@ const UserRecentChats = () => {
 const ChatCard = ({
   name,
   image_path,
-  onDelete
+  onDelete,
 }: {
   name: string;
   image_path: string;
-  onDelete: () => void
+  onDelete: () => void;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -99,30 +109,32 @@ const ChatCard = ({
         setShowConfirm(false);
       }}
     >
-      
       <button className="w-full text-left p-2 text-[var(--white)] rounded hover:bg-[#3a3a3a] relative flex items-center justify-start">
-      <img src={image_path} alt="Character" className=" bg-white rounded-full flex flex-row h-10 w-10 mr-2 "/>
+        <img
+          src={image_path}
+          alt="Character"
+          className=" bg-white rounded-full flex flex-row h-10 w-10 mr-2 "
+        />
         <span>{name}</span>
       </button>
 
       {isHovered && !showConfirm && (
         <button
-        onClick={() => setShowConfirm(true)}
-        className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-700 p-1 rounded-full hover:bg-red-600 transition-all"
-      >
-        <Trash2 size={16} className="text-white" />
+          onClick={() => setShowConfirm(true)}
+          className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-700 p-1 rounded-full hover:bg-red-600 transition-all"
+        >
+          <Trash2 size={16} className="text-white" />
         </button>
       )}
 
       {showConfirm && (
-        <div className=" absolute left-full top-0 bg-gray-800 text-white text-sm p-2 rounded shadow-lg z-10000 ml-2 "
-        onClick={onDelete}>
-        <p>You will remove your chat with this character.</p>
-      </div>
-      )
-
-      }
-      
+        <div
+          className=" absolute top-0 bg-gray-800 text-white text-sm p-2 rounded shadow-lg  ml-2 "
+          onClick={onDelete}
+        >
+          <p>You will remove your chat with this character.</p>
+        </div>
+      )}
     </div>
   );
 };

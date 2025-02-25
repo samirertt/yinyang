@@ -1,4 +1,7 @@
 const SuggestionBanner = () => {
+    return (
+        <div>Suggestion Banner</div>
+    );
 
 }
 

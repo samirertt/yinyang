@@ -7,7 +7,7 @@ function truncateText(text: string, maxCharsPerLine = 10, maxLines = 3) {
     : text;
 }
 
-const CharacterGrid = () => {
+const CharacterGrid = ({ onCharacterSelect }: { onCharacterSelect: (characterName: string, characterImg: string) => void }) => {
   const arrayOfCharacters = [
     {
       img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352",
@@ -75,8 +75,11 @@ const CharacterGrid = () => {
     },
   ];
   return (
-    <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-20">
+    <div className="space-y-0">
+      {/* <div className="flex items-start ml-20 "> */}
+      <p className="text-xl text-white mt-10 flex items-start ml-10 ">Featured</p>
+      {/* </div> */}
+      <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-10 h-fit">
         {arrayOfCharacters.map((character) => (
           <CharacterInfo
             key={character.Id}
@@ -84,6 +87,7 @@ const CharacterGrid = () => {
             name={character.name}
             details={character.details}
             usage={character.usage}
+            onClick={() => onCharacterSelect(character.name, character.img)}
           />
         ))}
       </div>
@@ -96,20 +100,23 @@ const CharacterInfo = ({
   name,
   details,
   usage,
+  onClick,
 }: {
   img_path: string;
   name: string;
   details: string;
   usage: number;
+  onClick: () => void;
 }) => {
   return (
-    <div className="flex w-70 h-40 items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden ">
-      <img src={img_path} alt={name} className="w-25 h-25 rounded-2xl " />
+    <div className="flex w-70 h-30 items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden "
+    onClick={onClick}>
+      <img src={img_path} alt={name} className="w-20 h-25 rounded-2xl " />
 
       <div className="ml-4 flex-1">
-        <h2 className="text-lg font-bold mb-1 text-white text-left">{name}</h2>
-        <p className="text-gray-300 text-left">By: Me</p>
-        <p className="text-sm mb-2 text-white text-left">
+        <h2 className="text-sm font-bold mb-1 text-white text-left">{name}</h2>
+        <p className="text-gray-300 text-left text-xs">By: Me</p>
+        <p className=" mb-2 text-white text-left text-xs">
           {truncateText(details)}
         </p>
         <span className="text-gray-500 text-xs flex items-center gap-1">

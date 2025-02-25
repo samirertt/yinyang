@@ -38,7 +38,7 @@ function SearchBar() {
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={handleChange}
-        className={`transition-all duration-300 ease-in-out bg-[#202024] text-white rounded-lg px-10 py-2 outline-none focus:ring-2 focus:ring-gray-400
+        className={`transition-all duration-300 ease-in-out bg-[#212121] text-white rounded-lg px-10 py-2 outline-none focus:ring-2 focus:ring-gray-400
           ${isExpanded ? "w-64" : "w-10 cursor-pointer"}`}
         type="search"
         placeholder={isExpanded ? "Search" : ""}
@@ -48,13 +48,27 @@ function SearchBar() {
 }
 
 function UserCharactertSelection() {
+  const [chatList, setChatList] = useState<{ name: string; image: string }[]>([]);
+
+
+  const addChat = (characterName: string, characterImage: string) => {
+    if (!chatList.some(chat => chat.name === characterName)) {
+      setChatList((prevChats) => [...prevChats, { name: characterName, image: characterImage }]);
+    }
+  };
+
+  const handleDelete = (buttonName: string) => {
+    setChatList((prevChat) =>
+      prevChat.filter((name) => name.name !== buttonName)
+    );
+  };
   return (
     <div className="bg-[#212121] ">
       <div className="flex flex-col bg-[#212121]">
-        <UserRecentChats />
+        <UserRecentChats chatList={chatList} handleDelete={handleDelete}/>
       </div>
       <div className="mt-5 items-center ml-25 mr-25 h-screen ">
-        <div className="flex justify-between items-center w-full px-4 py-2 bg-[#202024] ">
+        <div className="flex justify-between items-center w-full px-4 py-2 bg-[#212121] ">
           <div className="flex items-center ">
             <UserAvatar name="John Doe" image_path={Avatar} />
           </div>
@@ -64,7 +78,7 @@ function UserCharactertSelection() {
           </div>
         </div>
         <SuggestionBanner/>
-        <CharacterGrid />
+        <CharacterGrid onCharacterSelect={addChat}/>
       </div>
     </div>
   );
