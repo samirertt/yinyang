@@ -38,7 +38,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
       {/* Sidebar Content (Only shown when sidebar is not collapsed) */}
       {!isCollapsed && (
         <div
-          className={`z-[21] flex-shrink-0 overflow-x-hidden bg-token-sidebar-surface-primary max-md:!w-0 transition-all duration-300 ${
+          className={`z-[21] flex-shrink-0 overflow-x-hidden bg-token-sidebar-surface-primary max-md:!w-0 transition-all duration-600 ${
             isCollapsed ? "w-0" : "w-[260px]"
           }`}
           style={{ visibility: "visible", willChange: "auto", backgroundColor: "var(--gray-black)"}}
@@ -46,7 +46,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
           <div className="h-full w-[260px]">
             <div className="flex h-full min-h-0 flex-col">
               {/* Draggable Header */}
-              <div className="draggable relative h-full w-full flex-1 items-start border-white/20">
+              <div className="draggable relative h-full w-full flex-1 items-start border-white/20 ">
                 {/* Hidden Heading for Accessibility */}
                 <h2
                   style={{
