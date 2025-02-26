@@ -109,7 +109,7 @@ const ChatCard = ({
         setShowConfirm(false);
       }}
     >
-      <button className="w-full text-left p-2 text-[var(--white)] rounded hover:bg-[#3a3a3a] relative flex items-center justify-start">
+      <button className="w-full text-left p-2 text-[var(--white)] rounded hover:bg-[#3a3a3a] relative flex items-center justify-start gap-2">
         <img
           src={image_path}
           alt="Character"

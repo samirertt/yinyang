@@ -76,9 +76,9 @@ const CharacterGrid = ({ onCharacterSelect }: { onCharacterSelect: (characterNam
   ];
   return (
     <div className="space-y-0">
-      {/* <div className="flex items-start ml-20 "> */}
+      
       <p className="text-xl text-white mt-10 flex items-start ml-10 ">Featured</p>
-      {/* </div> */}
+  
       <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-10 h-fit">
         {arrayOfCharacters.map((character) => (
           <CharacterInfo
@@ -109,7 +109,7 @@ const CharacterInfo = ({
   onClick: () => void;
 }) => {
   return (
-    <div className="flex w-70 h-30 items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden "
+    <div className="flex w-75 h-30 items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden cursor-pointer"
     onClick={onClick}>
       <img src={img_path} alt={name} className="w-20 h-25 rounded-2xl " />
 

@@ -67,8 +67,8 @@ function UserCharactertSelection() {
       <div className="flex flex-col bg-[#212121]">
         <UserRecentChats chatList={chatList} handleDelete={handleDelete}/>
       </div>
-      <div className="mt-5 items-center ml-25 mr-25 h-screen ">
-        <div className="flex justify-between items-center w-full px-4 py-2 bg-[#212121] ">
+      <div className="mt-5 items-center ml-25 mr-25    ">
+        <div className="flex justify-between items-center w-full px-4 py-2 pb-8 bg-[#212121] ">
           <div className="flex items-center ">
             <UserAvatar name="John Doe" image_path={Avatar} />
           </div>
