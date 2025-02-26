@@ -1,12 +1,19 @@
 import { useState } from "react";
 import YinYang from "../../assets/yinyang.png";
-import { Trash2, Menu, X } from "lucide-react";
+import {
+  Trash2,
+  Menu,
+  X,
+  ArrowDown,
+  User,
+  Settings,
+  LogOut,
+} from "lucide-react";
 
 type Chat = {
   name: string;
   image: string;
 };
-
 
 //This is the chat history of the user
 const UserRecentChats = ({
@@ -47,7 +54,7 @@ const UserRecentChats = ({
         </button>
 
         <div className="w-full h-full p-4 flex flex-col">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 ">
             <div className="flex items-center gap-2 w-10 h-10 mb-8 mt-10">
               <img
                 src={YinYang}
@@ -60,6 +67,7 @@ const UserRecentChats = ({
             </div>
           </div>
 
+          <h2 className="text-xm mb-5">Recent Chats</h2>
           <div
             style={{
               maxHeight: "300px",
@@ -78,12 +86,60 @@ const UserRecentChats = ({
             ))}
           </div>
 
-          <div className="flex flex-col">
-            <button>Settings</button>
-            <button>Logout</button>
+          <div className="relative h-full w-full">
+            <LoginInfo />
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const LoginInfo = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="absolute bottom-0 left-0 flex flex-col items-center w-55">
+      {/* Context Menu (Positioned above the button) */}
+      {isOpen && (
+        <div className="absolute bottom-full mb-2 w-55 bg-[#212121]rounded-2xl shadow-lg p-3">
+          <PopUpMenuItems icon={User} label="Profile" />
+          <PopUpMenuItems icon={Settings} label="Settings" />
+          <PopUpMenuItems icon={LogOut} label="Logout" />
+        </div>
+      )}
+
+      {/* Login Info Button */}
+      <div
+        className="flex items-center gap-10 hover:bg-[#454545] h-15 w-55 rounded-2xl p-3 cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className="flex items-center gap-3">
+          <img src={YinYang} alt="YinYang Logo" className="h-8 w-8 ml-3" />
+          <p>User Name</p>
+        </div>
+        {/* Arrow with rotation animation */}
+        <div
+          className={`transition-transform duration-300 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        >
+          <ArrowDown size={18} />
+        </div>
+      </div>
+    </div>
+  );
+};
+type MenuItemsProps ={
+  icon: React.ElementType;
+  label: string;
+};
+
+const PopUpMenuItems = ({ icon: Icon, label }: MenuItemsProps) => {
+  return (
+    <div className="flex justify-between hover:bg-[#454545] p-1 rounded-2xl w-full">
+      <p className="text-xm ml-1">{label}</p>
+      <Icon size={20} className="mr-1"/>
     </div>
   );
 };

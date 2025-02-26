@@ -41,7 +41,7 @@ const SuggestionBanner = () => {
           id="gif-banner"
           src={gifs[currentGif]}
           alt="Animated Banner"
-          className="h-full w-full  rounded-2xl mr-4"
+          className="h-full w-full rounded-2xl mr-4"
         />
         <div className="flex flex-row ">
           {characters.map((character) => (
@@ -86,9 +86,10 @@ const BannerCards = ({
     >
       <div className="flex items-center justify-start gap-5">
         <img src={img} alt={name} className="h-12 w-12 rounded-full" />
-        <h2 className="text-gray-200 w-fit align-middle">{name}</h2>
+        <h2 className="text-white font-bold text-xm w-fit align-middle">{name}</h2>
       </div>
-      <p>{quote}</p>
+      <p className="text-white font-bold text-center">{quote}</p>
+      
     </div>
   );
 };
