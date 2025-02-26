@@ -48,7 +48,7 @@ const UserRecentChats = ({
       >
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute top-4 right-4 bg-[var(--gray-darker)] text-[var(--white)] px-2 py-1 rounded hover:bg-[var(--gray-medium-dark)]"
+          className="absolute top-4 right-4 text-[var(--white)] px-2 py-1 rounded hover:bg-[var(--gray-medium-dark)]"
         >
           <X />
         </button>
@@ -68,7 +68,7 @@ const UserRecentChats = ({
           </div>
 
           <h2 className="text-xm mb-5">Recent Chats</h2>
-          <div
+          <div className="h-300"
             style={{
               maxHeight: "300px",
               overflowY: "scroll",
@@ -185,7 +185,7 @@ const ChatCard = ({
 
       {showConfirm && (
         <div
-          className=" absolute top-0 bg-gray-800 text-white text-sm p-2 rounded shadow-lg  ml-2 "
+          className=" absolute top-0 bg-gray-800 text-white text-sm p-2 rounded shadow-lg  ml-2 cursor-pointer"
           onClick={onDelete}
         >
           <p>You will remove your chat with this character.</p>

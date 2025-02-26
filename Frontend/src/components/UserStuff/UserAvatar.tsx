@@ -1,6 +1,5 @@
 import { useState } from "react";
 const truncateText = (text: string, maxCharsPerLine = 10, maxLines = 3) => {
-  text = "Welcome, " + text;
   const maxTotalChars = maxCharsPerLine * maxLines; // 10 * 3 = 30 characters max
   return text.length > maxTotalChars
     ? text.slice(0, maxTotalChars) + "..."
