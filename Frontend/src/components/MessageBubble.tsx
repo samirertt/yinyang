@@ -3,6 +3,8 @@ import Avatar from "../assets/Avatar.png";
 import Delete from "../assets/Delete.svg";
 import Edit from "../assets/Edit.svg";
 import Copy from "../assets/Copy.svg";
+import Emi from "../assets/Emi.jpg";
+
 
 interface MessageProps {
   text: string;
@@ -43,7 +45,7 @@ export default function MessageBubble({ text, sender }: MessageProps) {
       <div className={`flex items-center gap-2 pt-2 ${sender === "ai" ? "justify-start" : "justify-end"}`}>
         {sender === "ai" && (
           <img
-            src={Avatar}
+            src={Emi}
             alt="Avatar"
             className="w-8 h-8 rounded-xl"
             style={{
@@ -57,7 +59,7 @@ export default function MessageBubble({ text, sender }: MessageProps) {
           className={`p-3 rounded-xl max-w-[800px] text-mm overflow-hidden ${
             sender === "user"
               ? "bg-[var(--gray-almost-black)] text-[var(--white)] border border-[var(--gray-darker)]"
-              : "bg-[var(--page)] text-[var(--white)]"
+              : "bg-[var(--page)] text-[var(--white)] border border-[var(--gray-darker)]"
           }`}
           style={{
             whiteSpace: "pre-wrap",
