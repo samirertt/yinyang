@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import CharacterCard from "./CharacterCard";
 
 function SmallBoxesBox(props: { inputValue: any; characters:Array<{ img: string; name: string; Id: number; details: string; usage:number; }>  })
@@ -6,6 +7,9 @@ function SmallBoxesBox(props: { inputValue: any; characters:Array<{ img: string;
     const searchVal= props.inputValue;
     
     const characters = props.characters;
+    const numPerPage = 4;
+    
+    const [page,setPage] = useState(0);
 
     function filterArr(arr:Array<{ img: string; name: string; Id: number; details: string; usage:number; }>)
     {
@@ -14,11 +18,30 @@ function SmallBoxesBox(props: { inputValue: any; characters:Array<{ img: string;
             {
                 
                 bar = arr.filter(item => item.name.toLowerCase().includes(searchVal.toLowerCase()));
-                console.log(bar);
-                console.log(searchVal);
+                
             }
 
+        
         return bar;
+    }
+
+    function pageIncrease()
+    {
+        if(page+1 < Math.max(1,filterArr(characters).length/numPerPage))
+        {
+            setPage(page+1);
+        }
+        
+    }
+
+    function pageDecrease()
+    {
+        if(page >= Math.min(1,Math.ceil(filterArr(characters).length/numPerPage)))
+        {
+            setPage(page-1);
+
+        }
+
     }
 
     function sortCharArray(arr:Array<{ img: string; name: string; Id: number; details: string; usage:number; }>)
@@ -46,10 +69,22 @@ function SmallBoxesBox(props: { inputValue: any; characters:Array<{ img: string;
         return arr;
     }
     return (
-        <div className="grid grid-cols-4 gap-6 max-w-[75%]">
-            {sortCharArray(filterArr(characters)).map((index)=>(
+        <div className='flex flex-col gap-5 items-center'>
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6 ">
+            {sortCharArray(filterArr(characters).slice(numPerPage*page,numPerPage*(page+1))).map((index)=>(
                 <CharacterCard key={index.Id} {...index}/>
             ))}
+            
+            </div>
+            <div className='flex gap-3 items-center'>
+                <button className='bg-[#efefef] rounded-full p-[20px] ' onClick={pageDecrease}> 
+                   <img src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000" className='w-5' alt="" />
+                </button>
+                <button className='bg-[#efefef] rounded-full p-[20px] ' onClick={pageIncrease}> 
+                   <img src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000" className='w-5 rotate-180' alt="" />
+                </button>
+            </div>
+            
         </div>
     )
 }

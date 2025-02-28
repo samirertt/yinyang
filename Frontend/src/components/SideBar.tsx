@@ -50,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
           <div className="h-full w-[230px]">
             <div className="flex h-full min-h-0 flex-col">
               {/* Draggable Header */}
-              <div className="draggable relative h-full w-full flex-1 items-start border-white/20">
+              <div className="draggable relative h-full w-full flex-1 items-start border-white/20 ">
                 {/* Hidden Heading for Accessibility */}
                 <h2
                   style={{
