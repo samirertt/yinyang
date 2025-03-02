@@ -3,9 +3,10 @@ import Avatar from "../assets/Avatar.png";
 import UserRecentChats from "../components/UserStuff/UserRecentChats";
 import CharacterGrid from "../components/UserStuff/CharacterGrid";
 import { useState, SetStateAction } from "react";
+import searchIcon from "../MaginifyingGlass.png"
 
 import SuggestionBanner from "../components/UserStuff/SuggestionBanner";
-import { Filter, Search } from "lucide-react";
+import { Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function SearchBar() {
