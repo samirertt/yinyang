@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import SideBar from "../assets/SideBar.svg";
 import Search from "../assets/Search.svg";
 import NewChat from "../assets/NewChat.svg";
-import ChatNav from "../components/ChatNav";
+import Emi from "../assets/Emi.jpg";
+import History from "../assets/History.svg";
+import Pin from "../assets/Pin.svg";
+
 
 // Define TypeScript interfaces for props (if needed)
 interface SidebarProps {
@@ -25,7 +28,8 @@ const Sidebar: React.FC<SidebarProps> = () => {
       {/* Toggle Button (Only shown when sidebar is collapsed) */}
       {isCollapsed && (
         <button
-          className="fixed z-30 h-15 rounded-lg px-5 text-token-text-secondary focus-visible:bg-token-surface-hover focus-visible:outline-0 enabled:hover:bg-token-surface-hover disabled:text-token-text-quaternary no-draggable"
+        className="fixed z-30 h-15 rounded-lg px-5 text-token-text-secondary focus-visible:bg-token-surface-hover 
+        focus-visible:outline-0 enabled:hover:bg-token-surface-hover disabled:text-token-text-quaternary no-draggable transition-all duration-1000 ease-in-out"          
           aria-label="Toggle SideBar"
           data-testid="toggle-sidebar-button"
           onClick={toggleCollapse}
@@ -38,15 +42,15 @@ const Sidebar: React.FC<SidebarProps> = () => {
       {/* Sidebar Content (Only shown when sidebar is not collapsed) */}
       {!isCollapsed && (
         <div
-          className={`z-[21] flex-shrink-0 overflow-x-hidden bg-token-sidebar-surface-primary max-md:!w-0 transition-all duration-300 ${
-            isCollapsed ? "w-0" : "w-[260px]"
-          }`}
+        className={`z-[21] flex-shrink-0 overflow-x-hidden bg-token-sidebar-surface-primary max-md:!w-0 transition-all duration-1000 ease-in-out ${
+          isCollapsed ? "w-0 opacity-0" : "w-[230px] opacity-100"
+        }`}
           style={{ visibility: "visible", willChange: "auto", backgroundColor: "var(--gray-black)"}}
         >
-          <div className="h-full w-[260px]">
+          <div className="h-full w-[230px]">
             <div className="flex h-full min-h-0 flex-col">
               {/* Draggable Header */}
-              <div className="draggable relative h-full w-full flex-1 items-start border-white/20">
+              <div className="draggable relative h-full w-full flex-1 items-start border-white/20 ">
                 {/* Hidden Heading for Accessibility */}
                 <h2
                   style={{
@@ -69,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
                 
                 <nav className="flex h-full w-full flex-col px-3" aria-label="Chat History">
                   {/* Header Buttons */}
-                  <div className="flex justify-between flex h-[60px] items-center md:h-header-height">
+                  <div className="flex justify-between h-[60px] items-center md:h-header-height">
                     {/* Close Sidebar Button */}
                     <span className="flex" data-state="closed">
                       <button
@@ -151,7 +155,44 @@ const Sidebar: React.FC<SidebarProps> = () => {
           </div>
         </div>
       )}
-      </div>
+      {/* Right Sidebar (Adjusting width based on left sidebar state) */}
+      <div
+        className={`fixed top-15 right-0 transition-all duration-300 bg-[var(--page)] text-[var(--white)] border border-[var(--gray-black)] h-screen overflow-hidden ${
+          isCollapsed ? "w-[300px]" : "w-[230px]"
+        }`}
+      >
+         <div className="p-4 border-b border-[var(--gray-black)] flex flex-col items-center">
+    <img
+      src={Emi}
+      alt="Avatar"
+      className="w-38 h-38 rounded-full border-2 border-[var(--gray-black)]"
+    />
+    <h2 className="text-xl font-semibold mt-2 text-center">Emilia Clarke</h2>
+  </div>
+
+  <div className="px-4 py-3">
+    <h3 className="text-xs font-semibold text-token-text-primary">Bio</h3>
+    <p className="text-xm font-medium mt-1 text-justify">
+      Emilia Clarke is a British actress best known as Daenerys Targaryen in Game of Thrones. A versatile and beloved talent, she continues to captivate audiences worldwide.
+    </p>
+  </div>
+
+  <nav className="mt-4 space-y-2 font-semibold px-4">
+    <button className="flex items-center gap-3 w-full px-4 py-2 rounded-md transition hover:bg-[var(--gray-light)]">
+      <img src={NewChat} alt="New Chat icon" className="w-6 h-6" />
+      <span>New chat</span>
+    </button>
+    <button className="flex items-center gap-3 w-full px-4 py-2 rounded-md transition hover:bg-[var(--gray-light)]">
+      <img src={History} alt="History icon" className="w-6 h-6" />
+      <span>History</span>
+    </button>
+    <button className="flex items-center gap-3 w-full px-4 py-2 rounded-md transition hover:bg-[var(--gray-light)]">
+      <img src={Pin} alt="Pin icon" className="w-6 h-6" />
+      <span>Pinned messages</span>
+    </button>
+  </nav>
+</div>
+    </div>
   );
 };
 

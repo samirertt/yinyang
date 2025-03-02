@@ -4,7 +4,6 @@ import Mitsuri from "../../assets/gifs/mitsuri.gif";
 import Todo from "../../assets/gifs/todo.gif";
 import LuffyPortrait from "../../assets/luffy_potrait.jpeg";
 import ObitoPotrait from "../../assets/obito_portrait.jpeg";
-
 import { useEffect, useState } from "react";
 
 const SuggestionBanner = () => {
@@ -23,29 +22,35 @@ const SuggestionBanner = () => {
     },
   ];
   const gifs = [Obito, Luffy, Mitsuri, Todo];
-  const [currentGif, setcurrentGif] = useState(0);
+  const [currentGif, setCurrentGif] = useState(0);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setcurrentGif((prevIndex) => (prevIndex + 1) % gifs.length);
+      setCurrentGif((prevIndex) => (prevIndex + 1) % gifs.length);
     }, 1000);
     return () => clearInterval(intervalId);
-  });
+  }, [gifs.length]);
+
   return (
-    <div className="ml-10 ">
-      <p className="text-xl text-white flex items-start pb-5 pt-8 ">
-        Top Choices
-      </p>
-      <div className="relative w-full h-75 flex justify-start items-start overflow-hidden flex-row ">
+    <div className="mx-2 sm:mx-4 md:ml-10">
+      <p className="text-lg sm:text-xl text-white pb-4 sm:pb-5 pt-6 sm:pt-8">Top Choices</p>
+      <div className="relative w-full flex flex-col md:flex-row justify-start items-start overflow-hidden gap-4 md:gap-0">
         <img
           id="gif-banner"
           src={gifs[currentGif]}
           alt="Animated Banner"
-          className="h-full w-full rounded-2xl mr-4"
+          className="h-40 sm:h-60 md:h-75 w-full object-cover rounded-2xl mr-0 md:mr-4"
         />
-        <div className="flex flex-row ">
+        
+        {/* Blurry Full-Width Background Card */}
+        <div className="absolute inset-0 w-full h-full flex justify-center items-center">
+          <div className="w-full h-40 sm:h-60 md:h-75 bg-[#313131] opacity-30 blur-3xl rounded-2xl"></div>
+        </div>
+        
+        <div className="flex flex-col md:flex-row gap-4 md:gap-0 relative z-10">
           {characters.map((character) => (
             <BannerCards
+              key={character.name}
               name={character.name}
               img={character.img}
               quote={character.quote}
@@ -69,8 +74,7 @@ const BannerCards = ({
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { left, top, width, height } =
-      e.currentTarget.getBoundingClientRect();
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - left) / width) * 100;
     const y = ((e.clientY - top) / height) * 100;
     setMousePos({ x, y });
@@ -78,19 +82,19 @@ const BannerCards = ({
 
   return (
     <div
-      className="h-75 w-70 ml-10 mr-10 bg-[#313131] p-4 rounded-3xl cursor-pointer transition-all duration-300 flex flex-col gap-7"
+      className="w-full md:w-80 h-auto bg-[#313131] p-4 sm:p-6 rounded-3xl cursor-pointer transition-all duration-300 flex flex-col gap-4 sm:gap-7 mx-0 md:mx-10"
       onMouseMove={handleMouseMove}
       style={{
         background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(255,255,255,0.3), rgba(49,49,49,1))`,
       }}
     >
-      <div className="flex items-center justify-start gap-5">
-        <img src={img} alt={name} className="h-12 w-12 rounded-full" />
-        <h2 className="text-white font-bold text-xm w-fit align-middle">{name}</h2>
+      <div className="flex items-center justify-start gap-3 sm:gap-5">
+        <img src={img} alt={name} className="h-10 w-10 sm:h-12 sm:w-12 rounded-full" />
+        <h2 className="text-white font-bold text-sm sm:text-base md:text-lg">{name}</h2>
       </div>
-      <p className="text-white font-bold text-center">{quote}</p>
-      
+      <p className="text-white font-bold text-sm sm:text-base text-center">{quote}</p>
     </div>
   );
 };
+
 export default SuggestionBanner;

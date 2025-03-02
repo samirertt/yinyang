@@ -26,7 +26,7 @@ export default function Chat() {
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { text: "This is an AI-generated response.", sender: "ai" },
+        { text: "Maybe next time Honey ", sender: "ai" },
       ]);
       setTyping(false);
     }, 1000);
@@ -37,19 +37,21 @@ export default function Chat() {
   }, [messages, typing]);
 
   return (
-    <div className=" flex h-screen bg-[var(--page)] justify-center">      
-    <SideBar/>
-      <div className="flex flex-col flex-1 h-full w-full relative p-4 overflow-y-auto space-y-4 items-center">
-      <ChatNav/>
-        <div className="pt-10">
-        {messages.map((msg, index) => (
-          <MessageBubble key={index} text={msg.text} sender={msg.sender} />
-        ))}
-        </div>
-        {typing && <Typing />}
-        <div ref={messagesEndRef} />
-        <div className="flex flex-col flex-1 h-full relative min-h-[50px] overflow-y-auto space-y-4 items-center">
-          <InputBar sendMessage={sendMessage} />
+    <div>
+      
+      <div className=" flex h-screen bg-[var(--page)] justify-center ">      
+      <SideBar/>
+        <div className="flex flex-col flex-1 h-full w-full relative p-4 overflow-y-auto space-y-4 items-center">
+        <ChatNav/>
+          <div className="pt-10 w-250">
+          {messages.map((msg, index) => (
+            <MessageBubble key={index} text={msg.text} sender={msg.sender} />
+          ))}
+            <InputBar sendMessage={sendMessage} />
+          </div>
+          {typing && <Typing />}
+          <div ref={messagesEndRef} />
+          
         </div>
       </div>
     </div>
