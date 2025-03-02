@@ -71,7 +71,7 @@ export default function InputBar({ sendMessage }: InputBarProps) {
       {message.trim() === "" ? (
         <button
           onClick={handleSpeak}
-          className="p-2 hover: rounded-xl ml-2"
+          className="p-2 hover: rounded-xl ml-2 cursor-pointer"
           style={{
             backgroundColor: "var(--white)",
             border: "1px solid var(--gray-even-darker)",
@@ -82,7 +82,7 @@ export default function InputBar({ sendMessage }: InputBarProps) {
       ) : (
         <button
         onClick={handleSend}
-        className="p-2 hover: rounded-xl ml-2"
+        className="p-2 hover: rounded-xl ml-2 cursor-pointer"
         style={{
           backgroundColor: "var(--white)",
           border: "1px solid var(--gray-even-darker)",

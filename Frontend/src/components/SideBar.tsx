@@ -5,6 +5,7 @@ import NewChat from "../assets/NewChat.svg";
 import Emi from "../assets/Emi.jpg";
 import History from "../assets/History.svg";
 import Pin from "../assets/Pin.svg";
+import Cross from "../assets/Cross.svg";
 
 
 // Define TypeScript interfaces for props (if needed)
@@ -15,6 +16,20 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = () => {
   // State to manage sidebar collapse
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const chatList = [
+    "Emilia Clarke",
+    "John Doe",
+    "Jane Smith",
+    "Michael Johnson",
+    "Sarah Williams"
+  ];
+  
+
+  const filteredChats = chatList.filter((chat) =>
+    chat.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Function to toggle sidebar collapse
   const toggleCollapse = () => {
@@ -29,7 +44,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
       {isCollapsed && (
         <button
         className="fixed z-30 h-15 rounded-lg px-5 text-token-text-secondary focus-visible:bg-token-surface-hover 
-        focus-visible:outline-0 enabled:hover:bg-token-surface-hover disabled:text-token-text-quaternary no-draggable transition-all duration-1000 ease-in-out"          
+        focus-visible:outline-0 enabled:hover:bg-token-surface-hover disabled:text-token-text-quaternary no-draggable transition-all duration-1000 ease-in-out cursor-pointer"          
           aria-label="Toggle SideBar"
           data-testid="toggle-sidebar-button"
           onClick={toggleCollapse}
@@ -43,7 +58,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
       {!isCollapsed && (
         <div
         className={`z-[21] flex-shrink-0 overflow-x-hidden bg-token-sidebar-surface-primary max-md:!w-0 transition-all duration-1000 ease-in-out ${
-          isCollapsed ? "w-0 opacity-0" : "w-[230px] opacity-100"
+          isCollapsed ? "w-0 opacity-0 transition-300" : "w-[230px] opacity-100 transition-300"
         }`}
           style={{ visibility: "visible", willChange: "auto", backgroundColor: "var(--gray-black)"}}
         >
@@ -77,7 +92,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
                     {/* Close Sidebar Button */}
                     <span className="flex" data-state="closed">
                       <button
-                        className="h-10 rounded-lg px-2 text-token-text-secondary focus-visible:bg-token-surface-hover focus-visible:outline-0 enabled:hover:bg-token-surface-hover disabled:text-token-text-quaternary no-draggable"
+                        className="h-10 rounded-lg px-2 text-token-text-secondary focus-visible:bg-token-surface-hover focus-visible:outline-0 enabled:hover:bg-token-surface-hover disabled:text-token-text-quaternary no-draggable cursor-pointer"
                         aria-label="Close SideBar"
                         data-testid="close-sidebar-button"
                         onClick={toggleCollapse}
@@ -90,12 +105,35 @@ const Sidebar: React.FC<SidebarProps> = () => {
                     <div className="flex">
                       {/* Search Button */}
                       <span className="flex" data-state="closed">
-                        <button
-                          aria-label="Search"
-                          className="h-10 rounded-lg px-2 text-token-text-secondary focus-visible:bg-token-surface-hover focus-visible:outline-0 enabled:hover:bg-token-surface-hover disabled:text-token-text-quaternary"
-                        >
-                        <img src={Search} alt="Search icon" className="w-5 h-5 cursor-pointer"  />
-                        </button>
+                      {searchOpen ? (
+                      <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        className="h-8 px-2 bg-[var(--gray-light)] text-[var(--gray-black)] rounded-xl w-[105px]"
+                        placeholder="Search..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                      <button
+                        aria-label="Close Search"
+                        className="h-8 cursor-pointer text-white"
+                        onClick={() => {
+                          setSearchOpen(false);
+                          setSearchTerm("");
+                        }}
+                      >
+                        <img src={Cross} alt="Close icon" className="w-5 h-5 cursor-pointer"  />
+                      </button>
+                    </div>
+                    ) : (
+                      <button
+                        aria-label="Search"
+                        className="h-10 px-2 cursor-pointer"
+                        onClick={() => setSearchOpen(!searchOpen)}
+                      >
+                        <img src={Search} alt="Search icon" className="w-5 h-5" />
+                      </button>
+                    )}
                       </span>
 
                       {/* New Chat Button */}
@@ -103,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
                         <button
                           aria-label="New chat"
                           data-testid="create-new-chat-button"
-                          className="h-10 rounded-lg px-2 text-token-text-secondary focus-visible:bg-token-surface-hover focus-visible:outline-0 enabled:hover:bg-token-surface-hover disabled:text-token-text-quaternary"
+                          className="h-10 rounded-lg px-2 text-token-text-secondary focus-visible:bg-token-surface-hover focus-visible:outline-0 enabled:hover:bg-token-surface-hover disabled:text-token-text-quaternary cursor-pointer"
                         >
                           <img src={NewChat} alt="NewChat icon" className="w-5 h-5 cursor-pointer"  />
                         </button>
@@ -126,24 +164,11 @@ const Sidebar: React.FC<SidebarProps> = () => {
                           </div>
                           <ol>
                             {/* Chat Item */}
-                            <li className="relative" data-testid="history-item-0">
-                              <div
-                                draggable="true"
-                                className="no-draggable group rounded-lg active:opacity-90 bg-[var(--item-background-color)] h-9 text-sm relative screen-arch:bg-transparent"
-                                style={{ "--item-background-color": "var(--sidebar-surface-tertiary)" } as React.CSSProperties}
-                              >
-                                <a
-                                  className="flex items-center gap-2 p-2 screen-arch:motion-safe:group-active:scale-[98%] screen-arch:motion-safe:group-active:transition-transform screen-arch:motion-safe:group-active:duration-100"
-                                  href="/c/67ba25b6-219c-8009-9c65-5022d9f2adf7"
-                                  data-discover="true"
-                                  style={{ maskImage: "var(--sidebar-mask)" }}
-                                >
-                                  <div className="relative grow overflow-hidden whitespace-nowrap" dir="auto" title="Textarea Message Alignment">
-                                    Emilia Clarke
-                                  </div>
-                                </a>
-                              </div>
+                            {filteredChats.map((chat, index) => (
+                            <li key={index} className="p-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
+                              {chat}
                             </li>
+                            ))}
                           </ol>
                         </div>
                       </div>
@@ -157,7 +182,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
       )}
       {/* Right Sidebar (Adjusting width based on left sidebar state) */}
       <div
-        className={`fixed top-15 right-0 transition-all duration-300 bg-[var(--page)] text-[var(--white)] border border-[var(--gray-black)] h-screen overflow-hidden ${
+        className={`fixed z-40 top-15 right-0 transition-all duration-300 bg-[var(--page)] text-[var(--white)] border border-[var(--gray-black)] h-screen overflow-hidden ${
           isCollapsed ? "w-[300px]" : "w-[230px]"
         }`}
       >
@@ -177,20 +202,32 @@ const Sidebar: React.FC<SidebarProps> = () => {
     </p>
   </div>
 
-  <nav className="mt-4 space-y-2 font-semibold px-4">
-    <button className="flex items-center gap-3 w-full px-4 py-2 rounded-md transition hover:bg-[var(--gray-light)]">
-      <img src={NewChat} alt="New Chat icon" className="w-6 h-6" />
-      <span>New chat</span>
-    </button>
-    <button className="flex items-center gap-3 w-full px-4 py-2 rounded-md transition hover:bg-[var(--gray-light)]">
-      <img src={History} alt="History icon" className="w-6 h-6" />
-      <span>History</span>
-    </button>
-    <button className="flex items-center gap-3 w-full px-4 py-2 rounded-md transition hover:bg-[var(--gray-light)]">
-      <img src={Pin} alt="Pin icon" className="w-6 h-6" />
-      <span>Pinned messages</span>
-    </button>
-  </nav>
+  <nav className="mt-4 space-y-2 font-semibold px-4 z-100">
+    <button className="z-30 group flex items-center gap-3 w-full px-4 py-2 transition hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
+        <img
+          src={NewChat}
+          alt="New Chat icon"
+          className="w-6 h-6 transition-transform duration-200 group-hover:scale-110 "
+        />
+        <span>New chat</span>
+      </button>
+      <button className="z-30 group flex items-center gap-3 w-full px-4 py-2 transition hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
+        <img
+          src={History}
+          alt="History icon"
+          className="w-6 h-6 transition-transform duration-200 group-hover:scale-110"
+        />
+        <span>History</span>
+      </button>
+      <button className="z-30 group flex items-center gap-3 w-full px-4 py-2 transition hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
+        <img
+          src={Pin}
+          alt="Pin icon"
+          className="w-6 h-6 transition-transform duration-200 group-hover:scale-110"
+        />
+        <span>Pinned messages</span>
+      </button>
+    </nav>
 </div>
     </div>
   );
