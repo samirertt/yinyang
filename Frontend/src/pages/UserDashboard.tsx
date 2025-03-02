@@ -3,8 +3,10 @@ import Avatar from "../assets/Avatar.png";
 import UserRecentChats from "../components/UserStuff/UserRecentChats";
 import CharacterGrid from "../components/UserStuff/CharacterGrid";
 import { useState, SetStateAction } from "react";
-import searchIcon from "../MaginifyingGlass.png";
+
 import SuggestionBanner from "../components/UserStuff/SuggestionBanner";
+import { Filter, Search } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function SearchBar() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -25,13 +27,12 @@ function SearchBar() {
   };
 
   return (
-    <div className="relative flex items-center ">
+    <div className="relative flex items-center gap-4 ">
       {!isExpanded && (
-        <img
-          src={searchIcon}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 invert pointer-events-none"
-          alt="SearchIcon"
-        ></img>
+        <Search
+          size={24}
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 text-black invert pointer-events-none"
+        />
       )}
       <input
         value={inputValue}
@@ -43,17 +44,24 @@ function SearchBar() {
         type="search"
         placeholder={isExpanded ? "Search" : ""}
       ></input>
+      <Link to="/UserDashboard/FilterPage">
+        <Filter size={24} className="text-white cursor-pointer" />
+      </Link>
     </div>
   );
 }
 
 function UserCharactertSelection() {
-  const [chatList, setChatList] = useState<{ name: string; image: string }[]>([]);
-
+  const [chatList, setChatList] = useState<{ name: string; image: string }[]>(
+    []
+  );
 
   const addChat = (characterName: string, characterImage: string) => {
-    if (!chatList.some(chat => chat.name === characterName)) {
-      setChatList((prevChats) => [...prevChats, { name: characterName, image: characterImage }]);
+    if (!chatList.some((chat) => chat.name === characterName)) {
+      setChatList((prevChats) => [
+        ...prevChats,
+        { name: characterName, image: characterImage },
+      ]);
     }
   };
 
@@ -65,7 +73,7 @@ function UserCharactertSelection() {
   return (
     <div className="bg-[#212121] ">
       <div className="flex flex-col bg-[#212121]">
-        <UserRecentChats chatList={chatList} handleDelete={handleDelete}/>
+        <UserRecentChats chatList={chatList} handleDelete={handleDelete} />
       </div>
       <div className="mt-5 items-center ml-25 mr-25    ">
         <div className="flex justify-between items-center w-full px-4 py-2 pb-8 bg-[#212121] ">
@@ -77,8 +85,8 @@ function UserCharactertSelection() {
             <SearchBar />
           </div>
         </div>
-        <SuggestionBanner/>
-        <CharacterGrid onCharacterSelect={addChat}/>
+        <SuggestionBanner />
+        <CharacterGrid onCharacterSelect={addChat} />
       </div>
     </div>
   );
