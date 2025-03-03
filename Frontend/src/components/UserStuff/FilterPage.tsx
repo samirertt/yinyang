@@ -3,7 +3,9 @@ import aggressiveImage from "../../assets/filter_image/aggressive.jpeg";
 import calmImage from "../../assets/filter_image/calm.png";
 import mysteriousImage from "../../assets/filter_image/mysterious.jpeg";
 import pridefulImage from "../../assets/filter_image/prideful.jpeg";
-
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import LoginNav from "../LoginNav";
 
 interface GridItem {
   title: string;
@@ -12,8 +14,6 @@ interface GridItem {
 }
 
 const FilterPage = () => {
-  
-
   const categories: GridItem[] = [
     {
       title: "Friendly",
@@ -38,21 +38,28 @@ const FilterPage = () => {
     {
       title: "Prideful",
       icon: pridefulImage,
-      bgColor: "bg-[#ba55d3]",
+      bgColor: "bg-[#b06239]",
     },
   ];
+  const navigate = useNavigate();
 
   return (
-    <div className="bg-[#212121] ">
-      <div className="w-auto mx-auto pl-20 pr-20 pb-20">
-        <div className="flex mb-6 ">
-          
-        <p className="text-lg sm:text-xl text-white pb-4 sm:pb-5 sm:pt-8 self-start">Filters</p>
+    <div className="bg-[#212121] min-h-screen md:pt-16">
+      <LoginNav/>
+      <div className="w-auto mx-auto pl-20 pr-20 pb-20 mt-10">
+        <div className="flex justify-center align-start relative">
+          <ArrowLeft className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white cursor-pointer"
+          onClick={() => navigate(-1)} />
+
+          <p className="text-2xl sm:text-3xl text-white pb-4 sm:pb-5 sm:pt-8 text-center">
+            Filters
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
           {categories.map((category) => (
             <FilterCards
+              key={category.title} // Add a key for React list rendering
               icon={category.icon}
               title={category.title}
               bgColor={category.bgColor}
@@ -73,20 +80,25 @@ const FilterCards = ({
   title: string;
   bgColor: string;
 }) => {
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    // Navigate to the new page and pass data via state
+    navigate('/UserDashBoard/FilterPage/FilterList', { state: { icon, title, bgColor } });
+  };
   return (
-    <div className="w-full overflow-hidden">
-      {/* Card */}
+    <div className="w-full ">
       <div
-        className={`w-full h-28 ${bgColor} text-left rounded-lg transition-colors cursor-pointer flex items-center px-4 gap-5 overflow-hidden`}
+        className={`w-full h-28 ${bgColor} text-left rounded-lg transition-all duration-300 cursor-pointer flex items-center px-4 gap-5 overflow-hidden hover:shadow-[0_0_25px_5px_rgba(255,255,255,0.6)]`}
+        onClick={handleClick}
       >
-        {/* Text on the left */}
         <h2 className="text-2xl text-white">{title}</h2>
 
-        {/* Image on the right, rotated 90 degrees */}
         <img
           src={icon}
           alt={title}
-          className="w-20 h-20 rounded-xl transform rotate-45 ml-auto translate-y-8 "
+          className="w-20 h-20 rounded-xl transform rotate-45 ml-auto translate-y-8"
         />
       </div>
     </div>

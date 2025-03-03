@@ -6,8 +6,6 @@ import { useState, SetStateAction } from "react";
 import searchIcon from "../MaginifyingGlass.png";
 
 import SuggestionBanner from "../components/UserStuff/SuggestionBanner";
-import { Filter } from "lucide-react";
-import FilterPage from "../components/UserStuff/FilterPage";
 
 function SearchBar() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -63,23 +61,18 @@ function UserCharactertSelection() {
     );
   };
 
-
- 
-
   return (
-    <div className="bg-[#212121] min-h-screen px-2 sm:px-4 md:px-6">
+    <div className="bg-[#212121] min-h-screen px-2 sm:px-4 md:px-6 ">
       {/* Recent Chats Section */}
       <div className="flex flex-col bg-[#212121]">
         <UserRecentChats chatList={chatList} handleDelete={handleDelete} />
       </div>
 
       {/* Avatar and Search Bar */}
-      <div className="mt-5 flex flex-col md:flex-row items-center justify-between gap-4 py-4 bg-[#212121]">
+      <div className="mt-5 flex flex-col md:flex-row items-center justify-between gap-4 py-4 bg-[#212121] ml-5">
         <UserAvatar name="John Doe" image_path={Avatar} />
         <SearchBar />
       </div>
-
-      
 
       {/* Suggestion Banner */}
       <SuggestionBanner />

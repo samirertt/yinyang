@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import YinYang from "../../assets/yinyang.png";
 import {
   Trash2,
@@ -8,6 +9,7 @@ import {
   User,
   Settings,
   LogOut,
+  Filter,
 } from "lucide-react";
 
 type Chat = {
@@ -27,15 +29,21 @@ const UserRecentChats = ({
 
   return (
     <div className="relative ">
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed top-4 left-4 text-[var(--white)] px-4 py-2 rounded hover:bg-[#3a3a3a]"
-      >
-        <Menu
-          size={24}
-          className="text-white hover:text-gray-300 cursor-pointer"
-        />
-      </button>
+      <div className="fixed top-4 left-4 text-[var(--white)] px-4 py-2 flex flex-col items-center gap-5">
+        {/* Menu Button */}
+        <button
+          className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition-all"
+          onClick={() => setIsOpen(true)}
+        >
+          <Menu size={24} className="text-white hover:text-gray-300" />
+        </button>
+
+        <Link to="/UserDashboard/FilterPage">
+          <button className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition-all">
+            <Filter size={24} className="text-white hover:text-gray-300" />
+          </button>
+        </Link>
+      </div>
 
       {isOpen && (
         <div className="fixed inset-0" onClick={() => setIsOpen(false)} />
@@ -68,7 +76,8 @@ const UserRecentChats = ({
           </div>
 
           <h2 className="text-xm mb-5">Recent Chats</h2>
-          <div className="h-300"
+          <div
+            className="h-300"
             style={{
               maxHeight: "300px",
               overflowY: "scroll",
@@ -130,7 +139,7 @@ const LoginInfo = () => {
     </div>
   );
 };
-type MenuItemsProps ={
+type MenuItemsProps = {
   icon: React.ElementType;
   label: string;
 };
@@ -139,7 +148,7 @@ const PopUpMenuItems = ({ icon: Icon, label }: MenuItemsProps) => {
   return (
     <div className="flex justify-between hover:bg-[#454545] p-1 rounded-2xl w-full">
       <p className="text-xm ml-1">{label}</p>
-      <Icon size={20} className="mr-1"/>
+      <Icon size={20} className="mr-1" />
     </div>
   );
 };
