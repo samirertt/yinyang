@@ -48,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
       
       {!isCollapsed && (
-        <div className={`z-21 flex-shrink-0 w-full md:w-60 bg-[var(--black)] bg-token-sidebar-surface-primary transition-all duration3000 ease-in-out  max-md:w-0`}>
+        <div className={`z-21 flex-shrink-0 w-full md:w-45 lg:w-60 bg-[var(--black)] bg-token-sidebar-surface-primary transition-all duration3000 ease-in-out  max-md:w-0`}>
           <div className="h-full flex flex-col">
             <div className="flex h-full min-h-0 flex-col">                
               <nav className="flex h-full w-full flex-col px-3" aria-label="Chat History">

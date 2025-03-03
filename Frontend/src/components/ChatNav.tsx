@@ -3,7 +3,7 @@ import Logo from '../assets/logo.png';
 const Navbar = () => {
   return (
     <nav className="bg-[#212121] text-white p-3 fixed w-347 z-10 top-0">
-      <div className="lg:max-w-8xl max-w-110  md:max-w-158 mx-auto flex justify-between items-center px-4 md:px-10">
+      <div className="lg:max-w-400 max-w-110  md:max-w-158 mx-auto flex justify-between items-center px-4 md:px-10">
         {/* Website Name and Logo (Always at the Start) */}
         <div className="flex items-center">
           <img src={Logo} alt="Logo icon" className="w-6 h-6 rounded-full" />
