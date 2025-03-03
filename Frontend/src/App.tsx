@@ -9,10 +9,13 @@ import Chat from './pages/Chat';
 import SignupPage from './pages/SignUpPage';
 import UserDashboard from "./pages/UserDashboard";
 import FilterPage from './components/UserStuff/FilterPage';
+import FilterList from './components/UserStuff/FiterList';
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
+        <Route path='/UserDashBoard/FilterPage/FilterList' element={<FilterList/>}/>
+        <Route path='/UserDashboard/FilterPage' element={<FilterPage/>}/>
         <Route path="/Login" element={<Login />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/SignUp" element={<SignupPage />} />

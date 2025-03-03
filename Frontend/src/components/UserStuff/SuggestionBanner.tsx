@@ -2,8 +2,8 @@ import Obito from "../../assets/gifs/Obito.gif";
 import Luffy from "../../assets/gifs/luffy.gif";
 import Mitsuri from "../../assets/gifs/mitsuri.gif";
 import Todo from "../../assets/gifs/todo.gif";
-import LuffyPortrait from "../../assets/luffy_potrait.jpeg";
-import ObitoPotrait from "../../assets/obito_portrait.jpeg";
+import LuffyPortrait from "../../assets/potrait/luffy_potrait.jpeg";
+import ObitoPotrait from "../../assets/potrait/obito_portrait.jpeg";
 import { useEffect, useState } from "react";
 
 const SuggestionBanner = () => {
@@ -32,8 +32,8 @@ const SuggestionBanner = () => {
   }, [gifs.length]);
 
   return (
-    <div className="mx-2 sm:mx-4 md:ml-10">
-      <p className="text-lg sm:text-xl text-white pb-4 sm:pb-5 pt-6 sm:pt-8">Top Choices</p>
+    <div className="mx-2 sm:mx-4 md:ml-10 flex flex-col gap-5 ">
+      <p className="text-lg sm:text-xl text-white pb-4 sm:pb-5 pt-6 sm:pt-8 self-start">Top Choices</p>
       <div className="relative w-full flex flex-col md:flex-row justify-start items-start overflow-hidden gap-4 md:gap-0">
         <img
           id="gif-banner"
