@@ -3,11 +3,11 @@ import Avatar from "../assets/Avatar.png";
 import UserRecentChats from "../components/UserStuff/UserRecentChats";
 import CharacterGrid from "../components/UserStuff/CharacterGrid";
 import { useState, SetStateAction } from "react";
-import searchIcon from "../MaginifyingGlass.png"
+import searchIcon from "../MaginifyingGlass.png";
 
 import SuggestionBanner from "../components/UserStuff/SuggestionBanner";
 import { Filter } from "lucide-react";
-import { Link } from "react-router-dom";
+import FilterPage from "../components/UserStuff/FilterPage";
 
 function SearchBar() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -17,10 +17,11 @@ function SearchBar() {
   const handleBlur = () => {
     if (inputValue.trim() === "") setIsExpanded(false);
   };
-  const handleChange = (e: { target: { value: SetStateAction<string> } }) => setInputValue(e.target.value);
+  const handleChange = (e: { target: { value: SetStateAction<string> } }) =>
+    setInputValue(e.target.value);
 
   return (
-    <div className="relative flex items-center w-full md:w-auto">
+    <div className="relative flex items-center w-full md:w-auto mr-15">
       {!isExpanded && (
         <img
           src={searchIcon}
@@ -33,14 +34,11 @@ function SearchBar() {
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={handleChange}
-        className={`transition-all duration-300 ease-in-out bg-[#212121] text-white rounded-lg px-10 py-2 outline-none focus:ring-2 focus:ring-gray-400
+        className={`transition-all duration-300 ease-in-out bg-[#212121] text-white rounded-lg px-10 py-2 outline-none focus:ring-2 focus:ring-gray-400 mr-4
           ${isExpanded ? "w-full md:w-80" : "w-10 cursor-pointer"}`}
         type="search"
         placeholder={isExpanded ? "Search" : ""}
       ></input>
-      <Link to="/UserDashboard/FilterPage">
-        <Filter size={24} className="text-white cursor-pointer" />
-      </Link>
     </div>
   );
 }
@@ -60,8 +58,13 @@ function UserCharactertSelection() {
   };
 
   const handleDelete = (buttonName: string) => {
-    setChatList((prevChat) => prevChat.filter((chat) => chat.name !== buttonName));
+    setChatList((prevChat) =>
+      prevChat.filter((chat) => chat.name !== buttonName)
+    );
   };
+
+
+ 
 
   return (
     <div className="bg-[#212121] min-h-screen px-2 sm:px-4 md:px-6">
@@ -76,9 +79,11 @@ function UserCharactertSelection() {
         <SearchBar />
       </div>
 
+      
+
       {/* Suggestion Banner */}
       <SuggestionBanner />
-      
+
       {/* Character Grid */}
       <CharacterGrid onCharacterSelect={addChat} />
     </div>
