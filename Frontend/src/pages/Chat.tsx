@@ -43,7 +43,7 @@ export default function Chat() {
       <SideBar/>
         <div className="flex flex-col flex-1 h-full w-full relative p-4 overflow-y-auto space-y-4 items-center">
         <ChatNav/>
-          <div className="pt-10 w-250">
+          <div className="pt-10 mb-20 w-100 md:min-w-[120px] lg:min-w-[1000px] items-center">
           {messages.map((msg, index) => (
             <MessageBubble key={index} text={msg.text} sender={msg.sender} />
           ))}
@@ -51,7 +51,6 @@ export default function Chat() {
           </div>
           {typing && <Typing />}
           <div ref={messagesEndRef} />
-          
         </div>
       </div>
     </div>

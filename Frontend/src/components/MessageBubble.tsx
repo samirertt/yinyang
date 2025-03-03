@@ -17,17 +17,17 @@ export default function MessageBubble({ text, sender }: MessageProps) {
 
   useEffect(() => {
     if (sender === "ai") {
-      setDisplayedText(""); // Reset before starting the effect
+      setDisplayedText(""); 
       let index = 0;
 
       const interval = setInterval(() => {
-        setDisplayedText((prev) => text.slice(0, index + 1)); // Correctly slices up to the current index
+        setDisplayedText((prev) => text.slice(0, index + 1)); 
         index++;
 
         if (index >= text.length) {
           clearInterval(interval);
         }
-      }, 10); // Adjust speed here
+      }, 10);
 
       return () => clearInterval(interval);
     }
@@ -41,7 +41,7 @@ export default function MessageBubble({ text, sender }: MessageProps) {
   }, [displayedText]);
 
   return (
-    <div className={`flex flex-col items-${sender === "user" ? "end" : "start"} max-w-xs min-w-[800px]`}>
+    <div className={`flex lg:max-w-[770px] min-w-[200px] md:min-w-[500px] lg:min-w-[800px] flex-col items-${sender === "user" ? "end" : "start"}`}>
       <div className={`flex items-center gap-2 pt-2 ${sender === "ai" ? "justify-start" : "justify-end"}`}>
         {sender === "ai" && (
           <img
@@ -56,7 +56,7 @@ export default function MessageBubble({ text, sender }: MessageProps) {
         )}
         <div
           ref={messageRef}
-          className={`p-3 rounded-xl max-w-[800px] text-mm overflow-hidden ${
+          className={`p-3 rounded-xl max-w-lg sm:max-w-xl md:max-w-2xl text-mm overflow-hidden ${
             sender === "user"
               ? "bg-[var(--gray-almost-black)] text-[var(--white)] border border-[var(--gray-darker)]"
               : "bg-[var(--page)] text-[var(--white)] border border-[var(--gray-darker)]"
