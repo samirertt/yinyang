@@ -6,6 +6,7 @@ import Emi from "../assets/Emi.jpg";
 import History from "../assets/History.svg";
 import Pin from "../assets/Pin.svg";
 import Cross from "../assets/Cross.svg";
+import Info from "../assets/info.svg";
 
 
 interface SidebarProps {
@@ -13,6 +14,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isInfoCollapsed, setIsInfoCollapsed] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const chatList = [
@@ -28,9 +30,12 @@ const Sidebar: React.FC<SidebarProps> = () => {
     chat.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Function to toggle sidebar collapse
   const toggleCollapse = () => {
     setIsCollapsed((prev) => !prev);
+  };
+
+  const toggleInfoBar = () => {
+    setIsInfoCollapsed((prev) => !prev);
   };
 
   return (
@@ -48,7 +53,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
       
       {!isCollapsed && (
-        <div className={`z-21 flex-shrink-0 w-full md:w-45 lg:w-60 bg-[var(--black)] bg-token-sidebar-surface-primary transition-all duration3000 ease-in-out  max-md:w-0`}>
+        <div className={`z-21 flex-shrink-0 w-40 md:w-45 lg:w-60 bg-[var(--black)] bg-token-sidebar-surface-primary transition-all`}>
           <div className="h-full flex flex-col">
             <div className="flex h-full min-h-0 flex-col">                
               <nav className="flex h-full w-full flex-col px-3" aria-label="Chat History">
@@ -121,11 +126,22 @@ const Sidebar: React.FC<SidebarProps> = () => {
       )}
 
       <div
-        className={`fixed z-40 top-15 right-0 transition-all duration-300 bg-[var(--page)] text-[var(--white)] border border-[var(--gray-black)] h-screen overflow-hidden ${
-          isCollapsed ? " w-0 md:w-0 lg:w-[300px]" : "w-0 md:w-0 lg:w-[230px]"
+        className={`fixed z-10 top-15 right-0 transition-all duration-300 bg-[var(--page)] text-[var(--white)] border border-[var(--gray-black)] h-screen overflow-hidden ${
+          isInfoCollapsed ? "w-0 md:w-0 lg:w-0" : "w-100 md:w-100 lg:w-[230px]"
         }`}
       >
-         <div className="p-4 border-b border-[var(--gray-black)] flex flex-col items-center">
+        <button
+        className="fixed z-50 h-7 right-5 rounded-lg px-1 text-token-text-secondary transition-all duration-1000 ease-in-out cursor-pointer"          
+          aria-label="Toggle info Bar"
+          data-testid="toggle-infoBar-button"
+          onClick={toggleInfoBar}
+        >
+          <img src={Info} alt="info icon" className="w-5 h-5 cursor-pointer" />
+        </button>
+        
+        {!isInfoCollapsed && (
+          <>
+         <div className="p-4 z-0 border-b border-[var(--gray-black)] flex flex-col items-center">
         <img
           src={Emi}
           alt="Avatar"
@@ -136,7 +152,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
       <div className="px-4 py-3">
         <h3 className="text-xl font-semibold">Bio</h3>
-        <p className="text-xm font-medium mt-1 text-justify">
+        <p className="text-xm mt-1 text-justify">
           Emilia Clarke is a British actress best known as Daenerys Targaryen in Game of Thrones. A versatile and beloved talent, she continues to captivate audiences worldwide.
         </p>
       </div>
@@ -167,6 +183,8 @@ const Sidebar: React.FC<SidebarProps> = () => {
           <span>Pinned messages</span>
         </button>
       </nav>
+      </>
+    )}
     </div>
   </div>
   );
