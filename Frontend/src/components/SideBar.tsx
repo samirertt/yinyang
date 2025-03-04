@@ -152,7 +152,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
       <div className="px-4 py-3">
         <h3 className="text-xl font-semibold">Bio</h3>
-        <p className="text-xm font-medium mt-1 text-justify">
+        <p className="text-xm mt-1 text-justify">
           Emilia Clarke is a British actress best known as Daenerys Targaryen in Game of Thrones. A versatile and beloved talent, she continues to captivate audiences worldwide.
         </p>
       </div>
