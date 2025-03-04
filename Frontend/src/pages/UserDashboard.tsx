@@ -4,7 +4,7 @@ import UserRecentChats from "../components/UserStuff/UserRecentChats";
 import CharacterGrid from "../components/UserStuff/CharacterGrid";
 import { useState, SetStateAction } from "react";
 import searchIcon from "../MaginifyingGlass.png";
-
+import Footer from "../components/Footer";
 import SuggestionBanner from "../components/UserStuff/SuggestionBanner";
 
 function SearchBar() {
@@ -79,6 +79,7 @@ function UserCharactertSelection() {
 
       {/* Character Grid */}
       <CharacterGrid onCharacterSelect={addChat} />
+      <Footer/>
     </div>
   );
 }

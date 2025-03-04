@@ -1,12 +1,28 @@
 import React, { useState } from "react";
 import LoginNav from '../components/LoginNav'
+import { useNavigate } from "react-router-dom";
+import Auth from "../utils/Auth";
 
 function Login() {
   const [isEmailClicked, setIsEmailClicked] = useState(false);
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleEmailClick = () => {
     setIsEmailClicked(true);
   };
+  const navigate = useNavigate();
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (Auth.login(username, password)) {
+      navigate("/UserDashboard");
+    } else {
+      setError("Invalid username or password");
+    }
+  };
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#212121] relative overflow-x-hidden">
@@ -30,7 +46,7 @@ function Login() {
         }`}
       >
         <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-center">
-          Get access to 10M+ Characters
+          Get access to your favorite characters!
         </h2>
         <p className="text-gray-400 text-[11px] sm:text-sm mt-1 md:mt-2 text-center">
           Sign up in just ten seconds
@@ -57,7 +73,7 @@ function Login() {
 
               <div className="flex items-center justify-center text-gray-500 text-[10px] sm:text-xs md:text-sm">OR</div>
 
-              <button className="w-full bg-gray-800 text-white flex items-center justify-center gap-1 p-1.5 sm:p-2 rounded-md shadow text-xs sm:text-sm md:text-base">
+              <button onClick={() => navigate("/SignUp")} className="w-full bg-gray-800 text-white flex items-center justify-center gap-1 p-1.5 sm:p-2 rounded-md shadow text-xs sm:text-sm md:text-base">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-3 h-3 sm:w-4 sm:h-4 md:w-6 md:h-6" fill="currentColor">
                   <path d="M2 4.5A2.5 2.5 0 0 1 4.5 2h15A2.5 2.5 0 0 1 22 4.5v15a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 19.5v-15zM4.5 4a.5.5 0 0 0-.5.5V6l8 5 8-5V4.5a.5.5 0 0 0-.5-.5h-15zM20 8.2l-7.5 4.7a1 1 0 0 1-1 0L4 8.2V19.5a.5.5 0 0 0 .5.5h15a.5.5 0 0 0 .5-.5V8.2z"/>
                 </svg>
@@ -65,25 +81,35 @@ function Login() {
               </button>
             </>
           ) : (
-            <div className="space-y-2 sm:space-y-3">
+             <form onSubmit={handleLogin} className="space-y-2 sm:space-y-3">
               <input
                 type="text"
                 placeholder="Email or Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="w-full p-1.5 sm:p-2 bg-gray-900 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-white text-xs sm:text-sm md:text-base"
               />
               <input
                 type="password"
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full p-1.5 sm:p-2 bg-gray-900 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-white text-xs sm:text-sm md:text-base"
               />
-              <button className="w-full bg-white text-black p-1.5 sm:p-2 rounded-md shadow text-xs sm:text-sm md:text-base">
+              {error && (
+                <p className="text-red-500 text-xs sm:text-sm">{error}</p>
+              )}
+              <button 
+                type="submit"
+                className="w-full bg-white hover:bg-gray-300 text-black p-1.5 sm:p-2 rounded-md shadow text-xs sm:text-sm md:text-base cursor-pointer"
+              >
                 Log In
               </button>
-            </div>
+            </form>
           )}
 
           <p className="text-[9px] xs:text-[10px] sm:text-xs text-gray-500 mt-2 sm:mt-3 text-center">
-            By continuing, you agree with the <span className="underline">Terms</span> and <span className="underline">Privacy Policy</span>
+            By continuing, you agree with the <a href="/TermsOfService" className="underline">Terms</a> and <a href="/PrivacyPolicy" className="underline">Privacy Policy</a>
           </p>
         </div>
       </div>

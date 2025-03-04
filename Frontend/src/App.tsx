@@ -10,6 +10,9 @@ import SignupPage from './pages/SignUpPage';
 import UserDashboard from "./pages/UserDashboard";
 import FilterPage from './components/UserStuff/FilterPage';
 import FilterList from './components/UserStuff/FiterList';
+import AboutUs from './pages/AboutUs';
+import PrivacyPolicy from './pages/PrivacyPolicies';
+import TermsOfService from './pages/terms';
 const App: React.FC = () => {
   return (
     <Router>
@@ -22,6 +25,9 @@ const App: React.FC = () => {
         <Route path="/AdminDashboard/Characters" element={<AdminDashboard/>}/>
         <Route path="/AdminDashboard/Edit" element={<AdminEditUsers/>}/>
         <Route path="/Moderator" element={<Moderator/>}/>
+        <Route path="/AboutUs" element={<AboutUs/>}/>
+        <Route path="/PrivacyPolicy" element={<PrivacyPolicy/>}/>
+        <Route path="/TermsOfService" element={<TermsOfService/>}/>
         <Route path="/UserDashboard" element={<UserDashboard/>}/>
       </Routes>
     </Router>

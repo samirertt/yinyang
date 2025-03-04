@@ -118,8 +118,8 @@ function SignupPage() {
 
         <p className="text-xs text-gray-500 mt-4 text-center">
           By signing up, you agree with the{" "}
-          <span className="underline">Terms</span> and{" "}
-          <span className="underline">Privacy Policy</span>
+          <a href="/TermsOfService" className="underline">Terms</a> and{" "}
+          <a href="/PrivacyPolicy" className="underline">Privacy Policy</a>
         </p>
 
         <p className="text-sm text-gray-400 mt-4 text-center">
