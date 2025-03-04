@@ -1,6 +1,6 @@
 import Obito from "../../assets/gifs/Obito.gif";
 import Luffy from "../../assets/gifs/luffy.gif";
-import Mitsuri from "../../assets/gifs/mitsuri.gif";
+import Mitsuri from "../../assets/gifs/mitsuri_updated.gif";
 import Todo from "../../assets/gifs/todo.gif";
 import LuffyPortrait from "../../assets/potrait/luffy_potrait.jpeg";
 import ObitoPotrait from "../../assets/potrait/obito_portrait.jpeg";
@@ -33,20 +33,22 @@ const SuggestionBanner = () => {
 
   return (
     <div className="mx-2 sm:mx-4 md:ml-10 flex flex-col gap-5 ">
-      <p className="text-lg sm:text-xl text-white pb-4 sm:pb-5 pt-6 sm:pt-8 self-start">Top Choices</p>
+      <p className="text-lg sm:text-xl text-white pb-4 sm:pb-5 pt-6 sm:pt-8 self-start">
+        Top Choices
+      </p>
       <div className="relative w-full flex flex-col md:flex-row justify-start items-start overflow-hidden gap-4 md:gap-0">
         <img
           id="gif-banner"
           src={gifs[currentGif]}
           alt="Animated Banner"
-          className="h-40 sm:h-60 md:h-75 w-full object-cover rounded-2xl mr-0 md:mr-4"
+          className="h-40 sm:h-60 md:h-75 w-full md:w-[500px] object-cover rounded-2xl mr-0 md:mr-4"
         />
-        
+
         {/* Blurry Full-Width Background Card */}
         <div className="absolute inset-0 w-full h-full flex justify-center items-center">
           <div className="w-full h-40 sm:h-60 md:h-75 bg-[#313131] opacity-30 blur-3xl rounded-2xl"></div>
         </div>
-        
+
         <div className="flex flex-col md:flex-row gap-4 md:gap-0 relative z-10">
           {characters.map((character) => (
             <BannerCards
@@ -74,7 +76,8 @@ const BannerCards = ({
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const { left, top, width, height } =
+      e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - left) / width) * 100;
     const y = ((e.clientY - top) / height) * 100;
     setMousePos({ x, y });
@@ -89,10 +92,18 @@ const BannerCards = ({
       }}
     >
       <div className="flex items-center justify-start gap-3 sm:gap-5">
-        <img src={img} alt={name} className="h-10 w-10 sm:h-12 sm:w-12 rounded-full" />
-        <h2 className="text-white font-bold text-sm sm:text-base md:text-lg">{name}</h2>
+        <img
+          src={img}
+          alt={name}
+          className="h-10 w-10 sm:h-12 sm:w-12 rounded-full"
+        />
+        <h2 className="text-white font-bold text-sm sm:text-base md:text-lg">
+          {name}
+        </h2>
       </div>
-      <p className="text-white font-bold text-sm sm:text-base text-center">{quote}</p>
+      <p className="text-white font-bold text-sm sm:text-base text-center">
+        {quote}
+      </p>
     </div>
   );
 };

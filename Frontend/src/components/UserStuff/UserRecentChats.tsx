@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+
 import YinYang from "../../assets/yinyang.png";
 import {
   Trash2,
@@ -9,7 +9,6 @@ import {
   User,
   Settings,
   LogOut,
-  Filter,
 } from "lucide-react";
 
 type Chat = {
@@ -37,12 +36,6 @@ const UserRecentChats = ({
         >
           <Menu size={24} className="text-white hover:text-gray-300" />
         </button>
-
-        <Link to="/UserDashboard/FilterPage">
-          <button className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition-all">
-            <Filter size={24} className="text-white hover:text-gray-300" />
-          </button>
-        </Link>
       </div>
 
       {isOpen && (
