@@ -1,8 +1,23 @@
 import { useState } from 'react';
 import CharacterCard from "./CharacterCard";
+import { motion } from "framer-motion";
+
 
 function SmallBoxesBox(props: { inputValue: any; characters:Array<{ img: string; name: string; Id: number; details: string; usage:number; }>  })
 {
+    const [direction,setDirection] = useState(1);
+
+    const variants = {
+        enter: (direction:number) => ({
+          x: direction > 0 ? "100%" : "-100%",
+          opacity: 0,
+        }),
+        center: { x: "0%", opacity: 1 },
+        exit: (direction:number) => ({
+          x: direction > 0 ? "-100%" : "100%",
+          opacity: 0,
+        }),
+      };
 
     const searchVal= props.inputValue;
     
@@ -30,6 +45,7 @@ function SmallBoxesBox(props: { inputValue: any; characters:Array<{ img: string;
         if(page+1 < Math.max(1,filterArr(characters).length/numPerPage))
         {
             setPage(page+1);
+            setDirection(1);
         }
         
     }
@@ -39,7 +55,7 @@ function SmallBoxesBox(props: { inputValue: any; characters:Array<{ img: string;
         if(page >= Math.min(1,Math.ceil(filterArr(characters).length/numPerPage)))
         {
             setPage(page-1);
-
+            setDirection(-1);
         }
 
     }
@@ -70,12 +86,24 @@ function SmallBoxesBox(props: { inputValue: any; characters:Array<{ img: string;
     }
     return (
         <div className='flex flex-col gap-5 items-center'>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6 ">
-            {sortCharArray(filterArr(characters).slice(numPerPage*page,numPerPage*(page+1))).map((index)=>(
-                <CharacterCard key={index.Id} {...index}/>
-            ))}
+
+
+            <motion.div
+                key={page} // Ensures re-animation on page change
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                custom={direction} 
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-6"
+            >
+                {sortCharArray(filterArr(characters).slice(numPerPage*page,numPerPage*(page+1))).map((index)=>(
+                    <CharacterCard key={index.Id} {...index}/>
+                ))}
+            </motion.div>
+
             
-            </div>
             <div className='flex gap-3 items-center'>
                 <button className='bg-[#efefef] rounded-full p-[20px] ' onClick={pageDecrease}> 
                    <img src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000" className='w-5' alt="" />

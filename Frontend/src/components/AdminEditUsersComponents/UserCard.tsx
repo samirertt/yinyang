@@ -14,8 +14,6 @@ function UserCard(props: {onUpdate: (arg0: number, arg1: boolean) => void, user:
     {
         charRole ? setCharRole(false) : setCharRole(true);
         
-        
-        
         props.onUpdate(character.Id, charRole);
     }   
 

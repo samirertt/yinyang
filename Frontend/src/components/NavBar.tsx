@@ -92,6 +92,14 @@ function NavBar(props: { logged: any; admin: any }) {
               Users
             </button>{" "}
           </Link>
+          <Link
+            style={{ margin: "0px", padding: "0px" }}
+            to="/AdminDashboard"
+          >
+            <button className="rounded-xl bg-[#ffffff] text-[#303136] cursor-pointer px-[10px] py-[5px]">
+              Dashboard
+            </button>{" "}
+          </Link>
         </div>
       )}
 
