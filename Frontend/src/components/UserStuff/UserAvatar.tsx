@@ -14,7 +14,7 @@ const UserAvatar = ({
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   return (
-    <div className="flex flex-col items-start gap-2 px-4 sm:px-6 md:px-9 lg:px-13">
+    <div className="flex flex-col items-start gap-2 px-9 lg:px-13">
       <div>
         <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300">Welcome back,</p>
       </div>

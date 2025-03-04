@@ -1,6 +1,6 @@
 import { useState } from "react";
 import NavBar from "../components/NavBar";
-import UsersSmallBoxesBox from "../components/AdminEditUsersComponents/UsersSmallBoxes Box";
+import UsersSmallBoxesBox from "../components/AdminEditUsersComponents/UsersSmallBoxes_Box";
 
 function AdminEditUsers()
 {

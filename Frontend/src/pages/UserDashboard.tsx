@@ -27,7 +27,7 @@ function UserCharactertSelection() {
   };
 
   return (
-    <div className="bg-[#212121] flex flex-col h-screen px-2 sm:px-4 md:px-6 ">
+    <div className="bg-[#212121] flex flex-col min-h-screen px-2 sm:px-4 md:px-6 ">
       {UserNavBar(chatList, handleDelete)}
 
       <div className=" items-center justify-between px-15">

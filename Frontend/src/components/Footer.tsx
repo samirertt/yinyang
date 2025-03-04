@@ -24,18 +24,18 @@ const Footer = () => {
           </div>
 
           {/* Contact Info */}
-          <div className="space-y-4">
+          <div className="space-y-4 text-center">
             <h3 className="text-xl font-bold">Contact Us</h3>
             <div className="space-y-2 text-gray-400">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-center">
                 <EnvelopeIcon className="h-5 w-5" />
                 <span>info@YinYang.com</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-center">
                 <PhoneIcon className="h-5 w-5" />
                 <span>+90 (522) 555 55 55</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-center">
                 <HomeIcon className="h-5 w-5" />
                 <span>Kadir Has University</span>
               </div>

@@ -75,11 +75,10 @@ const CharacterGrid = ({ onCharacterSelect }: { onCharacterSelect: (characterNam
     },
   ];
   return (
-    <div className="space-y-0">
-      
-      <p className="text-xl text-white mt-10 flex items-start ml-10 ">Featured</p>
+    <div className="space-y-0 bg-[#212121] px-4 sm:px-0">
+      <p className="text-xl text-white mt-10 text-center sm:text-left">Featured</p>
   
-      <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-10 h-fit">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-6 h-fit justify-items-center">
         {arrayOfCharacters.map((character) => (
           <CharacterInfo
             key={character.Id}
@@ -95,13 +94,7 @@ const CharacterGrid = ({ onCharacterSelect }: { onCharacterSelect: (characterNam
   );
 };
 
-const CharacterInfo = ({
-  img_path,
-  name,
-  details,
-  usage,
-  onClick,
-}: {
+const CharacterInfo = ({ img_path, name, details, usage, onClick }: { 
   img_path: string;
   name: string;
   details: string;
@@ -109,18 +102,23 @@ const CharacterInfo = ({
   onClick: () => void;
 }) => {
   return (
-    <div className="flex w-75 h-30 items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden cursor-pointer"
-    onClick={onClick}>
-      <img src={img_path} alt={name} className="w-20 h-25 rounded-2xl " />
-
-      <div className="ml-4 flex-1">
-        <h2 className="text-sm font-bold mb-1 text-white text-left">{name}</h2>
-        <p className="text-gray-300 text-left text-xs">By: Me</p>
-        <p className=" mb-2 text-white text-left text-xs">
-          {truncateText(details)}
+    <div 
+      className="flex w-full h-40 items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden cursor-pointer transition-colors"
+      onClick={onClick}
+    >
+      <img 
+        src={img_path} 
+        alt={name} 
+        className="w-16 h-20 sm:w-20 sm:h-25 rounded-2xl"  // Smaller image on mobile
+      />
+      <div className="ml-3 sm:ml-4 flex-1 min-w-0">
+        <h2 className="text-xs sm:text-sm font-bold mb-1 text-white truncate">{name}</h2>
+        <p className="text-gray-300 text-[10px] sm:text-xs mb-1">By: Me</p>
+        <p className="text-white text-[10px] sm:text-xs line-clamp-2 mb-1 sm:mb-2">
+          {details}
         </p>
-        <span className="text-gray-500 text-xs flex items-center gap-1">
-          <MessageCircle size={14} className="text-gray-500" />
+        <span className="text-gray-500 text-[10px] sm:text-xs flex items-center gap-1">
+          <MessageCircle size={12} className="text-gray-500" />
           Usage: {usage}
         </span>
       </div>
