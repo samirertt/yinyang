@@ -2,16 +2,6 @@ import { useState } from "react";
 import NavBar from "../components/NavBar";
 import UsersSmallBoxesBox from "../components/AdminEditUsersComponents/UsersSmallBoxes Box";
 
-
-
-
-
-/*
- TO DO: 
- Fix the updating of the users array. It does not update users after we switch the page for some reason. 
- */
-
-
 function AdminEditUsers()
 {
     const [toggleModerator,setToggleModerator] = useState(false);

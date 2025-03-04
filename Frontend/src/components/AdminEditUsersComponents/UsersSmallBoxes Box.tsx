@@ -23,17 +23,38 @@ function UsersSmallBoxesBox(props: { moderator:boolean, users:Array<{ img: strin
     const [users,setUsers] = useState(props.users);
     const updateUserRole = (Id:number, role:boolean)=>
     {
-        
-        setUsers((prevItems: { img: string; name: string; Id: number; role:boolean; }[]) =>
-            prevItems.map((item: { img: string; name: string; Id: number; role:boolean }) => (item.Id === Id ? { ...item, role: role } : item))
-          );
-          users.map((item)=>
-              {
-                  item.Id===Id ? console.log(item): "";
-              })
+        var count = 0;
+        users.map((user) =>
+        {
+            user.role ? count++ : "";
+        })
 
-        console.log(users);
-        
+       
+        setUsers((users: { img: string; name: string; Id: number; role:boolean; }[]) =>
+            users.map((item: { img: string; name: string; Id: number; role:boolean }) => 
+            { 
+                if(item.Id === Id)
+                {
+                    if(count>1)
+                    {
+                        count++;
+                        return { ...item, role: role };
+                    }
+                    else
+                    {
+                        count++;
+                        return { ...item, role: true };
+                    }
+                }
+                else
+                {
+                   return item
+                }
+                
+            })
+            );
+
+       
     }
     
     function filterUsers(users:Array<{ img: string; name: string; Id: number; role:boolean }>)
@@ -72,7 +93,6 @@ function UsersSmallBoxesBox(props: { moderator:boolean, users:Array<{ img: strin
         }
 
     }
-
 
     return (
         
