@@ -39,11 +39,11 @@ export default function Chat() {
   return (
     <div>
       
-      <div className=" flex h-screen bg-[var(--page)] justify-center ">      
+      <div className=" flex h-screen bg-[var(--page)] ">      
       <SideBar/>
         <div className="flex flex-col flex-1 h-full w-full relative p-4 overflow-y-auto space-y-4 items-center">
         <ChatNav/>
-          <div className="pt-10 mb-20 w-100 md:min-w-[120px] lg:min-w-[1000px] items-center">
+          <div className="pt-10 mb-20 w-100 md:min-w-[120px] lg:min-w-[850px] items-center">
           {messages.map((msg, index) => (
             <MessageBubble key={index} text={msg.text} sender={msg.sender} />
           ))}
