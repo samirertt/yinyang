@@ -16,7 +16,7 @@ const UserCharacterSelection = ({
 }: UserCharacterSelectionProps) => {
   
   return (
-    <div className="bg-[#212121] flex flex-col min-h-screen px-4 sm:px-6 md:px-10 lg:px-30">
+    <div className="bg-[#212121] flex flex-col min-h-screen px-4 sm:px-6 md:px-10 lg:px-40">
       <UserNavBar chatList={chatList} handleDelete={handleDelete} />
 
       <MainPage addChat={addChat} />
@@ -34,7 +34,8 @@ const MainPage: React.FC<MainPageProps> = ({ addChat }) => {
     <div className=" items-center justify-between px-15 bg-[#212121]">
       <SuggestionBanner />
 
-      <CharacterGrid onCharacterSelect={addChat} />
+      <CharacterGrid onCharacterSelect={addChat} title="Featured"/>
+      <CharacterGrid onCharacterSelect={addChat} title="Favourites"/>
     </div>
   );
 };

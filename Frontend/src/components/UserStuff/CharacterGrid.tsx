@@ -9,7 +9,7 @@ function truncateText(text: string, maxCharsPerLine = 10, maxLines = 3) {
     : text;
 }
 
-const CharacterGrid = ({ onCharacterSelect }: { onCharacterSelect: (characterName: string, characterImg: string) => void }) => {
+const CharacterGrid = ({ onCharacterSelect,title }: { onCharacterSelect: (characterName: string, characterImg: string) => void;title:string }) => {
   const arrayOfCharacters = [
     {
       img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352",
@@ -78,7 +78,7 @@ const CharacterGrid = ({ onCharacterSelect }: { onCharacterSelect: (characterNam
   ];
   return (
     <div className="space-y-0 bg-[#212121] px-4 sm:px-0">
-      <p className="text-xl text-white mt-10 text-center sm:text-left">Featured</p>
+      <p className="text-xl text-white mt-10 pl-8 text-center sm:text-left">{title}</p>
   
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-6 h-fit justify-items-center">
         {arrayOfCharacters.map((character) => (

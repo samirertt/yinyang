@@ -46,7 +46,7 @@ const FilterPage : React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-[#212121] h-screen pt-5">
+    <div className="bg-[#212121] h-screen pt-5 px-4 sm:px-6 md:px-10 lg:px-40">
       <UserNavBar chatList={chatList} handleDelete={handleDelete } />
       <div className="w-auto mx-auto pl-20 pr-20 pb-20 mt-10">
         <div className="flex justify-center align-start relative">

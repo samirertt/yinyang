@@ -10,7 +10,7 @@ const FilterList: React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
 
   const navigate = useNavigate();
   return (
-    <div className="bg-[#212121] min-h-screen flex flex-col">
+    <div className="bg-[#212121] min-h-screen flex flex-col px-4 sm:px-6 md:px-10 lg:px-40">
       <UserNavBar chatList={chatList} handleDelete={handleDelete}/>
       <div
         className={`bg-gradient-to-b ${bgColor} from-[#yourColor] to-black rounded-t-4xl w-full h-90 relative overflow-hidden mt-25`}
