@@ -2,7 +2,7 @@ import Logo from '../assets/logo.png';
 
 const Navbar = () => {
   return (
-    <nav className="bg-[#212121] text-white p-3 fixed w-full z-10 top-0">
+    <nav className="bg-[#212121] text-white p-3 fixed w-full lg:w-347 z-10 top-0">
       <div className="container mx-auto flex justify-between items-center px-4 md:px-10">
         {/* Website Name and Logo (Always at the Start) */}
         <div className="flex items-center flex-shrink-0">
