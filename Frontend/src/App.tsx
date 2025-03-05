@@ -38,7 +38,7 @@ const App: React.FC = () => {
         <Route
           path="/UserDashBoard/FilterPage/FilterList"
           element={
-            <FilterList chatList={chatList} handleDelete={handleDelete} />
+            <FilterList  chatList={chatList} handleDelete={handleDelete} />
           }
         />
         <Route

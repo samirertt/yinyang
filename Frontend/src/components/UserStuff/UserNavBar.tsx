@@ -25,7 +25,7 @@ function SearchBar() {
           {!isExpanded && (
             <img
               src={searchIcon}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-10 h-10 invert  pointer-events-none"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-10 h-10 invert pointer-events-none"
               alt="SearchIcon"
             />
           )}
@@ -34,8 +34,9 @@ function SearchBar() {
             onFocus={handleFocus}
             onBlur={handleBlur}
             onChange={handleChange}
-            className={`transition-all duration-300 ease-in-out bg-[#212121] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-gray-400 w-full
-              ${isExpanded ? "pl-10" : "pl-10 cursor-pointer"}`}
+            className={`transition-all duration-300 ease-in-out bg-[#212121] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-gray-400 w-full ${
+              isExpanded ? "pl-10" : "pl-10 cursor-pointer"
+            }`}
             type="search"
             placeholder={isExpanded ? "Search" : ""}
           />
@@ -51,18 +52,24 @@ function SearchBar() {
   );
 }
 
- export interface UserNavBarProps {
-  chatList: { name: string; image: string }[],
-  handleDelete: (buttonName: string) => void
+export interface UserNavBarProps {
+  chatList: { name: string; image: string }[];
+  handleDelete: (buttonName: string) => void;
+  username?: string;
 }
 
-const UserNavBar : React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
+const UserNavBar: React.FC<UserNavBarProps> = ({
+  chatList,
+  handleDelete,
+  username,
+}) => {
   return (
     <div className="mt-5 flex flex-col md:flex-row items-center justify-between bg-[#212121] ml-5 h-auto">
       <div className="self-start">
         <UserRecentChats chatList={chatList} handleDelete={handleDelete} />
         <div className="md:ml-2">
-          <UserAvatar name="Ana De Armas" image_path={Avatar} />
+          {/* Provide a default value if username is not given */}
+          <UserAvatar name={username || "Guest"} image_path={Avatar} />
         </div>
       </div>
       
