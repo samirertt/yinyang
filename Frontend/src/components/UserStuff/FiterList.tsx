@@ -1,15 +1,17 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import LoginNav from "../LoginNav";
+import { UserNavBarProps } from "./UserNavBar";
 import CharacterGrid from "./CharacterGrid";
 import { ArrowLeft } from "lucide-react";
-const FilterList = () => {
+import UserNavBar from "./UserNavBar";
+
+const FilterList: React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
   const location = useLocation();
   const { icon, title, bgColor } = location.state;
 
   const navigate = useNavigate();
   return (
     <div className="bg-[#212121] min-h-screen flex flex-col">
-      <LoginNav />
+      <UserNavBar chatList={chatList} handleDelete={handleDelete}/>
       <div
         className={`bg-gradient-to-b ${bgColor} from-[#yourColor] to-black rounded-t-4xl w-full h-90 relative overflow-hidden mt-25`}
       >
