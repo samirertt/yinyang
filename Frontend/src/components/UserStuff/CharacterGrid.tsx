@@ -1,6 +1,8 @@
 import { Heart } from "lucide-react";
 import { MessageCircle } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 function truncateText(text: string, maxCharsPerLine = 10, maxLines = 3) {
   text = "Welcome, " + text;
   const maxTotalChars = maxCharsPerLine * maxLines; // 10 * 3 = 30 characters max
@@ -9,7 +11,34 @@ function truncateText(text: string, maxCharsPerLine = 10, maxLines = 3) {
     : text;
 }
 
-const CharacterGrid = ({ onCharacterSelect,title }: { onCharacterSelect: (characterName: string, characterImg: string) => void;title:string }) => {
+const CharacterGrid = ({ onCharacterSelect,title,list }: { onCharacterSelect: (characterName: string, characterImg: string) => void;title:string;list:{ name: string; image: string }[] }) => {
+  
+  const [myList,setMyList]=useState(list);
+  const navigate = useNavigate();
+  const goToChat = (character:{ img: string; name: string; details: string; usage: number; Id:number; })=>
+  {
+    onCharacterSelect(character.name, character.img);
+
+
+    if (!myList.some((chat) => chat.name === character.name)) 
+    {
+      var temp = myList;
+      temp.push({name: character.name, image: character.img});
+      
+      setMyList(temp);
+    }
+
+    
+    
+    navigate("/Chat", { state: {
+      character:character,
+      historyList:myList
+    }, replace:true});
+    
+  }
+
+  
+
   const arrayOfCharacters = [
     {
       img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352",
@@ -88,13 +117,17 @@ const CharacterGrid = ({ onCharacterSelect,title }: { onCharacterSelect: (charac
             name={character.name}
             details={character.details}
             usage={character.usage}
-            onClick={() => onCharacterSelect(character.name, character.img)}
+            //onClick={() => onCharacterSelect(character.name, character.img)
+            onClick={() => goToChat(character)
+            }
           />
         ))}
       </div>
     </div>
   );
 };
+
+
 
 const CharacterInfo = ({ img_path, name, details, usage, onClick }: { 
   img_path: string;

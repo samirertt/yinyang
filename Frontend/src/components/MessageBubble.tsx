@@ -3,15 +3,16 @@ import Avatar from "../assets/Avatar.png";
 import Delete from "../assets/Delete.svg";
 import Edit from "../assets/Edit.svg";
 import Copy from "../assets/Copy.svg";
-import Emi from "../assets/Emi.jpg";
+// import Emi from "../assets/Emi.jpg";
 
 
 interface MessageProps {
   text: string;
   sender: "user" | "ai";
+  image:string;
 }
 
-export default function MessageBubble({ text, sender }: MessageProps) {
+export default function MessageBubble({ text, sender,image }: MessageProps) {
   const messageRef = useRef<HTMLDivElement>(null);
   const [displayedText, setDisplayedText] = useState(sender === "user" ? text : ""); 
 
@@ -45,7 +46,7 @@ export default function MessageBubble({ text, sender }: MessageProps) {
       <div className={`flex items-center gap-2 pt-2 ${sender === "ai" ? "justify-start" : "justify-end"}`}>
         {sender === "ai" && (
           <img
-            src={Emi}
+            src={image}
             alt="Avatar"
             className="w-8 h-8 rounded-xl"
             style={{

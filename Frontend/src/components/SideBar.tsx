@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SideBar from "../assets/SideBar.svg";
 import Search from "../assets/Search.svg";
 import NewChat from "../assets/NewChat.svg";
-import Emi from "../assets/Emi.jpg";
+// import Emi from "../assets/Emi.jpg";
 import History from "../assets/History.svg";
 import Pin from "../assets/Pin.svg";
 import Cross from "../assets/Cross.svg";
@@ -10,24 +10,20 @@ import Info from "../assets/info.svg";
 
 
 interface SidebarProps {
+  character:{img: string, name:string, Id:number, details:string, usage: number },
+  historyList:{ name: string; image: string }[]
 }
 
-const Sidebar: React.FC<SidebarProps> = () => {
+const Sidebar: React.FC<SidebarProps> = (props: { character:{img: string, name:string, Id:number, details:string, usage: number },historyList:{ name: string; image: string }[] }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isInfoCollapsed, setIsInfoCollapsed] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const chatList = [
-    "Emilia Clarke",
-    "John Doe",
-    "Jane Smith",
-    "Michael Johnson",
-    "Sarah Williams"
-  ];
-  
+  const [chatList,setChatList] = useState(props.historyList);
+  const [activeCharacter,setActiveCharacter] = useState(props.character);
 
   const filteredChats = chatList.filter((chat) =>
-    chat.toLowerCase().includes(searchTerm.toLowerCase())
+    chat.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const toggleCollapse = () => {
@@ -114,7 +110,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
                   <ol>
                     {filteredChats.map((chat, index) => (
                     <li key={index} className="p-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
-                      {chat}
+                      {chat.name}
                     </li>
                     ))}
                   </ol>
@@ -143,17 +139,17 @@ const Sidebar: React.FC<SidebarProps> = () => {
           <>
          <div className="p-4 z-0 border-b border-[var(--gray-black)] flex flex-col items-center">
         <img
-          src={Emi}
+          src={activeCharacter.img}
           alt="Avatar"
           className="w-38 h-38 rounded-full border-2 border-[var(--gray-black)]"
         />
-        <h2 className="text-xl font-semibold mt-2 text-center">Emilia Clarke</h2>
+        <h2 className="text-xl font-semibold mt-2 text-center">{activeCharacter.name}</h2>
       </div>
 
       <div className="px-4 py-3">
         <h3 className="text-xl font-semibold">Bio</h3>
         <p className="text-xm mt-1 text-justify">
-          Emilia Clarke is a British actress best known as Daenerys Targaryen in Game of Thrones. A versatile and beloved talent, she continues to captivate audiences worldwide.
+          {activeCharacter.details}
         </p>
       </div>
 

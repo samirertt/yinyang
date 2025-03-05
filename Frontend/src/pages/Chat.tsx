@@ -4,6 +4,7 @@ import Typing from "../components/Typing";
 import MessageBubble from "../components/MessageBubble";
 import SideBar from "../components/SideBar";
 import ChatNav from "../components/ChatNav";
+import { useLocation } from "react-router-dom";
 
 
 export interface Message {
@@ -36,16 +37,21 @@ export default function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typing]);
 
+
+  const location = useLocation();
+  const [receivedCharacter,setRecievedCharacter] = useState(location.state.character);// Access the passed object
+  const [list,setList] = useState(location.state.historyList);// Access the passed object
+
   return (
     <div>
       
       <div className=" flex h-screen bg-[var(--page)] ">      
-      <SideBar/>
+      <SideBar historyList={list} character={receivedCharacter}/>
         <div className="flex flex-col flex-1 h-full w-full relative p-4 overflow-y-auto space-y-4 items-center">
         <ChatNav/>
-          <div className="pt-15 mb-20 w-89 md:min-w-[10px] lg:min-w-[850px] items-center">
+        <div className="pt-15 mb-20 w-89 md:min-w-[10px] lg:min-w-[850px] items-center">
           {messages.map((msg, index) => (
-            <MessageBubble key={index} text={msg.text} sender={msg.sender} />
+            <MessageBubble key={index} text={msg.text} sender={msg.sender} image={receivedCharacter.img} />
           ))}
             <InputBar sendMessage={sendMessage} />
           </div>
@@ -56,3 +62,4 @@ export default function Chat() {
     </div>
   );
 }
+  

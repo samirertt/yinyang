@@ -24,10 +24,12 @@ const UserCharacterSelection = ({
     return <Navigate to="/Login" replace />;
   }
 
+  
+
   return (
     <div className="bg-[#212121] flex flex-col min-h-screen px-4 sm:px-6 md:px-10 lg:px-40">
       <UserNavBar username={username} chatList={chatList} handleDelete={handleDelete} />
-      <MainPage addChat={addChat} />
+      <MainPage addChat={addChat} chatList={chatList} />
       <Footer />
     </div>
   );
@@ -35,14 +37,15 @@ const UserCharacterSelection = ({
 
 interface MainPageProps {
   addChat: (characterName: string, characterImage: string) => void;
+  chatList: { name: string; image: string }[];
 }
 
-const MainPage: React.FC<MainPageProps> = ({ addChat }) => {
+const MainPage: React.FC<MainPageProps> = ({ addChat,chatList }) => {
   return (
     <div className="flex flex-col items-center justify-between px-4 bg-[#212121]">
       <SuggestionBanner />
-      <CharacterGrid onCharacterSelect={addChat} title="Featured" />
-      <CharacterGrid onCharacterSelect={addChat} title="Favourites" />
+      <CharacterGrid onCharacterSelect={addChat} list={chatList} title="Featured" />
+      <CharacterGrid onCharacterSelect={addChat} list={chatList} title="Favourites" />
     </div>
   );
 };
