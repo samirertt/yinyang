@@ -61,7 +61,7 @@ const App: React.FC = () => {
         <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
         <Route path="/TermsOfService" element={<TermsOfService />} />
         <Route
-          path="/UserDashboard"
+          path="/"
           element={
             <UserCharacterSelection
               chatList={chatList}

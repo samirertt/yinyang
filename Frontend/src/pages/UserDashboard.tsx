@@ -16,7 +16,7 @@ const UserCharacterSelection = ({
 }: UserCharacterSelectionProps) => {
   
   return (
-    <div className="bg-[#212121] flex flex-col h-full px-2 sm:px-4 md:px-6 ">
+    <div className="bg-[#212121] flex flex-col min-h-screen px-4 sm:px-6 md:px-10 lg:px-30">
       <UserNavBar chatList={chatList} handleDelete={handleDelete} />
 
       <MainPage addChat={addChat} />
