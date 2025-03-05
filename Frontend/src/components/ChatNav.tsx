@@ -2,22 +2,22 @@ import Logo from '../assets/logo.png';
 
 const Navbar = () => {
   return (
-    <nav className="bg-[#212121] text-white p-3 fixed w-347 z-10 top-0">
-      <div className="z-40 lg:max-w-400 max-w-110  md:max-w-158 mx-auto flex justify-between items-center px-4 md:px-10">
+    <nav className="bg-[#212121] text-white p-3 fixed w-full z-10 top-0">
+      <div className="container mx-auto flex justify-between items-center px-4 md:px-10">
         {/* Website Name and Logo (Always at the Start) */}
-        <div className="flex items-center">
+        <div className="flex items-center flex-shrink-0">
           <img src={Logo} alt="Logo icon" className="w-6 h-6 rounded-full" />
-          <h1 className="text-3xl font-mono font-bold tracking-wide ml-2">
+          <h1 className="text-2xl md:text-3xl font-mono font-bold tracking-wide ml-2 whitespace-nowrap">
             YinYang
           </h1>
         </div>
 
         {/* Buttons (Pushed to the End) */}
-        <div className="flex gap-4 md:gap-6">
-          <button className="bg-[#212121] text-[#acacaf] px-4 py-2 rounded-md cursor-pointer hover:bg-[#2F2F2F] transition font-semibold">
+        <div className="flex gap-2 md:gap-6">
+          <button className="bg-[#212121] text-[#acacaf] px-2 md:px-3 py-1 md:py-2 rounded-md cursor-pointer hover:bg-[#2F2F2F] transition font-semibold text-sm md:text-base whitespace-nowrap">
             Sign Up to Chat
           </button>
-          <button className="bg-[#212121] text-[#acacaf] px-4 py-2 rounded-md cursor-pointer hover:bg-[#2F2F2F] transition font-semibold">
+          <button className="bg-[#212121] text-[#acacaf] px-2 md:px-3 py-1 md:py-2 rounded-md cursor-pointer hover:bg-[#2F2F2F] transition font-semibold text-sm md:text-base whitespace-nowrap">
             Login
           </button>
         </div>

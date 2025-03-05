@@ -42,12 +42,12 @@ const Sidebar: React.FC<SidebarProps> = () => {
     <div className="flex relative h-screen">
       {isCollapsed && (
         <button
-        className="fixed z-30 h-15 rounded-lg px-5 text-token-text-secondary transition-all duration-1000 ease-in-out cursor-pointer"          
+        className="fixed z-30 lg:h-15 md:h-15 h-14 rounded-lg px-1 text-token-text-secondary transition-all duration-1000 ease-in-out cursor-pointer"          
           aria-label="Toggle SideBar"
           data-testid="toggle-sidebar-button"
           onClick={toggleCollapse}
         >
-          <img src={SideBar} alt="SideBar icon" className="w-5 h-5 cursor-pointer" />
+          <img src={SideBar} alt="SideBar icon" className="w-5 h-5 cursor-pointer " />
         </button>
       )}
 
@@ -59,7 +59,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
               <nav className="flex h-full w-full flex-col px-3" aria-label="Chat History">
                 <div className="flex justify-between h-[60px] items-center md:h-header-height">
                   <button
-                    className="h-10 rounded-lg px-2 cursor-pointer"
+                    className="h-9 rounded-lg cursor-pointer"
                     aria-label="Close SideBar"
                     onClick={toggleCollapse}
                   >
@@ -131,12 +131,12 @@ const Sidebar: React.FC<SidebarProps> = () => {
         }`}
       >
         <button
-        className="fixed z-50 h-7 right-5 rounded-lg px-1 text-token-text-secondary transition-all duration-1000 ease-in-out cursor-pointer"          
+        className="fixed z-50 right-5 top-16 rounded-lg px-1 text-token-text-secondary transition-all duration-1000 ease-in-out cursor-pointer"          
           aria-label="Toggle info Bar"
           data-testid="toggle-infoBar-button"
           onClick={toggleInfoBar}
         >
-          <img src={Info} alt="info icon" className="w-5 h-5 cursor-pointer" />
+          <img src={Info} alt="info icon" className="lg:w-5 lg:h-5 w-4 h-4 cursor-pointer" />
         </button>
         
         {!isInfoCollapsed && (
