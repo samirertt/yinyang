@@ -5,6 +5,7 @@ import searchIcon from "../../MaginifyingGlass.png";
 import { Link } from "react-router-dom";
 import { Filter } from "lucide-react";
 import { useState, SetStateAction } from "react";
+import { Heart } from "lucide-react";
 
 function SearchBar() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -50,14 +51,15 @@ function SearchBar() {
   );
 }
 
-function UserNavBar(
+ export interface UserNavBarProps {
   chatList: { name: string; image: string }[],
   handleDelete: (buttonName: string) => void
-) {
+}
+
+const UserNavBar : React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
   return (
-    <div className="mt-5 flex flex-col md:flex-row items-start justify-between bg-[#212121] mx-5 p-4 rounded-lg gap-4">
-      {/* Left section - Recent chats + Profile */}
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-4 order-1">
+    <div className="mt-5 flex flex-col md:flex-row items-center justify-between bg-[#212121] ml-5 h-auto">
+      <div className="self-start">
         <UserRecentChats chatList={chatList} handleDelete={handleDelete} />
         <div className="md:ml-2">
           <UserAvatar name="Ana De Armas" image_path={Avatar} />
@@ -70,6 +72,6 @@ function UserNavBar(
       </div>
     </div>
   );
-}
+};
 
 export default UserNavBar;

@@ -1,35 +1,41 @@
 import CharacterGrid from "../components/UserStuff/CharacterGrid";
-import { useState } from "react";
-
 import Footer from "../components/Footer";
 import SuggestionBanner from "../components/UserStuff/SuggestionBanner";
 import UserNavBar from "../components/UserStuff/UserNavBar";
 
-function UserCharactertSelection() {
-  const [chatList, setChatList] = useState<{ name: string; image: string }[]>([]);
+interface UserCharacterSelectionProps {
+  chatList: { name: string; image: string }[];
+  handleDelete: (buttonName: string) => void;
+  addChat: (characterName: string, characterImage: string) => void;
+}
 
-  const addChat = (characterName: string, characterImage: string) => {
-    if (!chatList.some((chat) => chat.name === characterName)) {
-      setChatList((prevChats) => [...prevChats, { name: characterName, image: characterImage }]);
-    }
-  };
-
-  const handleDelete = (buttonName: string) => {
-    setChatList((prevChat) => prevChat.filter((chat) => chat.name !== buttonName));
-  };
-
+const UserCharacterSelection = ({
+  chatList,
+  handleDelete,
+  addChat,
+}: UserCharacterSelectionProps) => {
+  
   return (
-    <div className="bg-[#212121] flex flex-col min-h-screen px-4 sm:px-10 md:px-15 lg:px-25">
-      {UserNavBar(chatList, handleDelete)}
+    <div className="bg-[#212121] flex flex-col h-full px-2 sm:px-4 md:px-6 ">
+      <UserNavBar chatList={chatList} handleDelete={handleDelete} />
 
-      <div className="flex flex-col items-center justify-between px-6 sm:px-10 md:px-16 lg:px-20">
-        <SuggestionBanner />
-        <CharacterGrid onCharacterSelect={addChat} />
-      </div>
-
+      <MainPage addChat={addChat} />
       <Footer />
     </div>
   );
+};
+
+interface MainPageProps {
+  addChat: (characterName: string, characterImage: string) => void;
 }
 
-export default UserCharactertSelection;
+const MainPage: React.FC<MainPageProps> = ({ addChat }) => {
+  return (
+    <div className=" items-center justify-between px-15 bg-[#212121]">
+      <SuggestionBanner />
+
+      <CharacterGrid onCharacterSelect={addChat} />
+    </div>
+  );
+};
+export default UserCharacterSelection;

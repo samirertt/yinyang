@@ -11,17 +11,17 @@ import {
   LogOut,
 } from "lucide-react";
 
-type Chat = {
-  name: string;
-  image: string;
-};
+// type Chat = {
+//   name: string;
+//   image: string;
+// };
 
 //This is the chat history of the user
 const UserRecentChats = ({
   chatList,
   handleDelete,
 }: {
-  chatList: Chat[];
+  chatList: { name: string; image: string }[];
   handleDelete: (name: string) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -78,6 +78,8 @@ const UserRecentChats = ({
               scrollbarWidth: "none",
             }}
           >
+            
+            
             {chatList.map((chat, index) => (
               <ChatCard
                 key={index}
@@ -86,6 +88,7 @@ const UserRecentChats = ({
                 onDelete={() => handleDelete(chat.name)}
               />
             ))}
+            
           </div>
 
           <div className="relative h-full w-full">
