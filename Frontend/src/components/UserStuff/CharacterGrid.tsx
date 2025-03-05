@@ -1,4 +1,6 @@
+import { Heart } from "lucide-react";
 import { MessageCircle } from "lucide-react";
+import { useState } from "react";
 function truncateText(text: string, maxCharsPerLine = 10, maxLines = 3) {
   text = "Welcome, " + text;
   const maxTotalChars = maxCharsPerLine * maxLines; // 10 * 3 = 30 characters max
@@ -101,29 +103,43 @@ const CharacterInfo = ({ img_path, name, details, usage, onClick }: {
   usage: number;
   onClick: () => void;
 }) => {
-  return (
-    <div 
-      className="flex w-full h-40 items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden cursor-pointer transition-colors"
-      onClick={onClick}
-    >
-      <img 
-        src={img_path} 
-        alt={name} 
-        className="w-16 h-20 sm:w-20 sm:h-25 rounded-2xl"  // Smaller image on mobile
-      />
-      <div className="ml-3 sm:ml-4 flex-1 min-w-0">
-        <h2 className="text-xs sm:text-sm font-bold mb-1 text-white truncate">{name}</h2>
-        <p className="text-gray-300 text-[10px] sm:text-xs mb-1">By: Me</p>
-        <p className="text-white text-[10px] sm:text-xs line-clamp-2 mb-1 sm:mb-2">
-          {details}
-        </p>
-        <span className="text-gray-500 text-[10px] sm:text-xs flex items-center gap-1">
-          <MessageCircle size={12} className="text-gray-500" />
-          Usage: {usage}
-        </span>
-      </div>
+
+  const [isLiked, setIsLiked] = useState(false);
+
+  const toggleLike = () => {
+    setIsLiked((prev) => !prev);
+  };
+
+return (
+  <div
+    className="relative flex w-75 h-30 items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden cursor-pointer"
+    onClick={onClick}
+  >
+   
+    <button className={`absolute top-2 right-2 hover:text-red-500 ${
+          isLiked ? "text-red-500" : "text-gray-500"
+        }`}
+    onClick={(e) => {
+      e.stopPropagation();
+      toggleLike();
+    }}>
+      <Heart size={18}  fill={isLiked ? "red " : "none"} />
+    </button>
+
+    <img src={img_path} alt={name} className="w-20 h-25 rounded-2xl " />
+
+    <div className="ml-4 flex-1">
+      <h2 className="text-sm font-bold mb-1 text-white text-left">{name}</h2>
+      <p className="text-gray-300 text-left text-xs">By: Me</p>
+      <p className="mb-2 text-white text-left text-xs">{truncateText(details)}</p>
+      <span className="text-gray-500 text-xs flex items-center gap-1">
+        <MessageCircle size={14} className="text-gray-500" />
+        Usage: {usage}
+      </span>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default CharacterGrid;

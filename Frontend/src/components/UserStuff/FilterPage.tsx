@@ -5,7 +5,9 @@ import mysteriousImage from "../../assets/filter_image/mysterious.jpeg";
 import pridefulImage from "../../assets/filter_image/prideful.jpeg";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import LoginNav from "../LoginNav";
+import Footer from "../Footer";
+import UserNavBar from "./UserNavBar";
+import {UserNavBarProps} from "./UserNavBar"
 
 interface GridItem {
   title: string;
@@ -13,7 +15,7 @@ interface GridItem {
   bgColor: string;
 }
 
-const FilterPage = () => {
+const FilterPage : React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
   const categories: GridItem[] = [
     {
       title: "Friendly",
@@ -44,12 +46,14 @@ const FilterPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-[#212121] min-h-screen md:pt-16">
-      <LoginNav/>
+    <div className="bg-[#212121] h-screen pt-5">
+      <UserNavBar chatList={chatList} handleDelete={handleDelete } />
       <div className="w-auto mx-auto pl-20 pr-20 pb-20 mt-10">
         <div className="flex justify-center align-start relative">
-          <ArrowLeft className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white cursor-pointer"
-          onClick={() => navigate(-1)} />
+          <ArrowLeft
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white cursor-pointer"
+            onClick={() => navigate(-1)}
+          />
 
           <p className="text-2xl sm:text-3xl text-white pb-4 sm:pb-5 sm:pt-8 text-center">
             Filters
@@ -67,6 +71,7 @@ const FilterPage = () => {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
@@ -80,12 +85,13 @@ const FilterCards = ({
   title: string;
   bgColor: string;
 }) => {
-
   const navigate = useNavigate();
 
   const handleClick = () => {
     // Navigate to the new page and pass data via state
-    navigate('/UserDashBoard/FilterPage/FilterList', { state: { icon, title, bgColor } });
+    navigate("/UserDashBoard/FilterPage/FilterList", {
+      state: { icon, title, bgColor },
+    });
   };
   return (
     <div className="w-full ">
