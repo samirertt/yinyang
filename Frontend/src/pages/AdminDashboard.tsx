@@ -1,11 +1,16 @@
 import { useState } from "react";
 import NavBar from "../components/NavBar";
 import CharactersBarGraph from "../components/AdminDashboardComponents/CategoriesBarGraph";
-
+import { useLocation, Navigate } from "react-router-dom"; // Import useLocation hook
 
 function AdminDashboard()
 {
-
+  const location = useLocation();
+  const username = location.state?.username; // Fallback to 'Guest' if username is not available
+  // Redirect if no username (not logged in)
+  if (!username) {
+    return <Navigate to="/Login" replace />;
+  }
     const allCategories = [
         {
           title: "Friendly",

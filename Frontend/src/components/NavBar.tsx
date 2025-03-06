@@ -70,7 +70,7 @@ function NavBar(props: { logged: any; admin: any }) {
           }}
           className="loggedIn"
         >
-          Hello, User!
+          Hello, Admin!
         </div>
       )}
 
