@@ -78,7 +78,7 @@ function Login() {
                 </svg>
                 Continue with Email
               </button>
-              <button className="w-full bg-gray-900 text-white flex items-center justify-center gap-1 p-1.5 sm:p-2 rounded-md shadow text-xs sm:text-sm md:text-base">
+              <button onClick={() => navigate("/", { state: {username : "Guest"} })} className="cursor-pointer w-full bg-gray-900 text-white flex items-center justify-center gap-1 p-1.5 sm:p-2 rounded-md shadow text-xs sm:text-sm md:text-base">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-3 h-3 sm:w-4 sm:h-4 md:w-6 md:h-6" fill="currentColor">
                   <path d="M12 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm-6 14a6 6 0 0 1 12 0v4a1 1 0 0 1-2 0v-4a4 4 0 1 0-8 0v4a1 1 0 0 1-2 0v-4z"/>
                 </svg>
