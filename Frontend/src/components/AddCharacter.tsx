@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { motion } from "framer-motion"; // Import Framer Motion
 
 const AddCharacter = () => {
   const [name, setName] = useState("");
@@ -6,6 +7,7 @@ const AddCharacter = () => {
   const [preview, setPreview] = useState<string | null>(null);
   const [details, setDetails] = useState("");
   const [characteristics, setCharacteristics] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false); // New success state
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -31,7 +33,14 @@ const AddCharacter = () => {
       alert("Please upload an image");
       return;
     }
+
     console.log("Character Added:", { name, image, details, characteristics });
+
+    // Show success animation
+    setIsSuccess(true);
+    setTimeout(() => setIsSuccess(false), 2000); // Hide after 2s
+
+    // Reset form fields
     setName("");
     setImage(null);
     setPreview(null);
@@ -43,11 +52,23 @@ const AddCharacter = () => {
   };
 
   return (
-    <div className="p-6 rounded-lg shadow-md w-full  h-full mt-20 bg-[#212121] flex flex-col items-center">
+    <div className="p-6 rounded-lg shadow-md w-full h-full mt-20 bg-[#212121] flex flex-col items-center relative">
+      {/* Success Animation */}
+      {isSuccess && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{ duration: 0.3 }}
+          className="absolute top-6 bg-green-500 text-white px-4 py-2 rounded-md shadow-md"
+        >
+          ✅ Character Added Successfully!
+        </motion.div>
+      )}
+
       <form onSubmit={handleSubmit} className="w-full max-w-2xl">
         {/* Character Name & Image Row */}
         <div className="flex gap-6 items-start mb-6">
-          {/* Character Name */}
           <div className="w-1/2">
             <label className="block text-[#acacaf] font-semibold mb-2">Character Name</label>
             <input
@@ -59,7 +80,6 @@ const AddCharacter = () => {
               required
             />
           </div>
-          {/* Character Image Upload */}
           <div className="w-1/2 flex flex-col items-center">
             <label className="block text-[#acacaf] font-semibold mb-2">Character Image</label>
             <input
@@ -122,18 +142,18 @@ const AddCharacter = () => {
 
       {/* Character Preview Card */}
       {name && preview && (
-      <div className="mt-6 p-4 rounded-lg shadow-md bg-[#2F2F2F] w-full max-w-md text-[#acacaf]">
-        <h2 className="font-bold text-xl mb-2">Character Preview</h2>
-        <div className="flex items-center gap-4 overflow-hidden">
-          <img src={preview} alt="Character Preview" className="w-20 h-20 object-cover rounded-md flex-shrink-0" />
-          <div className="overflow-hidden">
-            <h3 className="text-lg font-semibold truncate">{name}</h3>
-            <p className="text-sm break-words line-clamp-3">{details}</p>
-            <p className="text-xs text-gray-400 mt-1 break-words line-clamp-2">{characteristics}</p>
+        <div className="mt-6 p-4 rounded-lg shadow-md bg-[#2F2F2F] w-full max-w-md text-[#acacaf]">
+          <h2 className="font-bold text-xl mb-2">Character Preview</h2>
+          <div className="flex items-center gap-4 overflow-hidden">
+            <img src={preview} alt="Character Preview" className="w-20 h-20 object-cover rounded-md flex-shrink-0" />
+            <div className="overflow-hidden">
+              <h3 className="text-lg font-semibold truncate">{name}</h3>
+              <p className="text-sm break-words line-clamp-3">{details}</p>
+              <p className="text-xs text-gray-400 mt-1 break-words line-clamp-2">{characteristics}</p>
+            </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
     </div>
   );
 };
