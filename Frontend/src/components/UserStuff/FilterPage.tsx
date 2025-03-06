@@ -46,7 +46,7 @@ const FilterPage : React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-[#212121] h-screen pt-5 px-4 sm:px-6 md:px-10 lg:px-40">
+    <div className="bg-[#212121] min-h-screen pt-5 px-4 sm:px-6 md:px-10 lg:px-40">
       <UserNavBar chatList={chatList} handleDelete={handleDelete } />
       <div className="w-auto mx-auto pl-20 pr-20 pb-20 mt-10">
         <div className="flex justify-center align-start relative">
@@ -60,7 +60,7 @@ const FilterPage : React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
           {categories.map((category) => (
             <FilterCards
               key={category.title} // Add a key for React list rendering
@@ -96,15 +96,15 @@ const FilterCards = ({
   return (
     <div className="w-full ">
       <div
-        className={`w-full h-28 ${bgColor} text-left rounded-lg transition-all duration-300 cursor-pointer flex items-center px-4 gap-5 overflow-hidden hover:shadow-[0_0_25px_5px_rgba(255,255,255,0.6)]`}
+        className={`w-full h-20 md:h-28 ${bgColor} text-left rounded-lg transition-all duration-300 cursor-pointer flex items-center px-4 gap-5 overflow-hidden hover:shadow-[0_0_25px_5px_rgba(255,255,255,0.6)]`}
         onClick={handleClick}
       >
-        <h2 className="text-2xl text-white">{title}</h2>
+        <h2 className=" text-sm md:text-2xl text-white">{title}</h2>
 
         <img
           src={icon}
           alt={title}
-          className="w-20 h-20 rounded-xl transform rotate-45 ml-auto translate-y-8"
+          className="w-15 h-15 md:w-20 md:h-20 rounded-xl transform rotate-45 ml-auto translate-y-8"
         />
       </div>
     </div>

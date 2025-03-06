@@ -32,7 +32,7 @@ const SuggestionBanner = () => {
   }, [gifs.length]);
 
   return (
-    <div className="mx-2 sm:mx-4 md:ml-10 flex flex-col gap-5 ">
+    <div className="mx-2 sm:mx-4 md:ml-10 flex flex-col gap-5 w-fit ">
       <p className="text-lg sm:text-xl text-white pb-4 sm:pb-5 pt-6 sm:pt-8 self-start">
         Top Choices
       </p>
@@ -41,7 +41,7 @@ const SuggestionBanner = () => {
           id="gif-banner"
           src={gifs[currentGif]}
           alt="Animated Banner"
-          className="h-40 sm:h-60 md:h-80 w-full md:w-[700px] object-cover rounded-2xl mr-0 md:mr-4"
+          className="h-40 sm:h-60 md:h-80 w-full md:w-[550px] object-cover rounded-2xl mr-0 md:mr-4"
         />
 
         {/* Blurry Full-Width Background Card */}
@@ -85,7 +85,7 @@ const BannerCards = ({
 
   return (
     <div
-      className="w-full md:w-85 min-h-80 bg-[#313131] p-4 sm:p-6 rounded-3xl cursor-pointer transition-all duration-300 flex flex-col gap-4 sm:gap-7 mx-0 md:mx-2"
+      className=" md:w-73 md:min-h-80 bg-[#313131] p-4 sm:p-6 rounded-3xl cursor-pointer transition-all duration-300 flex flex-col gap-4 sm:gap-7 mx-0 md:mx-2"
       onMouseMove={handleMouseMove}
       style={{
         background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(255,255,255,0.3), rgba(49,49,49,1))`,

@@ -14,6 +14,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicies";
 import TermsOfService from "./pages/terms";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserCharacterSelection from "./pages/UserDashboard";
+import Profile from "./components/UserStuff/ProfilePage";
+import UserSettings from "./components/UserStuff/Settings";
 const App: React.FC = () => {
   const [chatList, setChatList] = useState<{ name: string; image: string }[]>(
     []
@@ -78,6 +80,8 @@ const App: React.FC = () => {
             />
           }
         />
+        <Route path="/UserDashboard/Profile" element={<Profile/>}/>
+        <Route path="/UserDashboard/Settings" element={<UserSettings/>}/>
       </Routes>
     </Router>
   );

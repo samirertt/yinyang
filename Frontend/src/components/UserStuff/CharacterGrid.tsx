@@ -22,7 +22,7 @@ const CharacterGrid = ({ onCharacterSelect,title,list }: { onCharacterSelect: (c
 
     if (!myList.some((chat) => chat.name === character.name)) 
     {
-      var temp = myList;
+      const temp = myList;
       temp.push({name: character.name, image: character.img});
       
       setMyList(temp);
@@ -145,7 +145,7 @@ const CharacterInfo = ({ img_path, name, details, usage, onClick }: {
 
 return (
   <div
-    className="relative flex w-75 h-30 items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden cursor-pointer"
+    className="relative flex w-70 h-30  items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden cursor-pointer"
     onClick={onClick}
   >
    
