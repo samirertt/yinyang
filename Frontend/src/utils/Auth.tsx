@@ -1,7 +1,7 @@
 
 class Auth {
     static login(username: string, password: string): boolean {
-      if (username === 'sam' && password === 'asd') {
+      if (username === 'moderator' && password === 'asd' || username === 'admin' && password === 'asd' || username === 'user' && password === 'asd') {
         localStorage.setItem('isAuthenticated', 'true');
         return true;
       }

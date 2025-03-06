@@ -16,17 +16,31 @@ function Login() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (Auth.login(username, password)) {
-      navigate("/", { state: { username } });
-    } else {
-      setError("Invalid username or password");
-    }
-  };
-
+    if(username== "moderator" && password == "asd"){
+      if (Auth.login(username, password)) {
+        navigate("/Moderator", { state: { username } });
+      } else {
+        setError("Invalid username or password");
+      }
+    } else if (username == "admin" && password == "asd"){
+        if (Auth.login(username, password)) {
+          navigate("/Admin", { state: { username } });
+        } else {
+          setError("Invalid username or password");
+        }
+      }
+      else{
+        if (Auth.login(username, password)) {
+          navigate("/", { state: { username } });
+        } else {
+          setError("Invalid username or password");
+        }
+      };
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#212121] relative overflow-x-hidden">
-      <LoginNav />
+      <LoginNav username={username} />
 
       {/* GIF Background Card */}
       <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[95vw] max-w-[900px] h-[50vh] max-h-[450px] rounded-[20px] md:rounded-[30px] shadow-2xl overflow-hidden">

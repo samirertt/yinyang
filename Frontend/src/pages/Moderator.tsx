@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation, Navigate } from "react-router-dom"; // Import useLocation hook
 import AddCharacter from "../components/AddCharacter";
 import EditCharacter from "../components/EditCharacter";
 import RemoveCharacter from "../components/RemoveCharacter";
@@ -7,9 +8,16 @@ import LoginNav from "../components/LoginNav";
 const ManageCharacters = () => {
   const [activeTab, setActiveTab] = useState("add");
 
+  // Use the useLocation hook to get location data
+  const location = useLocation();
+  const username = location.state?.username; // Fallback to 'Guest' if username is not available
+  // Redirect if no username (not logged in)
+  if (!username) {
+    return <Navigate to="/Login" replace />;
+  }
   return (
     <div className="flex flex-col items-center bg-[#212121] min-h-screen p-4 sm:p-6">
-      <LoginNav />
+      <LoginNav username={username} />
       <div className="w-full max-w-[900px] h-full mt-10 sm:mt-20 rounded-lg shadow-lg p-4 sm:p-8 flex flex-col bg-[#212121]">
         {/* Tabs */}
         <div className="flex flex-wrap justify-center border-b mb-6">
