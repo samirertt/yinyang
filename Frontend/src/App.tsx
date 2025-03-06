@@ -17,6 +17,7 @@ import UserCharacterSelection from "./pages/UserDashboard";
 import Profile from "./components/UserStuff/ProfilePage";
 import UserSettings from "./components/UserStuff/Settings";
 const App: React.FC = () => {
+
   const [chatList, setChatList] = useState<{ name: string; image: string }[]>(
     []
   );
@@ -40,7 +41,7 @@ const App: React.FC = () => {
       console.log("Array updated, proceeding with the next step...");
       console.log(chatList);
     }
-  }, [chatList]); // Runs whenever "items" changes
+  }, [chatList]); 
 
   return (
     <Router>
@@ -80,7 +81,7 @@ const App: React.FC = () => {
             />
           }
         />
-        <Route path="/UserDashboard/Profile" element={<Profile/>}/>
+        <Route path="/UserDashboard/Profile" element={<Profile chatList={chatList}/>}/>
         <Route path="/UserDashboard/Settings" element={<UserSettings/>}/>
       </Routes>
     </Router>

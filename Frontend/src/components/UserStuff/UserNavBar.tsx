@@ -65,7 +65,7 @@ const UserNavBar: React.FC<UserNavBarProps> = ({
   return (
     <div className="mt-5 flex flex-col md:flex-row items-center justify-between bg-[#212121] ml-5 h-auto w-full">
       <div className="self-start">
-        <UserRecentChats chatList={chatList} handleDelete={handleDelete} name={username}/>
+        <UserRecentChats chatList={chatList} handleDelete={handleDelete} name={username} image_path={Avatar}/>
         <div className="ml-5 md:ml-2">
           {/* Provide a default value if username is not given */}
           <UserAvatar name={username || "Guest"} image_path={Avatar} />
