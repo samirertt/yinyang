@@ -11,32 +11,34 @@ function truncateText(text: string, maxCharsPerLine = 10, maxLines = 3) {
     : text;
 }
 
-const CharacterGrid = ({ onCharacterSelect,title,list }: { onCharacterSelect: (characterName: string, characterImg: string) => void;title:string;list:{ name: string; image: string }[] }) => {
+const CharacterGrid = ({ onCharacterSelect, title, list, user }: { 
+  onCharacterSelect: (characterName: string, characterImg: string) => void;
+  title: string;
+  list: { name: string; image: string }[];
+  user: { username: string }; // Ensure user is passed as a prop
+}) => {
   
-  const [myList,setMyList]=useState(list);
+  const [myList, setMyList] = useState(list);
   const navigate = useNavigate();
-  const goToChat = (character:{ img: string; name: string; details: string; usage: number; Id:number; })=>
-  {
+  
+  const goToChat = (character: { img: string; name: string; details: string; usage: number; Id: number; }) => {
     onCharacterSelect(character.name, character.img);
 
-
-    if (!myList.some((chat) => chat.name === character.name)) 
-    {
+    if (!myList.some((chat) => chat.name === character.name)) {
       const temp = myList;
-      temp.push({name: character.name, image: character.img});
-      
+      temp.push({ name: character.name, image: character.img });
       setMyList(temp);
     }
 
-    
-    
-    navigate("/Chat", { state: {
-      character:character,
-      historyList:myList
-    }, replace:true});
-    
+    navigate("/Chat", { 
+      state: {
+        character: character,
+        historyList: myList,
+        user: user, // Pass user data here
+      }, 
+      replace: true 
+    });
   }
-
   
 
   const arrayOfCharacters = [
