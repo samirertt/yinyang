@@ -17,7 +17,7 @@ function Login() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (Auth.login(username, password)) {
-      navigate("/UserDashboard");
+      navigate("/", { state: { username } });
     } else {
       setError("Invalid username or password");
     }

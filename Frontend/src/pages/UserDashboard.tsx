@@ -2,6 +2,7 @@ import CharacterGrid from "../components/UserStuff/CharacterGrid";
 import Footer from "../components/Footer";
 import SuggestionBanner from "../components/UserStuff/SuggestionBanner";
 import UserNavBar from "../components/UserStuff/UserNavBar";
+import { Navigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Filter } from "lucide-react";
 
@@ -16,21 +17,21 @@ const UserCharacterSelection = ({
   handleDelete,
   addChat,
 }: UserCharacterSelectionProps) => {
+  // Move hooks inside the component
+  const location = useLocation();
+  const username = location.state?.username;
+
+  // Redirect if no username (not logged in)
+  if (!username) {
+    return <Navigate to="/Login" replace />;
+  }
+
+  
+
   return (
-    <div className="bg-[#212121] flex flex-col h-full px-2 sm:px-4 md:px-6 ">
-      <div className="flex items-center justify-between mt-5 ">
-        {/* UserNavBar remains on the left */}
-        <UserNavBar chatList={chatList} handleDelete={handleDelete} />
-
-        {/* Filter Icon moves to the right */}
-        <Link to="/UserDashboard/FilterPage">
-          <button className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition-all">
-            <Filter size={24} className="text-white hover:text-gray-300" />
-          </button>
-        </Link>
-      </div>
-
-      <MainPage addChat={addChat} />
+    <div className="bg-[#212121] flex flex-col min-h-screen px-4 sm:px-6 md:px-10 lg:px-40">
+      <UserNavBar username={username} chatList={chatList} handleDelete={handleDelete} />
+      <MainPage addChat={addChat} chatList={chatList} />
       <Footer />
     </div>
   );
@@ -38,15 +39,17 @@ const UserCharacterSelection = ({
 
 interface MainPageProps {
   addChat: (characterName: string, characterImage: string) => void;
+  chatList: { name: string; image: string }[];
 }
 
-const MainPage: React.FC<MainPageProps> = ({ addChat }) => {
+const MainPage: React.FC<MainPageProps> = ({ addChat,chatList }) => {
   return (
-    <div className=" items-center justify-between px-15 bg-[#212121]">
+    <div className="flex flex-col items-center justify-between px-4 bg-[#212121]">
       <SuggestionBanner />
-
-      <CharacterGrid onCharacterSelect={addChat} />
+      <CharacterGrid onCharacterSelect={addChat} list={chatList} title="Featured" />
+      <CharacterGrid onCharacterSelect={addChat} list={chatList} title="Favourites" />
     </div>
   );
 };
+
 export default UserCharacterSelection;

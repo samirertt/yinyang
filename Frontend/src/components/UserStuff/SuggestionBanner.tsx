@@ -85,7 +85,7 @@ const BannerCards = ({
 
   return (
     <div
-      className="w-full md:w-80 h-auto  bg-[#313131] p-4 sm:p-6 rounded-3xl cursor-pointer transition-all duration-300 flex flex-col gap-4 sm:gap-7 mx-0 md:mx-10"
+      className="w-full md:w-85 min-h-80 bg-[#313131] p-4 sm:p-6 rounded-3xl cursor-pointer transition-all duration-300 flex flex-col gap-4 sm:gap-7 mx-0 md:mx-2"
       onMouseMove={handleMouseMove}
       style={{
         background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, rgba(255,255,255,0.3), rgba(49,49,49,1))`,

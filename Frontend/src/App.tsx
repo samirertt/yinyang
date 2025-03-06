@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import AdminEditCharacters from "./pages/AdminEditCharacters";
 import AdminEditUsers from "./pages/AdminEditUsers";
@@ -30,14 +30,23 @@ const App: React.FC = () => {
         { name: characterName, image: characterImage },
       ]);
     }
+    
   };
+
+  useEffect(() => {
+    if (chatList.length > 0) {
+      console.log("Array updated, proceeding with the next step...");
+      console.log(chatList);
+    }
+  }, [chatList]); // Runs whenever "items" changes
+
   return (
     <Router>
       <Routes>
         <Route
           path="/UserDashBoard/FilterPage/FilterList"
           element={
-            <FilterList chatList={chatList} handleDelete={handleDelete} />
+            <FilterList  chatList={chatList} handleDelete={handleDelete} />
           }
         />
         <Route
@@ -60,7 +69,7 @@ const App: React.FC = () => {
         <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
         <Route path="/TermsOfService" element={<TermsOfService />} />
         <Route
-          path="/UserDashboard"
+          path="/"
           element={
             <UserCharacterSelection
               chatList={chatList}
