@@ -10,6 +10,7 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 
 // type Chat = {
@@ -21,9 +22,11 @@ import {
 const UserRecentChats = ({
   chatList,
   handleDelete,
+  name,
 }: {
   chatList: { name: string; image: string }[];
   handleDelete: (name: string) => void;
+  name?: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -90,7 +93,7 @@ const UserRecentChats = ({
           </div>
 
           <div className="relative h-full w-full">
-            <LoginInfo />
+            <LoginInfo name={name}/>
           </div>
         </div>
       </div>
@@ -98,7 +101,7 @@ const UserRecentChats = ({
   );
 };
 
-const LoginInfo = () => {
+const LoginInfo = ({name}: {name?: string}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -106,10 +109,10 @@ const LoginInfo = () => {
       {/* Context Menu (Positioned above the button) */}
       {isOpen && (
         <div className="absolute bottom-full mb-2 w-55 bg-[#212121]rounded-2xl shadow-lg p-3">
-          <PopUpMenuItems icon={User} label="Profile" />
+          <PopUpMenuItems icon={User} label="Profile" to="/UserDashboard/Profile" name={name} image_path=""/>
 
-          <PopUpMenuItems icon={Settings} label="Settings" />
-          <PopUpMenuItems icon={LogOut} label="Logout" />
+          <PopUpMenuItems icon={Settings} label="Settings" to="/UserDashboard/Settings" name="" image_path=""/>
+          <PopUpMenuItems icon={LogOut} label="Logout" to="/Login" name="" image_path=""/>
         </div>
       )}
 
@@ -137,14 +140,18 @@ const LoginInfo = () => {
 type MenuItemsProps = {
   icon: React.ElementType;
   label: string;
-   
+  to: string;
+  name?: string;
+  image_path: string;
+
 };
 
-const PopUpMenuItems = ({ icon: Icon, label }: MenuItemsProps) => {
-
+const PopUpMenuItems = ({ icon: Icon, label, to, name, image_path }: MenuItemsProps) => {
+  const navigate = useNavigate();
 
   return (
-    <div className="flex justify-between hover:bg-[#454545] p-1 rounded-2xl w-full" >
+    <div className="flex justify-between hover:bg-[#454545] p-1 rounded-2xl w-full"
+    onClick={() => navigate(to, {})} >
       <p className="text-xm ml-1">{label}</p>
       <Icon size={20} className="mr-1" />
     </div>
