@@ -29,7 +29,6 @@ const App: React.FC = () => {
         ...prevChats,
         { name: characterName, image: characterImage },
       ]);
-      
     }
   };
   return (

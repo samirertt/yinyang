@@ -11,6 +11,7 @@ import {
   LogOut,
 } from "lucide-react";
 
+
 // type Chat = {
 //   name: string;
 //   image: string;
@@ -78,8 +79,6 @@ const UserRecentChats = ({
               scrollbarWidth: "none",
             }}
           >
-            
-            
             {chatList.map((chat, index) => (
               <ChatCard
                 key={index}
@@ -88,7 +87,6 @@ const UserRecentChats = ({
                 onDelete={() => handleDelete(chat.name)}
               />
             ))}
-            
           </div>
 
           <div className="relative h-full w-full">
@@ -109,6 +107,7 @@ const LoginInfo = () => {
       {isOpen && (
         <div className="absolute bottom-full mb-2 w-55 bg-[#212121]rounded-2xl shadow-lg p-3">
           <PopUpMenuItems icon={User} label="Profile" />
+
           <PopUpMenuItems icon={Settings} label="Settings" />
           <PopUpMenuItems icon={LogOut} label="Logout" />
         </div>
@@ -138,11 +137,14 @@ const LoginInfo = () => {
 type MenuItemsProps = {
   icon: React.ElementType;
   label: string;
+   
 };
 
 const PopUpMenuItems = ({ icon: Icon, label }: MenuItemsProps) => {
+
+
   return (
-    <div className="flex justify-between hover:bg-[#454545] p-1 rounded-2xl w-full">
+    <div className="flex justify-between hover:bg-[#454545] p-1 rounded-2xl w-full" >
       <p className="text-xm ml-1">{label}</p>
       <Icon size={20} className="mr-1" />
     </div>

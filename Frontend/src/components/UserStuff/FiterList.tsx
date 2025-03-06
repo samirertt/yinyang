@@ -1,10 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { UserNavBarProps } from "./UserNavBar";
 import CharacterGrid from "./CharacterGrid";
 import { ArrowLeft } from "lucide-react";
 import UserNavBar from "./UserNavBar";
 
-const FilterList: React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
+const FilterList: React.FC<UserNavBar.UserNavBarProps> = ({ chatList, handleDelete }) => {
   const location = useLocation();
   const { icon, title, bgColor } = location.state;
 

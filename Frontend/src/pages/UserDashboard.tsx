@@ -2,6 +2,8 @@ import CharacterGrid from "../components/UserStuff/CharacterGrid";
 import Footer from "../components/Footer";
 import SuggestionBanner from "../components/UserStuff/SuggestionBanner";
 import UserNavBar from "../components/UserStuff/UserNavBar";
+import { Link } from "react-router-dom";
+import { Filter } from "lucide-react";
 
 interface UserCharacterSelectionProps {
   chatList: { name: string; image: string }[];
@@ -14,10 +16,19 @@ const UserCharacterSelection = ({
   handleDelete,
   addChat,
 }: UserCharacterSelectionProps) => {
-  
   return (
     <div className="bg-[#212121] flex flex-col h-full px-2 sm:px-4 md:px-6 ">
-      <UserNavBar chatList={chatList} handleDelete={handleDelete} />
+      <div className="flex items-center justify-between mt-5 ">
+        {/* UserNavBar remains on the left */}
+        <UserNavBar chatList={chatList} handleDelete={handleDelete} />
+
+        {/* Filter Icon moves to the right */}
+        <Link to="/UserDashboard/FilterPage">
+          <button className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition-all">
+            <Filter size={24} className="text-white hover:text-gray-300" />
+          </button>
+        </Link>
+      </div>
 
       <MainPage addChat={addChat} />
       <Footer />
