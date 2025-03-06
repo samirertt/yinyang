@@ -8,12 +8,14 @@ interface UserCharacterSelectionProps {
   chatList: { name: string; image: string }[];
   handleDelete: (buttonName: string) => void;
   addChat: (characterName: string, characterImage: string) => void;
+  addLikedList: (characterName: string, characterImage: string) => void;
 }
 
 const UserCharacterSelection = ({
   chatList,
   handleDelete,
   addChat,
+  addLikedList
 }: UserCharacterSelectionProps) => {
   const location = useLocation();
   const username = location.state?.username;
@@ -30,7 +32,7 @@ const UserCharacterSelection = ({
         chatList={chatList}
         handleDelete={handleDelete}
       />
-      <MainPage addChat={addChat} chatList={chatList} username={username} />
+      <MainPage addChat={addChat} chatList={chatList} addLikedList={addLikedList} username={username} />
       <Footer />
     </div>
   );
@@ -39,10 +41,11 @@ const UserCharacterSelection = ({
 interface MainPageProps {
   addChat: (characterName: string, characterImage: string) => void;
   chatList: { name: string; image: string }[];
+  addLikedList: (characterName: string, characterImage: string) => void;
   username: string;
 }
 
-const MainPage: React.FC<MainPageProps> = ({ addChat, chatList, username }) => {
+const MainPage: React.FC<MainPageProps> = ({ addChat, chatList, addLikedList, username }) => {
   return (
     <div className="flex flex-col items-center justify-between px-4 bg-[#212121]">
       <SuggestionBanner />
@@ -50,12 +53,14 @@ const MainPage: React.FC<MainPageProps> = ({ addChat, chatList, username }) => {
         onCharacterSelect={addChat}
         list={chatList}
         title="Featured"
+        addLikedList={addLikedList}
         user={{ username }} // Update this to match the expected prop
       />
       <CharacterGrid
         onCharacterSelect={addChat}
         list={chatList}
         title="Favourites"
+        addLikedList={null}
         user={{ username }} // Same here
       />
     </div>
