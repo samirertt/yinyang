@@ -11,43 +11,35 @@ function truncateText(text: string, maxCharsPerLine = 10, maxLines = 3) {
     : text;
 }
 
-const CharacterGrid = ({
-  onCharacterSelect,
-  title,
-  list,
-  addLikedList,
-}: {
+const CharacterGrid = ({ onCharacterSelect, title, list, user }: { 
   onCharacterSelect: (characterName: string, characterImg: string) => void;
   title: string;
   list: { name: string; image: string }[];
-  addLikedList: ((characterName: string, characterImg: string) => void) | null;
+  user: { username: string }; // Ensure user is passed as a prop
 }) => {
+  
   const [myList, setMyList] = useState(list);
   const navigate = useNavigate();
-  const goToChat = (character: {
-    img: string;
-    name: string;
-    details: string;
-    usage: number;
-    Id: number;
-  }) => {
+  
+  const goToChat = (character: { img: string; name: string; details: string; usage: number; Id: number; }) => {
     onCharacterSelect(character.name, character.img);
 
     if (!myList.some((chat) => chat.name === character.name)) {
       const temp = myList;
       temp.push({ name: character.name, image: character.img });
-
       setMyList(temp);
     }
 
-    navigate("/Chat", {
+    navigate("/Chat", { 
       state: {
         character: character,
         historyList: myList,
-      },
-      replace: true,
+        user: user, // Pass user data here
+      }, 
+      replace: true 
     });
-  };
+  }
+
 
   const arrayOfCharacters = [
     {
@@ -117,10 +109,8 @@ const CharacterGrid = ({
   ];
   return (
     <div className="space-y-0 bg-[#212121] px-4 sm:px-0">
-      <p className="text-xl text-white mt-10 pl-8 text-center sm:text-left">
-        {title}
-      </p>
-
+      <p className="text-xl text-white mt-10 pl-8 text-center sm:text-left">{title}</p>
+  
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-6 h-fit justify-items-center">
         {arrayOfCharacters.map((character) => (
           <CharacterInfo
@@ -129,9 +119,7 @@ const CharacterGrid = ({
             name={character.name}
             details={character.details}
             usage={character.usage}
-            //onClick={() => onCharacterSelect(character.name, character.img)
             onClick={() => goToChat(character)}
-            
           />
         ))}
       </div>
