@@ -4,17 +4,19 @@ import Search from "../assets/Search.svg";
 import NewChat from "../assets/NewChat.svg";
 // import Emi from "../assets/Emi.jpg";
 import History from "../assets/History.svg";
-import Pin from "../assets/Pin.svg";
+//import Pin from "../assets/Pin.svg";
 import Cross from "../assets/Cross.svg";
 import Info from "../assets/info.svg";
+import { useNavigate } from "react-router-dom";
 
 
 interface SidebarProps {
+  username: string;
   character:{img: string, name:string, Id:number, details:string, usage: number },
   historyList:{ name: string; image: string }[]
 }
 
-const Sidebar: React.FC<SidebarProps> = (props: { character:{img: string, name:string, Id:number, details:string, usage: number },historyList:{ name: string; image: string }[] }) => {
+const Sidebar: React.FC<SidebarProps> = (props: {username: string, character:{img: string, name:string, Id:number, details:string, usage: number },historyList:{ name: string; image: string }[] }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isInfoCollapsed, setIsInfoCollapsed] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -33,7 +35,11 @@ const Sidebar: React.FC<SidebarProps> = (props: { character:{img: string, name:s
   const toggleInfoBar = () => {
     setIsInfoCollapsed((prev) => !prev);
   };
+  const navigate = useNavigate();
 
+  const handleNewChat = () => {
+    navigate("/", { state: { username: props.username } });
+  };
   return (
     <div className="flex relative h-screen">
       {isCollapsed && (
@@ -95,6 +101,7 @@ const Sidebar: React.FC<SidebarProps> = (props: { character:{img: string, name:s
                     aria-label="New chat"
                     data-testid="create-new-chat-button"
                     className="h-10 rounded-lg px-2 text-token-text-secondary focus-visible:bg-token-surface-hover focus-visible:outline-0 enabled:hover:bg-token-surface-hover disabled:text-token-text-quaternary cursor-pointer"
+                    onClick={handleNewChat}
                   >
                     <img src={NewChat} alt="NewChat icon" className="w-5 h-5 cursor-pointer"  />
                   </button>
@@ -154,29 +161,24 @@ const Sidebar: React.FC<SidebarProps> = (props: { character:{img: string, name:s
       </div>
 
       <nav className="mt-4 space-y-2 font-semibold px-4 z-100">
-        <button className=" flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
+        <button className=" flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer"
+        onClick={handleNewChat}>
           <img
             src={NewChat}
             alt="New Chat icon"
-            className="w-6 h-6 transition-transform duration-200 group-hover:scale-110 "
+            className="w-6 h-6 transition-transform duration-200 group-hover:scale-110"
           />
           <span>New chat</span>
         </button>
-        <button className="flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
+        <button className="flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer"
+        onClick={toggleCollapse}
+        >
           <img
             src={History}
             alt="History icon"
             className="w-6 h-6 transition-transform duration-200 group-hover:scale-110"
           />
           <span>History</span>
-        </button>
-        <button className=" flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
-          <img
-            src={Pin}
-            alt="Pin icon"
-            className="w-6 h-6 transition-transform duration-200 group-hover:scale-110"
-          />
-          <span>Pinned messages</span>
         </button>
       </nav>
       </>

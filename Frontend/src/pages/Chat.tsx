@@ -46,7 +46,7 @@ export default function Chat() {
   return (
     <div>
       <div className="flex h-screen bg-[var(--page)]">
-        <SideBar historyList={list} character={receivedCharacter} />
+        <SideBar username={username} historyList={list} character={receivedCharacter} />
         <div className="flex flex-col flex-1 h-full w-full relative p-4 overflow-y-auto space-y-4 items-center">
           {/* Pass username to ChatNav */}
           <ChatNav username={username} />
