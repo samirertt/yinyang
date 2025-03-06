@@ -11,35 +11,43 @@ function truncateText(text: string, maxCharsPerLine = 10, maxLines = 3) {
     : text;
 }
 
-const CharacterGrid = ({ onCharacterSelect, title, list, user }: { 
+const CharacterGrid = ({
+  onCharacterSelect,
+  title,
+  list,
+  addLikedList,
+}: {
   onCharacterSelect: (characterName: string, characterImg: string) => void;
   title: string;
   list: { name: string; image: string }[];
-  user: { username: string }; // Ensure user is passed as a prop
+  addLikedList: ((characterName: string, characterImg: string) => void) | null;
 }) => {
-  
   const [myList, setMyList] = useState(list);
   const navigate = useNavigate();
-  
-  const goToChat = (character: { img: string; name: string; details: string; usage: number; Id: number; }) => {
+  const goToChat = (character: {
+    img: string;
+    name: string;
+    details: string;
+    usage: number;
+    Id: number;
+  }) => {
     onCharacterSelect(character.name, character.img);
 
     if (!myList.some((chat) => chat.name === character.name)) {
       const temp = myList;
       temp.push({ name: character.name, image: character.img });
+
       setMyList(temp);
     }
 
-    navigate("/Chat", { 
+    navigate("/Chat", {
       state: {
         character: character,
         historyList: myList,
-        user: user, // Pass user data here
-      }, 
-      replace: true 
+      },
+      replace: true,
     });
-  }
-  
+  };
 
   const arrayOfCharacters = [
     {
@@ -109,8 +117,10 @@ const CharacterGrid = ({ onCharacterSelect, title, list, user }: {
   ];
   return (
     <div className="space-y-0 bg-[#212121] px-4 sm:px-0">
-      <p className="text-xl text-white mt-10 pl-8 text-center sm:text-left">{title}</p>
-  
+      <p className="text-xl text-white mt-10 pl-8 text-center sm:text-left">
+        {title}
+      </p>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-6 h-fit justify-items-center">
         {arrayOfCharacters.map((character) => (
           <CharacterInfo
@@ -120,8 +130,8 @@ const CharacterGrid = ({ onCharacterSelect, title, list, user }: {
             details={character.details}
             usage={character.usage}
             //onClick={() => onCharacterSelect(character.name, character.img)
-            onClick={() => goToChat(character)
-            }
+            onClick={() => goToChat(character)}
+            
           />
         ))}
       </div>
@@ -129,52 +139,59 @@ const CharacterGrid = ({ onCharacterSelect, title, list, user }: {
   );
 };
 
-
-
-const CharacterInfo = ({ img_path, name, details, usage, onClick }: { 
+const CharacterInfo = ({
+  img_path,
+  name,
+  details,
+  usage,
+  onClick,
+ 
+}: {
   img_path: string;
   name: string;
   details: string;
   usage: number;
   onClick: () => void;
+  
 }) => {
-
   const [isLiked, setIsLiked] = useState(false);
 
   const toggleLike = () => {
     setIsLiked((prev) => !prev);
   };
-
-return (
-  <div
-    className="relative flex w-70 h-30  items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden cursor-pointer"
-    onClick={onClick}
-  >
    
-    <button className={`absolute top-2 right-2 hover:text-red-500 ${
+  return (
+    <div
+      className="relative flex w-70 h-30  items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden cursor-pointer"
+      onClick={onClick}
+    >
+      <button
+        className={`absolute top-2 right-2 hover:text-red-500 ${
           isLiked ? "text-red-500" : "text-gray-500"
         }`}
-    onClick={(e) => {
-      e.stopPropagation();
-      toggleLike();
-    }}>
-      <Heart size={18}  fill={isLiked ? "red " : "none"} />
-    </button>
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleLike();
+        }}
+      >
+        <Heart size={18} fill={isLiked ? "red " : "none"} />
+      </button>
 
-    <img src={img_path} alt={name} className="w-20 h-25 rounded-2xl " />
+      <img src={img_path} alt={name} className="w-20 h-25 rounded-2xl " />
 
-    <div className="ml-4 flex-1">
-      <h2 className="text-sm font-bold mb-1 text-white text-left">{name}</h2>
-      <p className="text-gray-300 text-left text-xs">By: Me</p>
-      <p className="mb-2 text-white text-left text-xs">{truncateText(details)}</p>
-      <span className="text-gray-500 text-xs flex items-center gap-1">
-        <MessageCircle size={14} className="text-gray-500" />
-        Usage: {usage}
-      </span>
+      <div className="ml-4 flex-1">
+        <h2 className="text-sm font-bold mb-1 text-white text-left">{name}</h2>
+        <p className="text-gray-300 text-left text-xs">By: Me</p>
+        <p className="mb-2 text-white text-left text-xs">
+          {truncateText(details)}
+        </p>
+        <span className="text-gray-500 text-xs flex items-center gap-1">
+          <MessageCircle size={14} className="text-gray-500" />
+          Usage: {usage}
+        </span>
+      </div>
     </div>
-  </div>
-);
-
+  );
 };
 
 export default CharacterGrid;

@@ -20,6 +20,9 @@ const App: React.FC = () => {
   const [chatList, setChatList] = useState<{ name: string; image: string }[]>(
     []
   );
+
+  const [liked, setLikedList] = useState<{ name: string; image: string }[]>([]);
+
   const handleDelete = (buttonName: string) => {
     setChatList((prevChat) =>
       prevChat.filter((chat) => chat.name !== buttonName)
@@ -32,7 +35,14 @@ const App: React.FC = () => {
         { name: characterName, image: characterImage },
       ]);
     }
-    
+  };
+  const addLikedList = (characterName: string, characterImage: string) => {
+    if (!chatList.some((chat) => chat.name === characterName)) {
+      setLikedList((prevChats) => [
+        ...prevChats,
+        { name: characterName, image: characterImage },
+      ]);
+    }
   };
 
   useEffect(() => {
@@ -40,7 +50,7 @@ const App: React.FC = () => {
       console.log("Array updated, proceeding with the next step...");
       console.log(chatList);
     }
-  }, [chatList]); // Runs whenever "items" changes
+  }, [chatList]);
 
   return (
     <Router>
@@ -48,7 +58,7 @@ const App: React.FC = () => {
         <Route
           path="/UserDashBoard/FilterPage/FilterList"
           element={
-            <FilterList  chatList={chatList} handleDelete={handleDelete} />
+            <FilterList chatList={chatList} handleDelete={handleDelete} />
           }
         />
         <Route
@@ -77,11 +87,15 @@ const App: React.FC = () => {
               chatList={chatList}
               handleDelete={handleDelete}
               addChat={addChat}
+              addLikedList={addLikedList}
             />
           }
         />
-        <Route path="/UserDashboard/Profile" element={<Profile/>}/>
-        <Route path="/UserDashboard/Settings" element={<UserSettings/>}/>
+        <Route
+          path="/UserDashboard/Profile"
+          element={<Profile chatList={chatList} likedList={liked} />}
+        />
+        <Route path="/UserDashboard/Settings" element={<UserSettings />} />
       </Routes>
     </Router>
   );
