@@ -8,12 +8,14 @@ interface UserCharacterSelectionProps {
   chatList: { name: string; image: string }[];
   handleDelete: (buttonName: string) => void;
   addChat: (characterName: string, characterImage: string) => void;
+  addLikedList: (characterName: string, characterImage: string) => void;
 }
 
 const UserCharacterSelection = ({
   chatList,
   handleDelete,
   addChat,
+  addLikedList
 }: UserCharacterSelectionProps) => {
   // Move hooks inside the component
   const location = useLocation();
@@ -31,7 +33,7 @@ const UserCharacterSelection = ({
         chatList={chatList}
         handleDelete={handleDelete}
       />
-      <MainPage addChat={addChat} chatList={chatList} />
+      <MainPage addChat={addChat} chatList={chatList} addLikedList={addLikedList} />
       <Footer />
     </div>
   );
@@ -40,9 +42,10 @@ const UserCharacterSelection = ({
 interface MainPageProps {
   addChat: (characterName: string, characterImage: string) => void;
   chatList: { name: string; image: string }[];
+  addLikedList: (characterName: string, characterImage: string) => void;
 }
 
-const MainPage: React.FC<MainPageProps> = ({ addChat, chatList }) => {
+const MainPage: React.FC<MainPageProps> = ({ addChat, chatList, addLikedList }) => {
   return (
     <div className="flex flex-col items-center justify-between px-4 bg-[#212121]">
       <SuggestionBanner />
@@ -50,11 +53,13 @@ const MainPage: React.FC<MainPageProps> = ({ addChat, chatList }) => {
         onCharacterSelect={addChat}
         list={chatList}
         title="Featured"
+        addLikedList={addLikedList}
       />
       <CharacterGrid
         onCharacterSelect={addChat}
         list={chatList}
         title="Favourites"
+        addLikedList={null}
       />
     </div>
   );

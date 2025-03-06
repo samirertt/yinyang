@@ -5,8 +5,10 @@ import { ArrowLeft, Camera, Edit } from "lucide-react"; // Icon for uploading
 
 const Profile = ({
   chatList,
+  likedList,
 }: {
   chatList: { name: string; image: string }[];
+  likedList: { name: string; image: string }[];
 }) => {
   const location = useLocation();
   const { name, image_path } = location.state || {};
@@ -88,7 +90,7 @@ const Profile = ({
           />
         </button>
       </div>
-      <NavigationTabs chatList={chatList} />
+      <NavigationTabs chatList={chatList} likedList={likedList}/>
     </div>
   );
 };
@@ -100,17 +102,19 @@ interface NavItem {
 
 const NavigationTabs = ({
   chatList,
+  likedList,
 }: {
   chatList: { name: string; image: string }[];
+  likedList: { name: string; image: string }[];
 }) => {
   const [activeTab, setActiveTab] = useState<string>("history");
   const [likedItems] = useState<string[]>([]);
 
   const tabs: NavItem[] = [
     { key: "history", label: "History" },
-    { key: "liked", label: "Liked" },
+    { key: "favourite", label: "Favourite" },
   ];
-
+  console.log(likedList)
   return (
     <div className="w-[300px] max-w-4xl mx-auto p-6">
       <div className="flex space-x-8 justify-center border-b border-gray-200">
@@ -132,8 +136,7 @@ const NavigationTabs = ({
       <div className="py-8">
         {activeTab === "history" && (
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Characters Content</h2>
-            {chatList ? (
+            {chatList && chatList.length > 0 ? (
               chatList.map((chat, index) => (
                 <ChatCard
                   key={index}
@@ -142,20 +145,30 @@ const NavigationTabs = ({
                 />
               ))
             ) : (
-              <p className="text-gray-600">
+              <p className="text-white">
                 Your characters list will appear here
               </p>
             )}
           </div>
         )}
 
-        {activeTab === "liked" && (
+        {activeTab === "favourite" && (
           <div className="text-center py-12">
             {likedItems.length === 0 ? (
               <div className="space-y-2">
-                <p className="text-lg font-medium text-white">
-                  You haven't liked any Characters yet.
-                </p>
+                {likedList && chatList.length > 0 ? (
+                  likedList.map((chat, index) => (
+                    <ChatCard
+                      key={index}
+                      name={chat.name}
+                      image_path={chat.image}
+                    />
+                  ))
+                ) : (
+                  <p className="text-lg font-medium text-white">
+                    You haven't liked any Characters yet.
+                  </p>
+                )}
               </div>
             ) : (
               <div>Liked items list</div>
