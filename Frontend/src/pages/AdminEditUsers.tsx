@@ -1,10 +1,17 @@
 import { useState } from "react";
 import NavBar from "../components/NavBar";
 import UsersSmallBoxesBox from "../components/AdminEditUsersComponents/UsersSmallBoxes_Box";
+import { Navigate, useLocation } from "react-router-dom";
 
 function AdminEditUsers()
 {
     const [toggleModerator,setToggleModerator] = useState(false);
+
+    const location = useLocation();
+    const username = location.state?.username;
+    if (!username) {
+        return <Navigate to="/Login" replace />;
+      }
 
     const allUsers = [
         { img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352", name: 'garen', Id: 15, role:true }

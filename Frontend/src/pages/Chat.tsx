@@ -4,7 +4,7 @@ import Typing from "../components/Typing";
 import MessageBubble from "../components/MessageBubble";
 import SideBar from "../components/SideBar";
 import ChatNav from "../components/ChatNav";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 export interface Message {
   text: string;
@@ -21,6 +21,11 @@ export default function Chat() {
   // Getting the username from location.state (you might adjust this based on how you store the username)
   const location = useLocation();
   const username = location.state?.user?.username; 
+  
+  // Redirect if no username (not logged in)
+  if (!username) {
+    return <Navigate to="/Login" replace />;
+  }
 
   const sendMessage = (message: string) => {
     setMessages([...messages, { text: message, sender: "user" }]);
@@ -43,16 +48,24 @@ export default function Chat() {
   const [receivedCharacter, setReceivedCharacter] = useState(location.state.character);
   const [list, setList] = useState(location.state.historyList);
 
+  const [activeCharacter,setActiveCharacter] = useState(receivedCharacter);
+  const updateActive:any = (character:any) =>
+  {
+    setActiveCharacter(character);
+  }
+
+
+
   return (
     <div>
       <div className="flex h-screen bg-[var(--page)]">
-        <SideBar username={username} historyList={list} character={receivedCharacter} />
+        <SideBar username={username} updateActive={updateActive} historyList={list} character={activeCharacter} />
         <div className="flex flex-col flex-1 h-full w-full relative p-4 overflow-y-auto space-y-4 items-center">
           {/* Pass username to ChatNav */}
           <ChatNav username={username} />
           <div className="pt-15 mb-20 w-89 md:min-w-[10px] lg:min-w-[850px] items-center">
             {messages.map((msg, index) => (
-              <MessageBubble key={index} text={msg.text} sender={msg.sender} image={receivedCharacter.img} />
+              <MessageBubble key={index} text={msg.text} sender={msg.sender} image={activeCharacter.img} />
             ))}
             <InputBar sendMessage={sendMessage} />
           </div>

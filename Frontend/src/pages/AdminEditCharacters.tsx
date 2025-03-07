@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import NavBar from '../components/NavBar';
 import SmallBoxesBox from '../components/AdminEditCharactersComponents/SmallBoxes Box';
+import { Navigate, useLocation } from 'react-router-dom';
 
 function AdminEditCharacters()
 {
@@ -63,6 +64,12 @@ function AdminEditCharacters()
 
     ]
     const [inputVal,setInputVal] = useState('');
+
+    const location = useLocation();
+    const username = location.state?.username;
+    if (!username) {
+        return <Navigate to="/Login" replace />;
+      }
 
     return(
         <div >

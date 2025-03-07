@@ -5,9 +5,9 @@ import UserNavBar from "../components/UserStuff/UserNavBar";
 import { Navigate, useLocation } from "react-router-dom";
 
 interface UserCharacterSelectionProps {
-  chatList: { name: string; image: string }[];
+  chatList: { name: string; image: string; details:string }[];
   handleDelete: (buttonName: string) => void;
-  addChat: (characterName: string, characterImage: string) => void;
+  addChat: (characterName: string, characterImage: string,characterDetails:string) => void;
 }
 
 const UserCharacterSelection = ({
@@ -37,8 +37,8 @@ const UserCharacterSelection = ({
 };
 
 interface MainPageProps {
-  addChat: (characterName: string, characterImage: string) => void;
-  chatList: { name: string; image: string }[];
+  addChat: (characterName: string, characterImage: string, characterDetails:string) => void;
+  chatList: { name: string; image: string,details:string }[];
   username: string;
 }
 

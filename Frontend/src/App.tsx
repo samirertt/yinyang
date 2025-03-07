@@ -17,7 +17,7 @@ import UserCharacterSelection from "./pages/UserDashboard";
 import Profile from "./components/UserStuff/ProfilePage";
 import UserSettings from "./components/UserStuff/Settings";
 const App: React.FC = () => {
-  const [chatList, setChatList] = useState<{ name: string; image: string }[]>(
+  const [chatList, setChatList] = useState<{ name: string; image: string; details:string }[]>(
     []
   );
 
@@ -27,11 +27,11 @@ const App: React.FC = () => {
       prevChat.filter((chat) => chat.name !== buttonName)
     );
   };
-  const addChat = (characterName: string, characterImage: string) => {
+  const addChat = (characterName: string, characterImage: string,characterDetails:string) => {
     if (!chatList.some((chat) => chat.name === characterName)) {
       setChatList((prevChats) => [
         ...prevChats,
-        { name: characterName, image: characterImage },
+        { name: characterName, image: characterImage, details:characterDetails },
       ]);
     }
   };
