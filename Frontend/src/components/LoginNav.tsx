@@ -11,11 +11,15 @@ const Navbar = ({ username }: NavbarProps) => {
     navigate("/", { state: { username } });
   };
 
+  const handleBackLogin = () => {
+    navigate("/Login", { state: { username } });
+  };
+
   return (
     <nav className="bg-[#212121] text-white p-3 fixed w-full z-10 top-0">
       <div className="container mx-auto flex items-center px-4 md:px-10">
         {/* Title (Centered) */}
-        <h1 className="text-2xl md:text-3xl font-mono font-bold">
+        <h1 onClick={handleBackLogin} className="text-2xl md:text-3xl font-mono font-bold cursor-pointer">
           YinYang
         </h1>
 

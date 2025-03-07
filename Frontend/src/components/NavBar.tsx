@@ -1,15 +1,18 @@
 import { SetStateAction, useState } from "react";
-import { Link } from "react-router-dom";
+import { useLocation,Link } from "react-router-dom";
 import "./Styles/NavBar.css";
 import "../MaginifyingGlass.png";
 
-function NavBar(props: { logged: any; admin: any }) {
+function NavBar(props: {logged: any; admin: any }) {
   const [isLogged, setIsLogged] = useState(props.logged);
   const [isAdmin, setIsAdmin] = useState(props.admin);
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const searchIcon = "../../public/MaginifyingGlass.png";
+
+  const location = useLocation();
+  const username = location.state?.username;
 
   const handleFocus = () => {
     setIsExpanded(true);
@@ -79,6 +82,7 @@ function NavBar(props: { logged: any; admin: any }) {
           <Link
             style={{ margin: "0px", padding: "0px" }}
             to="/AdminDashboard/Characters"
+            state={{ username: username }}
           >
             <button className="rounded-xl bg-[#ffffff] text-[#303136] cursor-pointer px-[10px] py-[5px]">
               Characters
@@ -87,6 +91,7 @@ function NavBar(props: { logged: any; admin: any }) {
           <Link
             style={{ margin: "0px", padding: "0px" }}
             to="/AdminDashboard/Edit"
+            state={{ username: username }}
           >
             <button className="rounded-xl bg-[#ffffff] text-[#303136] cursor-pointer px-[10px] py-[5px]">
               Users
@@ -95,6 +100,7 @@ function NavBar(props: { logged: any; admin: any }) {
           <Link
             style={{ margin: "0px", padding: "0px" }}
             to="/AdminDashboard"
+            state={{ username: username }}
           >
             <button className="rounded-xl bg-[#ffffff] text-[#303136] cursor-pointer px-[10px] py-[5px]">
               Dashboard

@@ -63,7 +63,7 @@ function AdminDashboard()
 
     return(
         <div >
-            <NavBar admin={true} logged={true}/>
+            <NavBar admin={true} logged={username}/>
             <div className="flex flex-col items-center mt-20">
                 <CharactersBarGraph userCount={userCount} categories={allCategories}/>
             </div>
