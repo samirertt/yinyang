@@ -21,7 +21,6 @@ const App: React.FC = () => {
     []
   );
 
-  const [liked, setLikedList] = useState<{ name: string; image: string }[]>([]);
 
   const handleDelete = (buttonName: string) => {
     setChatList((prevChat) =>
@@ -36,14 +35,7 @@ const App: React.FC = () => {
       ]);
     }
   };
-  const addLikedList = (characterName: string, characterImage: string) => {
-    if (!chatList.some((chat) => chat.name === characterName)) {
-      setLikedList((prevChats) => [
-        ...prevChats,
-        { name: characterName, image: characterImage },
-      ]);
-    }
-  };
+  
 
   useEffect(() => {
     if (chatList.length > 0) {
@@ -87,15 +79,15 @@ const App: React.FC = () => {
               chatList={chatList}
               handleDelete={handleDelete}
               addChat={addChat}
-              addLikedList={addLikedList}
+              
             />
           }
         />
         <Route
           path="/UserDashboard/Profile"
-          element={<Profile chatList={chatList} likedList={liked} />}
+          element={<Profile   />}
         />
-        <Route path="/UserDashboard/Settings" element={<UserSettings />} />
+        <Route path="/UserDashboard/Settings" element={<UserSettings chatList={chatList}/>} />
       </Routes>
     </Router>
   );

@@ -13,10 +13,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 
-// type Chat = {
-//   name: string;
-//   image: string;
-// };
+
 
 //This is the chat history of the user
 const UserRecentChats = ({
@@ -35,7 +32,7 @@ const UserRecentChats = ({
   return (
     <div className="relative ">
       <div className="fixed top-4 left-4 text-[var(--white)] px-4 py-2 flex flex-col items-center gap-5">
-        {/* Menu Button */}
+        
         <button
           className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition-all"
           onClick={() => setIsOpen(true)}
@@ -113,7 +110,7 @@ const LoginInfo = ({name, image_path}: {name?: string; image_path: string}) => {
         <div className="absolute bottom-full mb-2 w-55 bg-[#212121]rounded-2xl shadow-lg p-3">
           <PopUpMenuItems icon={User} label="Profile" to="/UserDashboard/Profile" name={name} image_path={image_path}/>
 
-          <PopUpMenuItems icon={Settings} label="Settings" to="/UserDashboard/Settings" name="" image_path=""/>
+          <PopUpMenuItems icon={Settings} label="Settings" to="/UserDashboard/Settings" name={name} image_path={image_path}/>
           <PopUpMenuItems icon={LogOut} label="Logout" to="/Login" name="" image_path=""/>
         </div>
       )}
