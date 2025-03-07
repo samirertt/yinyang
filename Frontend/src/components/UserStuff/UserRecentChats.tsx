@@ -122,7 +122,7 @@ const LoginInfo = ({name, image_path}: {name?: string; image_path: string}) => {
       >
         <div className="flex items-center gap-3">
           <img src={YinYang} alt="YinYang Logo" className="h-8 w-8 ml-3" />
-          <p>User Name</p>
+          <p>{name}</p>
         </div>
         {/* Arrow with rotation animation */}
         <div
@@ -130,7 +130,7 @@ const LoginInfo = ({name, image_path}: {name?: string; image_path: string}) => {
             isOpen ? "rotate-180" : ""
           }`}
         >
-          <ArrowDown size={18} />
+          <ArrowDown size={18} className="absolute top-6 right-4"/>
         </div>
       </div>
     </div>

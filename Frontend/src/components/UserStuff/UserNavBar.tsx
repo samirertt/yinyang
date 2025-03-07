@@ -21,12 +21,10 @@ function SearchBar() {
       <div className="relative flex-1">
         <div className="relative flex items-center ">
           {!isExpanded && (
-            <Search size={20} className="absolute   right-74 sm:right-9 md:right-4 top-1/2 transform -translate-y-1/2 pointer-events-none text-white "/>
-            // <img
-            //   src={searchIcon}
-            //   className="absolute left-0 md:right-3 top-1/2 transform -translate-y-1/2 w-10 h-10 pointer-events-none text-white "
-            //   alt="SearchIcon"
-            // />
+            <Search
+              size={20}
+              className="absolute left-3 sm:left-auto sm:right-9 md:right-4 top-1/2 transform -translate-y-1/2 pointer-events-none text-white "
+            />
           )}
           <input
             value={inputValue}
@@ -65,13 +63,18 @@ const UserNavBar: React.FC<UserNavBarProps> = ({
   return (
     <div className="mt-5 flex flex-col md:flex-row items-center justify-between bg-[#212121] ml-5 h-auto w-full">
       <div className="self-start">
-        <UserRecentChats chatList={chatList} handleDelete={handleDelete} name={username} image_path={Avatar}/>
+        <UserRecentChats
+          chatList={chatList}
+          handleDelete={handleDelete}
+          name={username}
+          image_path={Avatar}
+        />
         <div className="ml-5 md:ml-2">
           {/* Provide a default value if username is not given */}
           <UserAvatar name={username || "Guest"} image_path={Avatar} />
         </div>
       </div>
-      
+
       {/* Right section - Search + Filter */}
       <div className="w-full md:w-[400px] order-2 ">
         <SearchBar />
