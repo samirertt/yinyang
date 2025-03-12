@@ -64,13 +64,11 @@ function AdminDashboard()
     return(
         <div >
             <NavBar admin={true} logged={username}/>
-            <div className="flex flex-col items-center mt-20">
+            <div className="w-[800px] h-full md:min-w-[100%] lg:min-w-[100%] flex flex-col items-center mt-20">
                 <CharactersBarGraph userCount={userCount} categories={allCategories}/>
             </div>
-
         </div>
     )
-
 } 
 
 export default AdminDashboard;

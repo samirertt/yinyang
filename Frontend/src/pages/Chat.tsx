@@ -34,7 +34,7 @@ export default function Chat() {
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { text: "Maybe next time Honey ", sender: "ai" },
+        { text: "Still working ", sender: "ai" },
       ]);
       setTyping(false);
     }, 1000);
