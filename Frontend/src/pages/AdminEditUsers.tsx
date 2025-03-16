@@ -38,7 +38,7 @@ function AdminEditUsers()
     return (
         <div>
             <NavBar admin={true} logged={true}/>
-            <div className='w-full flex flex-col gap-10 items-center'>
+            <div className='w-full min-w-[800px] flex flex-col gap-10 items-center'>
                 <div className={`mt-10 flex gap-6`}>
                     <button className={`transition-colors duration-500 ease-in-out text-[#2f2f2f] px-[20px] py-[10px] rounded-xl ${toggleModerator ? 'bg-[#ffffff]' :'border border-[#303136] bg-transparent text-[#ffffff]'}`} onClick={handleModerator}> {'Moderator'}</button>
                     <button className={`transition-colors duration-500 ease-in-out text-[#2f2f2f] px-[20px] py-[10px] rounded-xl ${toggleModerator ? 'border border-[#303136] bg-transparent text-[#ffffff]' :'bg-[#ffffff]'}`} onClick={handleUser}> {'User'}</button>
