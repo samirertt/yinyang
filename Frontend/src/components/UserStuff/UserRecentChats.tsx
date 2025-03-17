@@ -20,12 +20,12 @@ const UserRecentChats = ({
   chatList,
   handleDelete,
   name,
-  image_path,
+  user_image,
 }: {
   chatList: { name: string; image: string }[];
   handleDelete: (name: string) => void;
   name?: string;
-  image_path: string;
+  user_image: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -92,7 +92,7 @@ const UserRecentChats = ({
           </div>
 
           <div className="relative h-full w-full">
-            <LoginInfo name={name} image_path={image_path}/>
+            <LoginInfo name={name} image_path={user_image}/>
           </div>
         </div>
       </div>
@@ -117,11 +117,11 @@ const LoginInfo = ({name, image_path}: {name?: string; image_path: string}) => {
 
       {/* Login Info Button */}
       <div
-        className="flex items-center gap-10 hover:bg-[#454545] h-15 w-55 rounded-2xl p-3 cursor-pointer"
+        className="flex items-center gap-20 hover:bg-[#454545] h-15 w-55 rounded-2xl p-3 cursor-pointer "
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-3">
-          <img src={YinYang} alt="YinYang Logo" className="h-8 w-8 ml-3" />
+          <img src={image_path} alt="YinYang Logo" className="h-10 w-10 ml-3 rounded-full" />
           <p>{name}</p>
         </div>
         {/* Arrow with rotation animation */}
@@ -130,7 +130,7 @@ const LoginInfo = ({name, image_path}: {name?: string; image_path: string}) => {
             isOpen ? "rotate-180" : ""
           }`}
         >
-          <ArrowDown size={18} className="absolute top-6 right-4"/>
+          <ArrowDown size={18} className="self-end"/>
         </div>
       </div>
     </div>

@@ -67,7 +67,7 @@ const UserNavBar: React.FC<UserNavBarProps> = ({
           chatList={chatList}
           handleDelete={handleDelete}
           name={username}
-          image_path={Avatar}
+          user_image={Avatar}
         />
         <div className="ml-5 md:ml-2">
           {/* Provide a default value if username is not given */}
