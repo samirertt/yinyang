@@ -24,7 +24,7 @@ function Login() {
       }
     } else if (username == "admin" && password == "asd"){
         if (Auth.login(username, password)) {
-          navigate("/Admin", { state: { username } });
+          navigate("/AdminDashboard", { state: { username } });
         } else {
           setError("Invalid username or password");
         }

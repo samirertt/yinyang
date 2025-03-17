@@ -12,9 +12,9 @@ function truncateText(text: string, maxCharsPerLine = 10, maxLines = 3) {
 }
 
 const CharacterGrid = ({ onCharacterSelect, title, list, user }: { 
-  onCharacterSelect: (characterName: string, characterImg: string) => void;
+  onCharacterSelect: (characterName: string, characterImg: string, characterDetails:string) => void;
   title: string;
-  list: { name: string; image: string }[];
+  list: { name: string; image: string; details:string }[];
   user: { username: string }; // Ensure user is passed as a prop
 }) => {
   
@@ -22,11 +22,11 @@ const CharacterGrid = ({ onCharacterSelect, title, list, user }: {
   const navigate = useNavigate();
   
   const goToChat = (character: { img: string; name: string; details: string; usage: number; Id: number; }) => {
-    onCharacterSelect(character.name, character.img);
+    onCharacterSelect(character.name, character.img,character.details);
 
     if (!myList.some((chat) => chat.name === character.name)) {
       const temp = myList;
-      temp.push({ name: character.name, image: character.img });
+      temp.push({ name: character.name, image: character.img, details:character.details });
       setMyList(temp);
     }
 

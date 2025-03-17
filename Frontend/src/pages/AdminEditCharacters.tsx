@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import NavBar from '../components/NavBar';
 import SmallBoxesBox from '../components/AdminEditCharactersComponents/SmallBoxes Box';
+import { Navigate, useLocation } from 'react-router-dom';
 
 function AdminEditCharacters()
 {
@@ -64,10 +65,16 @@ function AdminEditCharacters()
     ]
     const [inputVal,setInputVal] = useState('');
 
+    const location = useLocation();
+    const username = location.state?.username;
+    if (!username) {
+        return <Navigate to="/Login" replace />;
+      }
+
     return(
-        <div >
+        <div className='min-h-screen' >
             <NavBar admin={true} logged={true}/>
-            <div className='pageContainer' style={{display:'flex', gap:'50px', alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
+            <div className='pageContainer min-w-[800px] mx-auto' style={{display:'flex', gap:'50px', alignItems:'center',justifyContent:'center',flexDirection:'column'}}>
             <input type='search' onChange={(e)=>{setInputVal(e.target.value)}} className='bg-[#2F2F2F] rounded-xl p-2 pl-4 outline-none mt-10' placeholder='Search Character'></input>
             <SmallBoxesBox characters={arrayOfCharacters} inputValue={inputVal}/>
             </div>

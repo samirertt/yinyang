@@ -47,7 +47,7 @@ const Footer = () => {
         <div className="py-6">
           <div className="flex flex-col md:flex-row items-center justify-between text-gray-400 text-sm">
             <div className="mb-2 md:mb-0">
-              &copy; {new Date().getFullYear()} Your Company. All rights reserved.
+              &copy; {new Date().getFullYear()} YingYang. All rights reserved.
             </div>
             <div className="flex space-x-4">
               <a href="/PrivacyPolicy" className="hover:text-gray-500 transition-colors">Privacy Policy</a>

@@ -107,7 +107,7 @@ function UsersSmallBoxesBox(props: { moderator:boolean, users:Array<{ img: strin
                 exit="exit"
                 custom={direction} 
                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="w-[80%] items-center grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-6"
+                className="w-[90%] items-center grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6"
             >
                 {filterUsers(users).slice(numPerPage*page,numPerPage*(page+1)).map((index)=>(
                     <UserCard user={index} onUpdate={updateUserRole} key={index.Id}/>
