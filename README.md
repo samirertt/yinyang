@@ -12,15 +12,7 @@ To ensure that your Spring Boot application runs smoothly, make sure you have th
 
 ### 2. MySQL
 - Ensure MySQL is installed and running.
-- Verify by running:
-  ```sh
-  mysql --version
-  ```
 - If MySQL is not installed, download it from [MySQL Downloads](https://dev.mysql.com/downloads/).
-- Create a database for your application:
-  ```sql
-  CREATE DATABASE your_database_name;
-  ```
   Update your `application.properties` or `application.yml` file with the appropriate database connection settings.
 
 ## Running the Project
@@ -31,9 +23,16 @@ If you haven't already, clone the project.
 ### 2. Build and Run the Application
 Use Gradle to build the project and install dependencies:
 access and run the `build.gradle` file under the Backend folder
+Run the following command to build the project:
+"./gradlew build"
+This compiles the code, runs tests, and generates a JAR file in build/libs/.
+To force refresh dependencies:
+"./gradlew build --refresh-dependencies"
 
-Then, run the Spring Boot application:
-access the Application under the main folder to test if everything is running properly
+Then, Run the app with the bootRun task:
+./gradlew bootRun
+The app will start on http://localhost:8080.
+Stop the app with Ctrl + C.
 
 ### 3. Adding Dependencies
 If you need to add new dependencies, update the `build.gradle` file under the `dependencies` section.
@@ -54,5 +53,5 @@ If the build fails, try 'gradle clean'
 and then re-run the build command.
 
 ---
-With these steps, you should be able to set up and run your Spring Boot application successfully. Happy coding! 🚀
+With these steps, you should be able to set up and run your Spring Boot application successfully.
 
