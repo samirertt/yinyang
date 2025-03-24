@@ -150,7 +150,7 @@ const CharacterInfo = ({
    
   return (
     <div
-      className="relative flex w-70 h-30  items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden cursor-pointer"
+      className="relative flex w-70 sm:w-fit  h-30  items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden cursor-pointer"
       onClick={onClick}
     >
       <button

@@ -32,16 +32,17 @@ const SuggestionBanner = () => {
   }, [gifs.length]);
 
   return (
-    <div className="mx-2 sm:mx-4 md:ml-10 flex flex-col gap-5 w-fit ">
+    <div className="mx-2 sm:mx-4 md:ml-10 flex flex-col gap-5 w-full ">
       <p className="text-lg sm:text-xl text-white pb-4 sm:pb-5 pt-6 sm:pt-8 self-start">
         Top Choices
       </p>
-      <div className="relative w-full  flex flex-col md:flex-row justify-start items-start overflow-hidden gap-4 md:gap-0">
+      <div className="relative w-full  flex flex-col md:flex-row justify-center items-start overflow-hidden gap-4 md:gap-0">
+      
         <img
           id="gif-banner"
           src={gifs[currentGif]}
           alt="Animated Banner"
-          className="h-40 sm:h-60 md:h-80 w-full md:w-[550px] object-cover rounded-2xl mr-0 md:mr-4"
+          className="h-40 sm:h-60 md:h-80 w-fit md:w-[550px] object-cover rounded-2xl mr-0 md:mr-4"
         />
 
         {/* Blurry Full-Width Background Card */}
