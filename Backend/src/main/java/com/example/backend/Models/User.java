@@ -1,24 +1,33 @@
 package com.example.backend.Models;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
-public class UserModel {
+@Entity
+@Table(name = "users")
+public class User {
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "userId", nullable = false, unique = true)
     private int userId;
+
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
+
+    @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "role", nullable = false)
     private String role;
+
+    @Column(name = "joinDate")
     private LocalDate joinDate;
-    private byte[] image;
 
-    // Constructors
-    public UserModel() {}
-
-    public UserModel(int userId, String username, String password, String role, LocalDate joinDate) {
-        this.userId = userId;
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.joinDate = joinDate;
+    @PrePersist
+    protected void onCreate() {
+        this.joinDate = LocalDate.now();
     }
 
     public int getUserId() {
@@ -59,13 +68,5 @@ public class UserModel {
 
     public void setJoinDate(LocalDate joinDate) {
         this.joinDate = joinDate;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
     }
 }

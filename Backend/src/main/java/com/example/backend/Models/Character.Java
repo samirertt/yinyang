@@ -1,16 +1,34 @@
 package com.example.backend.Models;
 
-public class CharacterModel 
-{
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "characters")
+public class Character {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "charId")
     private int charId;
+
+
+    @Column(name = "charName")
     private String charName;
+
+    @Column(name = "charPersonality")
     private String charPersonality;
+
+    @Column(name = "charImg")
     private String charImg;
+
+    @Column(name = "charDescription")
     private String charDescription;
-    private Double charUsage;
+
+    @Column(name = "charUsage")
+    private double charUsage;
+
+    @Column(name = "charPrompt")
     private String charPrompt;
 
-    // Getters and Setters
     public int getCharId() {
         return charId;
     }
@@ -51,11 +69,11 @@ public class CharacterModel
         this.charDescription = charDescription;
     }
 
-    public Double getCharUsage() {
+    public double getCharUsage() {
         return charUsage;
     }
 
-    public void setCharUsage(Double charUsage) {
+    public void setCharUsage(double charUsage) {
         this.charUsage = charUsage;
     }
 

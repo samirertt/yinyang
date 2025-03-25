@@ -39,7 +39,7 @@ const CharacterGrid = ({ onCharacterSelect, title, list, user }: {
       replace: true 
     });
   }
-
+  
 
   const arrayOfCharacters = [
     {
