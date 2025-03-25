@@ -1,15 +1,12 @@
 package com.example.backend.Models;
 
-
 import jakarta.persistence.*;
-
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
-public class UserModel
-{
+public class User {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
