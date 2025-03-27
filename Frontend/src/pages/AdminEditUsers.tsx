@@ -1,29 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import UsersSmallBoxesBox from "../components/AdminEditUsersComponents/UsersSmallBoxes_Box";
 import { Navigate, useLocation } from "react-router-dom";
+import { adminService, User } from "../services/adminService";
 
 function AdminEditUsers()
 {
     const [toggleModerator,setToggleModerator] = useState(false);
+    const [users, setUsers] = useState<User[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     const location = useLocation();
     const username = location.state?.username;
     if (!username) {
         return <Navigate to="/Login" replace />;
-      }
+    }
 
-    const allUsers = [
-         { img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352", name: 'garen', Id: 15, role:true }
-        ,{ img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352", name: 'Darius', Id: 16, role:false }
-        ,{ img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352", name: 'garen', Id: 17, role:true }
-        ,{ img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352", name: 'garen', Id: 18, role:true }
-        ,{ img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352", name: 'garen', Id: 19, role:true }
-        ,{ img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352", name: 'Darius', Id: 20, role:false }
-        ,{ img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352", name: 'garen', Id: 21, role:true }
-        ,{ img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352", name: 'garen', Id: 22, role:true }
-        ,{ img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352", name: 'garen', Id: 23, role:true }
-    ];
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+
+    const fetchUsers = async () => {
+        try {
+            const data = await adminService.getAllUsers();
+            setUsers(data);
+        } catch (err) {
+            setError('Failed to fetch users');
+            console.error('Error fetching users:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     function handleModerator()
     {
@@ -35,6 +43,39 @@ function AdminEditUsers()
         setToggleModerator(false);
     }
 
+    const handleRoleToggle = async (userId: number) => {
+        try {
+            const updatedUser = await adminService.toggleUserRole(userId);
+            setUsers(users.map(user => 
+                user.userId === userId ? updatedUser : user
+            ));
+        } catch (err) {
+            console.error('Error toggling user role:', err);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div>
+                <NavBar admin={true} logged={true}/>
+                <div className="flex justify-center items-center h-screen">
+                    <div className="text-white">Loading...</div>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div>
+                <NavBar admin={true} logged={true}/>
+                <div className="flex justify-center items-center h-screen">
+                    <div className="text-red-500">{error}</div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div>
             <NavBar admin={true} logged={true}/>
@@ -43,7 +84,11 @@ function AdminEditUsers()
                     <button className={`transition-colors duration-500 ease-in-out text-[#2f2f2f] px-[20px] py-[10px] rounded-xl ${toggleModerator ? 'bg-[#ffffff]' :'border border-[#303136] bg-transparent text-[#ffffff]'}`} onClick={handleModerator}> {'Moderator'}</button>
                     <button className={`transition-colors duration-500 ease-in-out text-[#2f2f2f] px-[20px] py-[10px] rounded-xl ${toggleModerator ? 'border border-[#303136] bg-transparent text-[#ffffff]' :'bg-[#ffffff]'}`} onClick={handleUser}> {'User'}</button>
                 </div>
-                <UsersSmallBoxesBox  users={allUsers} moderator={toggleModerator}/>
+                <UsersSmallBoxesBox 
+                    users={users} 
+                    moderator={toggleModerator}
+                    onRoleToggle={handleRoleToggle}
+                />
             </div>
             
         </div>

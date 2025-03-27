@@ -1,0 +1,29 @@
+package com.example.backend.controller;
+
+import com.example.backend.models.User;
+import com.example.backend.service.AdminService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/admin")
+@CrossOrigin(origins = "http://localhost:5173")
+public class AdminController {
+
+    @Autowired
+    private AdminService adminService;
+
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(adminService.getAllUsers());
+    }
+
+    @PutMapping("/users/{userId}/toggle-role")
+    public ResponseEntity<User> toggleUserRole(@PathVariable int userId) {
+        User updatedUser = adminService.toggleUserRole(userId);
+        return ResponseEntity.ok(updatedUser);
+    }
+}
