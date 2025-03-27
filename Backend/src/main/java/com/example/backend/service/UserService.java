@@ -1,7 +1,7 @@
-package com.example.backend.UserLogic.service;
+package com.example.backend.service;
 
 import com.example.backend.Models.User;
-import com.example.backend.UserLogic.repository.UserRepository;
+import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
