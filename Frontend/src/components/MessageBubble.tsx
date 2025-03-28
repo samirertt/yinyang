@@ -8,7 +8,7 @@ import Copy from "../assets/Copy.svg";
 
 interface MessageProps {
   text: string;
-  sender: "user" | "ai";
+  sender: string;
   image:string;
 }
 

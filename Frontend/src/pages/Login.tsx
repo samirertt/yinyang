@@ -29,29 +29,36 @@ function Login() {
       });
 
       if (response.ok) {
-        const data = await response.text();
-        setError(data);
+        const data = await response.json();
+        
+        const userId:number = data.userId;
+        const user = {
+          username:username,
+          userId:userId
+        }
 
         if (username == "moderator" && password == "asd") {
           if (Auth.login(username, password)) {
-            navigate("/Moderator", { state: { username } });
+            navigate("/Moderator", { state: { user } });
           } else {
             setError("Invalid username or password");
           }
         } else if (username == "admin" && password == "asd") {
           if (Auth.login(username, password)) {
-            navigate("/AdminDashboard", { state: { username } });
+            navigate("/AdminDashboard", { state: { user } });
           } else {
             setError("Invalid username or password");
           }
         } else {
           if (Auth.login(username, password)) {
-            navigate("/", { state: { username } });
+            
+            navigate("/", { state: { user } });
           } else {
             setError("Invalid username or password");
           }
         }
-      } else {
+      } 
+      else {
         setError("Invalid Credentials");
       }
     } catch (error) {
@@ -126,7 +133,7 @@ function Login() {
                 Continue with Email
               </button>
               <button
-                onClick={() => navigate("/", { state: { username: "Guest" } })}
+                onClick={() => navigate("/", { state: { username: "Guest", userId:0 } })}
                 className="cursor-pointer w-full bg-gray-900 text-white flex items-center justify-center gap-1 p-1.5 sm:p-2 rounded-md shadow text-xs sm:text-sm md:text-base"
               >
                 <svg

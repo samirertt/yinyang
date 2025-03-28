@@ -1,7 +1,7 @@
 import { Heart } from "lucide-react";
 import { MessageCircle } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function truncateText(text: string, maxCharsPerLine = 10, maxLines = 3) {
   text = "Welcome, " + text;
@@ -11,18 +11,21 @@ function truncateText(text: string, maxCharsPerLine = 10, maxLines = 3) {
     : text;
 }
 
+
+
+
 const CharacterGrid = ({ onCharacterSelect, title, list, user }: { 
-  onCharacterSelect: (characterName: string, characterImg: string, characterDetails:string) => void;
+  onCharacterSelect: (characterName: string, characterImg: string, characterDetails:string, chatId:number) => void;
   title: string;
   list: { name: string; image: string; details:string }[];
-  user: { username: string }; // Ensure user is passed as a prop
+  user: { username: string, userId: number }; // Ensure user is passed as a prop
 }) => {
   
   const [myList, setMyList] = useState(list);
   const navigate = useNavigate();
-  
-  const goToChat = (character: { img: string; name: string; details: string; usage: number; Id: number; }) => {
-    onCharacterSelect(character.name, character.img,character.details);
+
+  const goToChat = (character: { img: string; name: string; details: string; usage: number; Id: number; }, id: number) => {
+    onCharacterSelect(character.name, character.img,character.details,id);
 
     if (!myList.some((chat) => chat.name === character.name)) {
       const temp = myList;
@@ -35,6 +38,7 @@ const CharacterGrid = ({ onCharacterSelect, title, list, user }: {
         character: character,
         historyList: myList,
         user: user, // Pass user data here
+        chatId:0  // Pass chatId data here (if it's 0 then a new chat is created)
       }, 
       replace: true 
     });
@@ -45,7 +49,7 @@ const CharacterGrid = ({ onCharacterSelect, title, list, user }: {
     {
       img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352",
       name: "Garen",
-      Id: 15,
+      Id: 1,
       details:
         "Garen: Spin, ult, repeat. Garen players enjoy the simple things: free health, easy damage, and a point-and-click kill button. If you main Garen, you've clearly opted for minimal effort, maximum reward.",
       usage: 15.5,
@@ -53,7 +57,7 @@ const CharacterGrid = ({ onCharacterSelect, title, list, user }: {
     {
       img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/f606418621ccec569ab1ec87e1084dfd8e45e5f1-496x560.jpg?auto=format&fit=fill&q=80&w=352",
       name: "Darius",
-      Id: 16,
+      Id: 2,
       details:
         "Darius: Five stacks, dunk, dominate. Darius players live for the stat-check, reveling in the easy kills and lane dominance. If you play Darius, you enjoy the feeling of being an unstoppable force, even if it requires minimal skill.",
       usage: 12.5,
@@ -61,7 +65,7 @@ const CharacterGrid = ({ onCharacterSelect, title, list, user }: {
     {
       img: "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/55e7e901b1f69d72804665cfbeb1f4f59c8fa877-496x560.jpg?auto=format&fit=fill&q=80&w=352",
       name: "Ahri",
-      Id: 17,
+      Id: 3,
       details:
         "Ahri, the nine-tailed 'fox.' All they do is spam charm and run away. Zero skill, all kiting. Every Ahri player thinks they're a god, but they're just abusing mobility. Go back to your anime.",
       usage: 9.5,
@@ -119,7 +123,7 @@ const CharacterGrid = ({ onCharacterSelect, title, list, user }: {
             name={character.name}
             details={character.details}
             usage={character.usage}
-            onClick={() => goToChat(character)}
+            onClick={() => goToChat(character,0)}
           />
         ))}
       </div>

@@ -4,6 +4,7 @@ import SuggestionBanner from "../components/UserStuff/SuggestionBanner";
 import UserNavBar from "../components/UserStuff/UserNavBar";
 import { Navigate, useLocation } from "react-router-dom";
 
+
 interface UserCharacterSelectionProps {
   chatList: { name: string; image: string; details: string }[];
   handleDelete: (buttonName: string) => void;
@@ -20,21 +21,24 @@ const UserCharacterSelection = ({
   addChat,
 }: UserCharacterSelectionProps) => {
   const location = useLocation();
-  const username = location.state?.username;
+  const user = location.state?.user;
 
+  
+  
   // Redirect if no username (not logged in)
-  if (!username) {
+  if (!user.username) {
     return <Navigate to="/Login" replace />;
   }
+  
 
   return (
     <div className="bg-[#212121] flex flex-col min-h-screen px-4 sm:px-6 md:px-10 lg:px-40">
       <UserNavBar
-        username={username}
+        username={user.username}
         chatList={chatList}
         handleDelete={handleDelete}
       />
-      <MainPage addChat={addChat} chatList={chatList} username={username} />
+      <MainPage addChat={addChat} chatList={chatList} Username={user.username} UserId={user.userId} />
       <Footer />
     </div>
   );
@@ -47,10 +51,11 @@ interface MainPageProps {
     characterDetails: string
   ) => void;
   chatList: { name: string; image: string; details: string }[];
-  username: string;
+  Username: string;
+  UserId: number;
 }
 
-const MainPage: React.FC<MainPageProps> = ({ addChat, chatList, username }) => {
+const MainPage: React.FC<MainPageProps> = ({ addChat, chatList, Username, UserId }) => {
   return (
     <div className="flex flex-col items-center justify-between px-4 bg-[#212121]">
       <SuggestionBanner />
@@ -58,13 +63,13 @@ const MainPage: React.FC<MainPageProps> = ({ addChat, chatList, username }) => {
         onCharacterSelect={addChat}
         list={chatList}
         title="Featured"
-        user={{ username }} // Update this to match the expected prop
+        user={{ username:Username, userId:UserId }} // Update this to match the expected prop
       />
       <CharacterGrid
         onCharacterSelect={addChat}
         list={chatList}
         title="Favourites"
-        user={{ username }} // Same here
+        user={{ username:Username,userId:UserId }} // Same here
       />
     </div>
   );

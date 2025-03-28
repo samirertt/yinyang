@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideBar from "../assets/SideBar.svg";
 import Search from "../assets/Search.svg";
 import NewChat from "../assets/NewChat.svg";
@@ -12,22 +12,22 @@ import { useNavigate } from "react-router-dom";
 
 interface SidebarProps {
   character:{img: string, name:string, Id:number, details:string, usage: number },
-  historyList:{ name: string; image: string,details:string }[],
+  historyList:{ name: string; image: string,details:string,chatId:number }[],
   updateActive:any,
-  username:string
+  user:{username:string, userId:number}
 }
 
-const Sidebar: React.FC<SidebarProps> = (props: {username:string, character:{img: string, name:string, Id:number, details:string, usage: number },historyList:{ name: string; image: string,details:string }[],updateActive:any }) => {
+const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:number}, character:{img: string, name:string, Id:number, details:string, usage: number },historyList:{ name: string; image: string,details:string,chatId:number }[],updateActive:any }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isInfoCollapsed, setIsInfoCollapsed] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [chatList,setChatList] = useState(props.historyList);
+  
   const [activeCharacter,setActiveCharacter] = useState(props.character);
 
-  const filteredChats = chatList.filter((chat) =>
-    chat.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const [user,setUser] = useState(props.user);
+
+  
 
   const toggleCollapse = () => {
     setIsCollapsed((prev) => !prev);
@@ -37,12 +37,13 @@ const Sidebar: React.FC<SidebarProps> = (props: {username:string, character:{img
     setIsInfoCollapsed((prev) => !prev);
   };
 
-  const changeCharacter = (nameP:string, imageP:string,detailsP:string) =>
+  const changeCharacter = (nameP:string, imageP:string,detailsP:string,chatIdP:number) =>
   {
     const character = {
       img:imageP,
       name:nameP,
       details:detailsP,
+      chatId:chatIdP,
       usage:0,
       Id:0
 
@@ -51,15 +52,88 @@ const Sidebar: React.FC<SidebarProps> = (props: {username:string, character:{img
     props.updateActive(character);
   }
 
-  
-
   const navigate = useNavigate();
   
   const goToDashboard = () =>
   {
-    const username = props.username;
-    navigate("/", { state: { username } });
+
+    navigate("/", { state: { user } });
   }
+
+  const [chatList,setChatList] = useState<{ name: string, image:string ,details:string, chatId:number }[]>([]);
+
+  const getCharFromId = async ( id:number) =>
+  {
+      //FILL this
+  }
+
+
+  const getUserChats = async ()=>
+    {
+        const body = {userId:user.userId};
+        try 
+        {
+          const response = await fetch("http://localhost:8080/chat/getUserChats", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+          });
+  
+          if (response.ok) 
+          {
+            const data = await response.json();
+            let chats: { name: string; image: string,details:string,chatId:number }[] = [];
+            data.map((chatItem: { charId: number; chatId: any; userId: string; chatText:string; })=>
+            {
+              
+              //Make the temp.name an acutal name, and fill the pics n shit
+              const temp = {
+                name:chatItem.charId.toString(),
+                chatId:chatItem.chatId,
+                image:"a",
+                details:chatItem.chatText
+              }
+              chats.push(temp);
+            })
+            
+            setChatList(chats.map((item)=>
+            {
+              return item;
+            }));
+          } 
+          else 
+          {
+            setChatList([]);
+
+          }
+        } 
+        catch (error) 
+        {
+          console.error("Error:", error);
+        }
+
+        
+        return;
+    }
+
+    const filteredChats = chatList.filter((chat) =>
+      chat.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    useEffect(()=>
+      {
+        getUserChats();
+        
+      },[]);
+
+
+
+
+
+
+
 
   return (
     <div className="flex relative h-screen">
@@ -137,7 +211,7 @@ const Sidebar: React.FC<SidebarProps> = (props: {username:string, character:{img
                 </div>
                   <ol>
                     {filteredChats.map((chat, index) => (
-                    <li onClick={() => changeCharacter(chatList[index].name,chatList[index].image,chatList[index].details)} key={index} className="p-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
+                    <li onClick={() => changeCharacter(chatList[index].name,chatList[index].image,chatList[index].details,chatList[index].chatId)} key={index} className="p-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
                       {chat.name}
                     </li>
                     ))}
