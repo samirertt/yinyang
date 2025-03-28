@@ -1,0 +1,22 @@
+import axios from 'axios';
+
+const API_URL = 'http://localhost:8080';
+
+export interface User {
+    userId: number;
+    username: string;
+    role: string;
+    userImg?: string;
+}
+
+export const adminService = {
+    getAllUsers: async (): Promise<User[]> => {
+        const response = await axios.get(`${API_URL}/admin/users`);
+        return response.data;
+    },
+
+    toggleUserRole: async (userId: number): Promise<User> => {
+        const response = await axios.put(`${API_URL}/admin/users/${userId}/toggle-role`);
+        return response.data;
+    }
+}; 

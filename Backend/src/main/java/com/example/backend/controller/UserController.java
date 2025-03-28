@@ -1,13 +1,11 @@
-package com.example.backend.UserLogic.controller;
+package com.example.backend.controller;
 
-
-import com.example.backend.UserLogic.service.UserService;
+import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-
 
 @RestController
 @RequestMapping("/auth")
@@ -32,8 +30,5 @@ public class UserController {
         }
     }
 
-
-
-
-
+    //gets the recent chats of the user
 }

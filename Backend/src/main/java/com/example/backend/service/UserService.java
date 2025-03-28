@@ -1,4 +1,4 @@
-package com.example.backend.UserLogic.service;
+package com.example.backend.service;
 
 import com.example.backend.Models.UserModel;
 import com.example.backend.UserLogic.repository.UserRepository;
@@ -30,5 +30,19 @@ public class UserService {
     public boolean validateUser(String username, String password) {
         Optional<UserModel> userModel = userRepository.findByUsername(username);
         return userModel.map(value -> value.getPassword().equals(password)).orElse(false);
+    }
+
+    public User toggleUserRole(int userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Toggle between 'user' and 'moderator' roles
+        if ("user".equals(user.getRole())) {
+            user.setRole("moderator");
+        } else if ("moderator".equals(user.getRole())) {
+            user.setRole("user");
+        }
+
+        return userRepository.save(user);
     }
 }
