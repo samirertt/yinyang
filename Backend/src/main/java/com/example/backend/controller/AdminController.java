@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.models.Character;
 import com.example.backend.models.User;
 import com.example.backend.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,10 @@ public class AdminController {
     public ResponseEntity<User> toggleUserRole(@PathVariable int userId) {
         User updatedUser = adminService.toggleUserRole(userId);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @GetMapping("/characters")
+    public ResponseEntity<List<Character>> getAllCharacters() {
+        return ResponseEntity.ok(adminService.getAllCharacters());
     }
 }
