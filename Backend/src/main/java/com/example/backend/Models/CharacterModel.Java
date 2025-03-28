@@ -2,9 +2,11 @@ package com.example.backend.Models;
 
 import jakarta.persistence.*;
 
+
 @Entity
 @Table(name = "characters")
-public class Character {
+public class CharacterModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "charId")
@@ -18,7 +20,7 @@ public class Character {
     private String charPersonality;
 
     @Column(name = "charImg")
-    private String charImg;
+    private byte[] charImg;
 
     @Column(name = "charDescription")
     private String charDescription;
@@ -53,11 +55,11 @@ public class Character {
         this.charPersonality = charPersonality;
     }
 
-    public String getCharImg() {
+    public byte[] getCharImg() {
         return charImg;
     }
 
-    public void setCharImg(String charImg) {
+    public void setCharImg(byte[] charImg) {
         this.charImg = charImg;
     }
 

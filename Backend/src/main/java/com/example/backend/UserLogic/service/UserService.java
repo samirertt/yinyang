@@ -1,6 +1,6 @@
 package com.example.backend.UserLogic.service;
 
-import com.example.backend.Models.User;
+import com.example.backend.Models.UserModel;
 import com.example.backend.UserLogic.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,12 +14,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<User> getUserByUsername(String username) {
+    public Optional<UserModel> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
 
     }
 
-    public List<User> getAllUsers() {
+    public List<UserModel> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -28,7 +28,7 @@ public class UserService {
     }
 
     public boolean validateUser(String username, String password) {
-        Optional<User> userModel = userRepository.findByUsername(username);
+        Optional<UserModel> userModel = userRepository.findByUsername(username);
         return userModel.map(value -> value.getPassword().equals(password)).orElse(false);
     }
 }
