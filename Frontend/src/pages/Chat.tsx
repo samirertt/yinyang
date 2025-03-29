@@ -125,14 +125,15 @@ export default function Chat()
         {
           const data = await response.json();
           setChatId(data.chatId);
-
+          
           setMessages([...messages, { text: message, sender: "user" }]);
           setTyping(true);
 
           const aiReply = "Still Working";
 
-          const aiBody = {charId:character.Id, userId: userId, message:aiReply};
-          const aiResponse = await fetch("http://localhost:8080/chat/createChat", {
+         
+          const aiBody = {chatId:data.chatId, message:aiReply};
+          const aiResponse = await fetch("http://localhost:8080/chat/sendMessage", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -168,7 +169,7 @@ export default function Chat()
       }
       return;
     }
-
+// https://stallion-valued-painfully.ngrok-free.app/chat
 
     try 
     {

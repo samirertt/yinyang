@@ -26,7 +26,7 @@ const UserCharacterSelection = ({
   
   
   // Redirect if no username (not logged in)
-  if (!user.username) {
+  if (!user) {
     return <Navigate to="/Login" replace />;
   }
   

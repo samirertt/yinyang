@@ -65,26 +65,7 @@ function Login() {
       console.error("Error:", error);
       setError("An error occured while logging in");
     }
-    // if(username== "moderator" && password == "asd"){
-    //   if (Auth.login(username, password)) {
-    //     navigate("/Moderator", { state: { username } });
-    //   } else {
-    //     setError("Invalid username or password");
-    //   }
-    // } else if (username == "admin" && password == "asd"){
-    //     if (Auth.login(username, password)) {
-    //       navigate("/AdminDashboard", { state: { username } });
-    //     } else {
-    //       setError("Invalid username or password");
-    //     }
-    //   }
-    //   else{
-    //     if (Auth.login(username, password)) {
-    //       navigate("/", { state: { username } });
-    //     } else {
-    //       setError("Invalid username or password");
-    //     }
-    //   };
+    
   };
 
   return (
