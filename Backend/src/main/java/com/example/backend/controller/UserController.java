@@ -1,5 +1,7 @@
 package com.example.backend.controller;
 
+
+import com.example.backend.models.User;
 import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +19,16 @@ public class UserController {
 
     //Handles the login of the user
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Map<String, String> credentials) {
+    public ResponseEntity<Object> login(@RequestBody Map<String, String> credentials) {
         String username = credentials.get("username");
         String password = credentials.get("password");
 
-        boolean isValid = userService.validateUser(username, password);
+        User user = userService.validateUser(username, password);
 
-        if (isValid) {
-            return ResponseEntity.ok("Login Successful");
+        if (user!=null) {
+            return ResponseEntity.ok(user);
         } else {
-            return ResponseEntity.status(401).body("Invalid Crendentials");
+            return ResponseEntity.status(401).body("Invalid Credentials");
         }
     }
 

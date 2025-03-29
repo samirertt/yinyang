@@ -1,9 +1,10 @@
 package com.example.backend.service;
 
-import com.example.backend.models.User;
+
 import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.backend.models.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,9 +28,20 @@ public class UserService {
         return userRepository.existsByUsername(username);
     }
 
-    public boolean validateUser(String username, String password) {
+    public User validateUser(String username, String password) {
         Optional<User> userModel = userRepository.findByUsername(username);
-        return userModel.map(value -> value.getPassword().equals(password)).orElse(false);
+        if(userModel.isPresent())
+        {
+            if(userModel.get().getPassword().equals(password))
+            {
+                return userModel.get();
+            }
+            else
+            {
+                return null;
+            }
+        }
+        return null;
     }
 
     public User toggleUserRole(int userId) {
