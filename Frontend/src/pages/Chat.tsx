@@ -110,7 +110,7 @@ export default function Chat()
 
     if(chatId==0)
     {
-      const body = {charId:character.Id, userId: userId, message:message};
+      const body = {charId:character.Id, userId: userId, message:""};
       try 
       {
         const response = await fetch("http://localhost:8080/chat/createChat", {
@@ -121,7 +121,14 @@ export default function Chat()
           body: JSON.stringify(body),
         });
 
-        if (response.ok) 
+        if (!response.ok) 
+        {
+          setError("Chat Not Found!");
+          console.error("Error:", error);
+
+          return;
+        }
+        else
         {
           const data = await response.json();
           setChatId(data.chatId);
@@ -129,7 +136,7 @@ export default function Chat()
           setMessages([...messages, { text: message, sender: "user" }]);
           setTyping(true);
 
-          const stringId = "" + chatId;
+          const stringId = "" + data.chatId;
             
           const modelBody = {chat_id: stringId, message:message};
           const modelResponse = await fetch("https://stallion-valued-painfully.ngrok-free.app/chat", {
@@ -142,33 +149,50 @@ export default function Chat()
 
           if(modelResponse.ok)
             {
-              const data =await modelResponse.json();
-              const aiReply = data.response.content;
-    
-              const aiBody = {chatId:chatId, message:aiReply};
-              const aiResponse = await fetch("http://localhost:8080/chat/sendMessage", {
+              const userBody = {chatId:chatId, message:message};
+              const userResponse = await fetch("http://localhost:8080/chat/sendMessage", {
                 method: "POST",
                 headers: {
-                  "Content-Type": "application/json",
+                  "Content-Type": "application/json"
                 },
-                body: JSON.stringify(aiBody),
+                body: JSON.stringify(userBody)
               });
-    
-              if(aiResponse.ok)
+
+              if(!userResponse.ok)
               {
-                setTimeout(() => {
-                  setMessages((prev) => [
-                    ...prev,
-                    { text: aiReply, sender: "ai" },
-                  ]);
-                  setTyping(false);
-                }, 1000);
+                setError("Couldn't send message!");
+                //Delete Empty message
               }
               else
               {
-                setError("Couldn't send Reply!");
+                const data =await modelResponse.json();
+                const aiReply = data.response.content;
+                
+                const aiBody = {chatId:chatId, message:aiReply};
+                const aiResponse = await fetch("http://localhost:8080/chat/sendMessage", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(aiBody),
+                });
+              
+                if(aiResponse.ok)
+                {
+                  setTimeout(() => {
+                    setMessages((prev) => [
+                      ...prev,
+                      { text: aiReply, sender: "ai" },
+                    ]);
+                    setTyping(false);
+                  }, 1000);
+                }
+                else
+                {
+                  setError("Couldn't send Reply!");
+                }
               }
-    
+             
             }
             else
             {
@@ -177,10 +201,7 @@ export default function Chat()
             }
 
         } 
-        else 
-        {
-          setError("Couldn't send message!");
-        }
+        
       } 
       catch (error) 
       {
@@ -289,12 +310,10 @@ export default function Chat()
       
     },[activeCharacter]);
 
-
-
   return (
     <div>
       <div className="flex h-screen bg-[var(--page)]">
-        <SideBar user={user} updateActive={updateActive} historyList={list} character={activeCharacter} />
+        <SideBar chatId={chatId} user={user} updateActive={updateActive} historyList={list} character={activeCharacter} />
         <div className="flex flex-col flex-1 h-full w-full relative p-4 overflow-y-auto space-y-4 items-center">
           {/* Pass username to ChatNav */}
           <ChatNav user={user} />

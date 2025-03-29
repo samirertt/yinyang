@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import SideBar from "../assets/SideBar.svg";
 import Search from "../assets/Search.svg";
 import NewChat from "../assets/NewChat.svg";
-// import Emi from "../assets/Emi.jpg";
 import History from "../assets/History.svg";
 import Pin from "../assets/Pin.svg";
 import Cross from "../assets/Cross.svg";
@@ -14,10 +13,11 @@ interface SidebarProps {
   character:{img: string, name:string, Id:number, details:string, usage: number },
   historyList:{ name: string; image: string,details:string,chatId:number }[],
   updateActive:any,
-  user:{username:string, userId:number}
+  user:{username:string, userId:number},
+  chatId:Number
 }
 
-const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:number}, character:{img: string, name:string, Id:number, details:string, usage: number },historyList:{ name: string; image: string,details:string,chatId:number }[],updateActive:any }) => {
+const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:number}, character:{img: string, name:string, Id:number, details:string, usage: number },historyList:{ name: string; image: string,details:string,chatId:number }[],updateActive:any,chatId:Number }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isInfoCollapsed, setIsInfoCollapsed] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -126,7 +126,7 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
       {
         getUserChats();
         
-      },[]);
+      },[props.chatId]);
 
 
 
