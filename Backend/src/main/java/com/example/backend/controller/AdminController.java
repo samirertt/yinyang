@@ -1,12 +1,19 @@
 package com.example.backend.controller;
 
-import com.example.backend.models.User;
-import com.example.backend.service.AdminService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.example.backend.models.Character;
+import com.example.backend.models.User;
+import com.example.backend.service.AdminService;
 
 @RestController
 @RequestMapping("/admin")
@@ -25,5 +32,10 @@ public class AdminController {
     public ResponseEntity<User> toggleUserRole(@PathVariable int userId) {
         User updatedUser = adminService.toggleUserRole(userId);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @GetMapping("/characters")
+    public ResponseEntity<List<Character>> getAllCharacters() {
+        return ResponseEntity.ok(adminService.getAllCharacters());
     }
 }
