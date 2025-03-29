@@ -37,7 +37,7 @@ export default function Chat()
     return <Navigate to="/Login" replace />;
   }
 
-  const [chatId,setChatId] = useState(location.state.chatId);
+  const [chatId,setChatId] = useState<Number>(location.state.chatId);
   const [userId,setUserId] = useState(user.userId);
   
 
@@ -129,32 +129,52 @@ export default function Chat()
           setMessages([...messages, { text: message, sender: "user" }]);
           setTyping(true);
 
-          const aiReply = "Still Working";
-
-         
-          const aiBody = {chatId:data.chatId, message:aiReply};
-          const aiResponse = await fetch("http://localhost:8080/chat/sendMessage", {
+          const stringId = "" + chatId;
+            
+          const modelBody = {chat_id: stringId, message:message};
+          const modelResponse = await fetch("https://stallion-valued-painfully.ngrok-free.app/chat", {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/json"
             },
-            body: JSON.stringify(aiBody),
+            body: JSON.stringify(modelBody)
           });
 
-          if(aiResponse.ok)
-          {
-            setTimeout(() => {
-              setMessages((prev) => [
-                ...prev,
-                { text: aiReply, sender: "ai" },
-              ]);
-              setTyping(false);
-            }, 1000);
-          }
-          else
-          {
-            setError("Couldn't get Reply!");
-          }
+          if(modelResponse.ok)
+            {
+              const data =await modelResponse.json();
+              const aiReply = data.response.content;
+    
+              const aiBody = {chatId:chatId, message:aiReply};
+              const aiResponse = await fetch("http://localhost:8080/chat/sendMessage", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(aiBody),
+              });
+    
+              if(aiResponse.ok)
+              {
+                setTimeout(() => {
+                  setMessages((prev) => [
+                    ...prev,
+                    { text: aiReply, sender: "ai" },
+                  ]);
+                  setTyping(false);
+                }, 1000);
+              }
+              else
+              {
+                setError("Couldn't send Reply!");
+              }
+    
+            }
+            else
+            {
+              setError("Couldn't reach the model!");
+              console.log(modelResponse);
+            }
 
         } 
         else 
@@ -169,7 +189,6 @@ export default function Chat()
       }
       return;
     }
-// https://stallion-valued-painfully.ngrok-free.app/chat
 
     try 
     {
@@ -177,9 +196,9 @@ export default function Chat()
       const response = await fetch("http://localhost:8080/chat/sendMessage", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify(body)
       });
 
       if (response.ok) 
@@ -187,8 +206,22 @@ export default function Chat()
         setMessages([...messages, { text: message, sender: "user" }]);
         setTyping(true);
 
+        const stringId = "" + chatId;
 
-        const aiReply = "Still Working";
+        const modelBody = {chat_id: stringId, message:message};
+        
+        const modelResponse = await fetch("https://stallion-valued-painfully.ngrok-free.app/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(modelBody),
+        });
+
+        if(modelResponse.ok)
+        {
+          const data =await modelResponse.json();
+          const aiReply = data.response.content;
 
           const aiBody = {chatId:chatId, message:aiReply};
           const aiResponse = await fetch("http://localhost:8080/chat/sendMessage", {
@@ -211,8 +244,16 @@ export default function Chat()
           }
           else
           {
-            setError("Couldn't get Reply!");
+            setError("Couldn't send Reply!");
           }
+
+        }
+        else
+        {
+          setError("Couldn't reach the model!");
+          
+        }
+
       } 
       else 
       {
