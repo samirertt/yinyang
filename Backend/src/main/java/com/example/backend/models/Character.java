@@ -7,26 +7,26 @@ import jakarta.persistence.*;
 public class Character {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "charId")
+    @Column(name = "char_Id")
     private int charId;
 
 
-    @Column(name = "charName")
+    @Column(name = "char_Name")
     private String charName;
 
-    @Column(name = "charPersonality")
+    @Column(name = "char_Personality")
     private String charPersonality;
 
-    @Column(name = "charImg")
+    @Column(name = "char_Img")
     private String charImg;
 
-    @Column(name = "charDescription")
+    @Column(name = "char_Description")
     private String charDescription;
 
-    @Column(name = "charUsage")
+    @Column(name = "char_Usage")
     private double charUsage;
 
-    @Column(name = "charPrompt")
+    @Column(name = "char_Prompt")
     private String charPrompt;
 
     public int getCharId() {

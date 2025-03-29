@@ -1,6 +1,6 @@
 import NavBar from "../components/NavBar";
 import CharactersBarGraph from "../components/AdminDashboardComponents/CategoriesBarGraph";
-import { useLocation, Navigate } from "react-router-dom"; // Import useLocation hook
+import { useLocation, Navigate } from "react-router-dom";
 
 function AdminDashboard()
 {
@@ -69,6 +69,6 @@ function AdminDashboard()
             </div>
         </div>
     )
-} 
+}
 
 export default AdminDashboard;

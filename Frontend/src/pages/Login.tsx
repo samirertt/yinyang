@@ -39,13 +39,13 @@ function Login() {
 
         if (username == "moderator" && password == "asd") {
           if (Auth.login(username, password)) {
-            navigate("/Moderator", { state: { user } });
+            navigate("/Moderator", { state: { username } });
           } else {
             setError("Invalid username or password");
           }
         } else if (username == "admin" && password == "asd") {
           if (Auth.login(username, password)) {
-            navigate("/AdminDashboard", { state: { user } });
+            navigate("/AdminDashboard", { state: { username } });
           } else {
             setError("Invalid username or password");
           }

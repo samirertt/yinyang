@@ -19,7 +19,7 @@ To ensure that your Spring Boot application runs smoothly, make sure you have th
 - If MySQL is not installed, download it from [MySQL Downloads](https://dev.mysql.com/downloads/).
 - Create a database for your application using the script in the "SQL" folder:
 
-  CREATE DATABASE yingyang;
+  CREATE DATABASE yinyang;
 
   Update your `application.properties` file with the appropriate database connection settings.
 

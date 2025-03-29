@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +38,25 @@ public class AdminController {
     @GetMapping("/characters")
     public ResponseEntity<List<Character>> getAllCharacters() {
         return ResponseEntity.ok(adminService.getAllCharacters());
+    }
+
+    @GetMapping("/characters/{charId}")
+    public ResponseEntity<Character> getCharacterById(@PathVariable int charId) {
+        return ResponseEntity.ok(adminService.getCharacterById(charId));
+    }
+
+    @GetMapping("/characters/personality")
+    public ResponseEntity<Map<String, Long>> getCharacterCountByPersonality() {
+        return ResponseEntity.ok(adminService.getCharacterCountByPersonality());
+    }
+
+    @GetMapping("/characters/usage")
+    public ResponseEntity<Map<String, Double>> getSimpleCharacterUsage() {
+        return ResponseEntity.ok(adminService.getSimpleCharacterUsage());
+    }
+
+    @GetMapping("/users/yearly")
+    public ResponseEntity<List<Map<String, Object>>> getUsersByYear() {
+        return ResponseEntity.ok(adminService.getUsersByYear());
     }
 }
