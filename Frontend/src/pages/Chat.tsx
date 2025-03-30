@@ -39,7 +39,7 @@ export default function Chat()
 
   const [chatId,setChatId] = useState<Number>(location.state.chatId);
   const [userId,setUserId] = useState(user.userId);
-  
+  const [firstRender,setFirstRender] = useState(true);
 
 
   function separateMessages(chatText:String):void
@@ -69,7 +69,7 @@ export default function Chat()
 
   const retrieveMessages = async (chatId: Number) =>
   {
-    console.log(chatId);
+    
     if(chatId==0)
     {
       setMessages([{ text: "Hello! How can I help you today?", sender: "ai" }]);
@@ -92,6 +92,7 @@ export default function Chat()
       {
         const data = await response.json();
         separateMessages(data.chatText);
+        
       } 
       else 
       {
@@ -149,7 +150,8 @@ export default function Chat()
 
           if(modelResponse.ok)
             {
-              const userBody = {chatId:chatId, message:message};
+              const userBody = {chatId:data.chatId, message:message};
+              setChatId(data.chatId);
               const userResponse = await fetch("http://localhost:8080/chat/sendMessage", {
                 method: "POST",
                 headers: {
@@ -165,10 +167,10 @@ export default function Chat()
               }
               else
               {
-                const data =await modelResponse.json();
-                const aiReply = data.response.content;
+                const aiData =await modelResponse.json();
+                const aiReply = aiData.response.content;
                 
-                const aiBody = {chatId:chatId, message:aiReply};
+                const aiBody = {chatId:data.chatId, message:aiReply};
                 const aiResponse = await fetch("http://localhost:8080/chat/sendMessage", {
                   method: "POST",
                   headers: {
@@ -262,6 +264,7 @@ export default function Chat()
               ]);
               setTyping(false);
             }, 1000);
+            setFirstRender(true);
           }
           else
           {
@@ -306,7 +309,12 @@ export default function Chat()
   useEffect(()=>
     {
       setMessages([])
+      if(chatId!=0)
+      {
+        setFirstRender(false);
+      }
       retrieveMessages(chatId);
+      
       
     },[activeCharacter]);
 
@@ -319,7 +327,7 @@ export default function Chat()
           <ChatNav user={user} />
           <div className="pt-15 mb-20 w-89 md:min-w-[10px] lg:min-w-[850px] items-center">
             {messages.map((msg, index) => (
-              <MessageBubble key={index} text={msg.text} sender={msg.sender} image={activeCharacter.img} />
+              <MessageBubble key={index} text={msg.text} sender={msg.sender} image={activeCharacter.img} anim={!firstRender} />
             ))}
             <InputBar sendMessage={sendMessage} />
           </div>

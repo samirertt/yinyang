@@ -56,17 +56,39 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
   
   const goToDashboard = () =>
   {
-
     navigate("/", { state: { user } });
   }
 
   const [chatList,setChatList] = useState<{ name: string, image:string ,details:string, chatId:number }[]>([]);
 
-  const getCharFromId = async ( id:number) =>
+  const getCharFromId = async (id:number): Promise<{ name: string; image: string; details: string; } | undefined> =>
   {
-      //FILL this
+    try 
+    {
+        const response = await fetch("http://localhost:8080/admin/characters/"+id, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.ok) 
+        {
+          const data = await response.json();
+          
+          return { name: data.charName, image: data.charImg ,details:data.charDescription }
+        } 
+        else 
+        {
+          console.log("Character Not Found!");
+          return undefined;
+        }
+    }
+    catch(error)
+    {
+      console.error("Error:", error);
+      return undefined;
+    }
   }
-
 
   const getUserChats = async ()=>
     {
@@ -85,23 +107,38 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
           {
             const data = await response.json();
             let chats: { name: string; image: string,details:string,chatId:number }[] = [];
-            data.map((chatItem: { charId: number; chatId: any; userId: string; chatText:string; })=>
+
+            const promises = data.map(async (chatItem: { charId: number; chatId: any; userId: string; chatText:string; })=>
             {
               
-              //Make the temp.name an acutal name, and fill the pics n shit
-              const temp = {
-                name:chatItem.charId.toString(),
-                chatId:chatItem.chatId,
-                image:"a",
-                details:chatItem.chatText
+              const character = await getCharFromId(chatItem.charId);
+              
+              if(character!=null)
+              {
+                return {
+                  name: character?.name ?? "N/A",
+                  chatId:chatItem.chatId,
+                  image:character?.image ?? "No Image",
+                  details:character?.details ?? "N/A"
+                }
+                
+                
               }
-              chats.push(temp);
+              return null;
+              
             })
-            
+
+            const resolvedChats = await Promise.all(promises);
+
+            chats = resolvedChats.filter(chat => chat !== null) as { name: string; image: string; details: string; chatId: number }[]; //filter out nulls.
+
             setChatList(chats.map((item)=>
             {
+              item.name = item.chatId.toString() + ". " + item.name;
               return item;
             }));
+            
+            
           } 
           else 
           {
@@ -127,13 +164,6 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
         getUserChats();
         
       },[props.chatId]);
-
-
-
-
-
-
-
 
   return (
     <div className="flex relative h-screen">

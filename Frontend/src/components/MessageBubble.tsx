@@ -10,28 +10,40 @@ interface MessageProps {
   text: string;
   sender: string;
   image:string;
+  anim:boolean;
 }
 
-export default function MessageBubble({ text, sender,image }: MessageProps) {
+export default function MessageBubble({ text, sender,image,anim }: MessageProps) {
   const messageRef = useRef<HTMLDivElement>(null);
   const [displayedText, setDisplayedText] = useState(sender === "user" ? text : ""); 
 
   useEffect(() => {
     if (sender === "ai") {
-      setDisplayedText(""); 
-      let index = 0;
+      if(!anim)
+      {
+        setDisplayedText(""); 
+        
+      }
+      else
+      {
+        setDisplayedText(text); 
+        return;
+      }
+        let index = 0;
 
-      const interval = setInterval(() => {
-        setDisplayedText((prev) => text.slice(0, index + 1)); 
-        index++;
+        const interval = setInterval(() => {
+          setDisplayedText((prev) => text.slice(0, index + 1)); 
+          index++;
 
-        if (index >= text.length) {
-          clearInterval(interval);
-        }
-      }, 10);
+          if (index >= text.length) {
+            clearInterval(interval);
+          }
+        }, 10);
 
-      return () => clearInterval(interval);
-    }
+        return () => clearInterval(interval);
+      }
+    
+    
   }, [text, sender]);
 
   useEffect(() => {
