@@ -5,11 +5,17 @@ import com.example.backend.repository.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ModeratorService {
 
     @Autowired
     private CharacterRepository characterRepository;
+
+    public List<Character> getAllCharacters() {
+        return characterRepository.findAll();
+    }
 
     public Character createCharacter(Character character) {
         // Validate required fields
