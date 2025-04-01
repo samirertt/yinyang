@@ -1,12 +1,36 @@
 import NavBar from "../components/NavBar";
 import CharactersBarGraph from "../components/AdminDashboardComponents/CategoriesBarGraph";
-import { useLocation, Navigate } from "react-router-dom";
-
+import {Navigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 function AdminDashboard()
 {
-  const location = useLocation();
-  const username = location.state?.username; 
-  if (!username) {
+const token = localStorage.getItem("jwtToken");
+  if (!token) {
+    return <Navigate to="/Login" replace />;
+  }
+  let username: string;
+  let userId: number;
+  
+  try {
+    const decoded: any = jwtDecode(token);
+    const roles = decoded.roles || [];
+
+    // Check if user has the "user" role
+    if (!roles.includes("admin")) {
+      return <Navigate to="/Login" replace />;
+    }
+
+    username = decoded.sub; // Typically, 'sub' is the username or subject
+    userId = decoded.userId; // Assumes userId is included in the token
+
+    // If userId is not in the token, this will be undefined; handle accordingly if needed
+    if (userId === undefined) {
+      console.error("userId not found in token");
+      // Optionally redirect or set a default value
+      return <Navigate to="/Login" replace />;
+    }
+  } catch (error) {
+    console.error("Invalid token:", error);
     return <Navigate to="/Login" replace />;
   }
 

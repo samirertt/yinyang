@@ -1,20 +1,44 @@
 import { useState } from "react";
-import { useLocation, Navigate } from "react-router-dom"; // Import useLocation hook
+import { Navigate } from "react-router-dom"; // Import useLocation hook
 import AddCharacter from "../components/AddCharacter";
 import EditCharacter from "../components/EditCharacter";
 import RemoveCharacter from "../components/RemoveCharacter";
 import LoginNav from "../components/LoginNav";
+import { jwtDecode } from "jwt-decode";
 
 const ManageCharacters = () => {
   const [activeTab, setActiveTab] = useState("add");
 
-  // Use the useLocation hook to get location data
-  const location = useLocation();
-  const username = location.state?.username; // Fallback to 'Guest' if username is not available
-  // Redirect if no username (not logged in)
-  if (!username) {
+  const token = localStorage.getItem("jwtToken");
+  if (!token) {
     return <Navigate to="/Login" replace />;
   }
+  let username: string;
+  let userId: number;
+  
+  try {
+    const decoded: any = jwtDecode(token);
+    const roles = decoded.roles || [];
+
+    // Check if user has the "user" role
+    if (!roles.includes("moderator")) {
+      return <Navigate to="/Login" replace />;
+    }
+
+    username = decoded.sub; // Typically, 'sub' is the username or subject
+    userId = decoded.userId; // Assumes userId is included in the token
+
+    // If userId is not in the token, this will be undefined; handle accordingly if needed
+    if (userId === undefined) {
+      console.error("userId not found in token");
+      // Optionally redirect or set a default value
+      return <Navigate to="/Login" replace />;
+    }
+  } catch (error) {
+    console.error("Invalid token:", error);
+    return <Navigate to="/Login" replace />;
+  }
+
   return (
     <div className="flex flex-col items-center bg-[#212121] min-h-screen p-4 sm:p-6">
       <LoginNav username={username} />

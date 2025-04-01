@@ -1,20 +1,23 @@
-
 class Auth {
-    static login(username: string, password: string): boolean {
-      if (username === 'moderator' && password === 'asd' || username === 'admin' && password === 'asd' || username === 'user' && password === 'asd') {
-        localStorage.setItem('isAuthenticated', 'true');
-        return true;
-      }
-      return false;
-    }
+  // Instead of checking credentials, we now store and retrieve the JWT token.
   
-    static logout(): void {
-      localStorage.removeItem('isAuthenticated');
-    }
-  
-    static isAuthenticated(): boolean {
-      return localStorage.getItem('isAuthenticated') === 'true';
-    }
+  static login(token: string): void {
+    // Store the token in localStorage
+    localStorage.setItem("jwtToken", token);
   }
-  
-  export default Auth;
+
+  static logout(): void {
+    localStorage.removeItem("jwtToken");
+  }
+
+  static isAuthenticated(): boolean {
+    // Simply check if the token exists.
+    return !!localStorage.getItem("jwtToken");
+  }
+
+  static getToken(): string | null {
+    return localStorage.getItem("jwtToken");
+  }
+}
+
+export default Auth;

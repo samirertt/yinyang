@@ -30,11 +30,13 @@ public class AdminService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Toggle between 'user' and 'moderator' roles
-        if ("user".equals(user.getRole())) {
-            user.setRole("moderator");
-        } else if ("moderator".equals(user.getRole())) {
-            user.setRole("user");
+        List<String> roles = user.getRoles();
+        if (roles.contains("user")) {
+            roles.remove("user");
+            roles.add("moderator");
+        } else if (roles.contains("moderator")) {
+            roles.remove("moderator");
+            roles.add("user");
         }
 
         return userRepository.save(user);
