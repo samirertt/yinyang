@@ -26,7 +26,8 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
   const [activeCharacter,setActiveCharacter] = useState(props.character);
 
   const [user,setUser] = useState(props.user);
-
+  // Retrieve token from localStorage
+  const token = localStorage.getItem("jwtToken");
   
 
   const toggleCollapse = () => {
@@ -69,6 +70,7 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
         });
         if (response.ok) 
@@ -99,6 +101,7 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
             },
             body: JSON.stringify(body),
           });
