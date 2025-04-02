@@ -12,6 +12,7 @@ interface Character {
 }
 
 const RemoveCharacter = () => {
+  const token = localStorage.getItem("jwtToken");
   const [characters, setCharacters] = useState<Character[]>([]);
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -24,7 +25,12 @@ const RemoveCharacter = () => {
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
-        const response = await fetch('http://localhost:8080/moderator/characters');
+        const response = await fetch('http://localhost:8080/moderator/characters',{
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch characters');
         }

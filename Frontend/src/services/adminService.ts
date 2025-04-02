@@ -9,14 +9,28 @@ export interface User {
     userImg?: string;
 }
 
+const token = localStorage.getItem('jwtToken');
+
 export const adminService = {
     getAllUsers: async (): Promise<User[]> => {
-        const response = await axios.get(`${API_URL}/admin/users`);
+        const response = await axios.get(`${API_URL}/admin/users`,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
         return response.data;
     },
 
     toggleUserRole: async (userId: number): Promise<User> => {
-        const response = await axios.put(`${API_URL}/admin/users/${userId}/toggle-role`);
+        const response = await axios.put(`${API_URL}/admin/users/${userId}/toggle-role`,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
         return response.data;
     }
 }; 

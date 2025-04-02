@@ -30,7 +30,12 @@ const EditCharacter = () => {
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
-        const response = await fetch('http://localhost:8080/moderator/characters');
+        const response = await fetch('http://localhost:8080/moderator/characters', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch characters');
         }
@@ -75,6 +80,9 @@ const EditCharacter = () => {
     }
   };
 
+  const token = localStorage.getItem("jwtToken");
+
+
   const handleEdit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedCharacter) return;
@@ -107,6 +115,7 @@ const EditCharacter = () => {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(updatedCharacter),
           });
@@ -150,6 +159,7 @@ const EditCharacter = () => {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify(updatedCharacter),
         });

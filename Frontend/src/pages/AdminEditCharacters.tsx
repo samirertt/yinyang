@@ -22,11 +22,17 @@ function AdminEditCharacters() {
     if (!username) {
         return <Navigate to="/Login" replace />;
     }
-
+    const token = localStorage.getItem('jwtToken');
     useEffect(() => {
         const fetchCharacters = async () => {
             try {
-                const response = await fetch('http://localhost:8080/admin/characters');
+                const response = await fetch('http://localhost:8080/admin/characters',{
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
                 if (!response.ok) {
                     throw new Error('Failed to fetch characters');
                 }
