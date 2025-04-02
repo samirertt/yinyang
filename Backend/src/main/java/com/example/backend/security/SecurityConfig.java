@@ -43,7 +43,10 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPointJwt))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll() // Allow authentication endpoints
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/**").authenticated()
+                        .requestMatchers("/admin/**").hasAuthority("admin")// Allow authentication endpoints
+                        .requestMatchers("/moderator/**").hasAuthority("moderator")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults());

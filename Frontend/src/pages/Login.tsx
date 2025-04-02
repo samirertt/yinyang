@@ -45,7 +45,7 @@ function Login() {
         const decoded: any = jwtDecode(token);
         const roles = decoded.roles || [];
         console.log("Decoded roles:", roles);
-        // Save token and roles in Auth (optional, depending on your Auth logic)
+        
         Auth.login(token);
 
         // Redirect based on the user's role

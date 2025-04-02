@@ -1,110 +1,119 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InputBar from "../components/InputBar";
 import Typing from "../components/Typing";
 import MessageBubble from "../components/MessageBubble";
 import SideBar from "../components/SideBar";
 import ChatNav from "../components/ChatNav";
 import { Navigate, useLocation } from "react-router-dom";
-import { details } from "framer-motion/client";
+import { jwtDecode } from "jwt-decode";
 
-
-//BUGS:
-//Doesnt set the older chats from the database to the sidebar thing
-
+// Define the shape of your decoded token
+interface DecodedToken {
+  sub: string;        // username
+  userId: number;     // userId included in token
+  roles: string[];    // roles as an array of strings
+  exp: number;        // expiration timestamp (optional)
+}
 
 export interface Message {
   text: string;
   sender: string;
 }
 
-export default function Chat() 
-{
-  
-  const [messages, setMessages] = useState<Message[]>( []);
+export default function Chat() {
+  const [messages, setMessages] = useState<Message[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [typing, setTyping] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
 
-  // Getting the username from location.state (you might adjust this based on how you store the username)
-  const location = useLocation();
-  const user = location.state?.user; 
-  const character = location.state?.character;
-  const [list, setList] = useState<{ name: string; image: string,details:string,chatId:number }[]>([]);
-  
-  // Redirect if no username (not logged in)
-  if (!user.username) {
+  // Retrieve token from localStorage
+  const token = localStorage.getItem("jwtToken");
+
+  // If no token, redirect to login
+  if (!token) {
     return <Navigate to="/Login" replace />;
   }
 
-  const [chatId,setChatId] = useState<Number>(location.state.chatId);
-  const [userId,setUserId] = useState(user.userId);
-  const [firstRender,setFirstRender] = useState(true);
+  let username: string;
+  let userId: number;
+  let roles: string[];
 
+  // Decode token and handle potential errors
+  try {
+    const decoded: any = jwtDecode(token);
+    roles = decoded.roles || [];
 
-  function separateMessages(chatText:String):void
-  {
-    const allMessages = chatText.split("$$").filter(msg=>msg.trim()!="");
-    let counter:number =0;
+    // Check if user has the required role (for example, "user")
+    if (!roles.includes("user")) {
+      return <Navigate to="/Login" replace />;
+    }
+
+    username = decoded.sub; // Typically, 'sub' is the username or subject
+    userId = decoded.userId; // Assumes userId is included in the token
+
+    if (userId === undefined) {
+      console.error("userId not found in token");
+      return <Navigate to="/Login" replace />;
+    }
+  } catch (error) {
+    console.error("Invalid token:", error);
+    return <Navigate to="/Login" replace />;
+  }
+
+  // Create a user object from decoded data
+  const user = { username, userId };
+
+  // Getting the username from location.state if available (optional)
+  const location = useLocation();
+  const character = location.state?.character;
+  const [list, setList] = useState<
+    { name: string; image: string; details: string; chatId: number }[]
+  >([]);
+  const [chatId, setChatId] = useState<number>(
+    location.state?.chatId || 0
+  );
+  const [firstRender, setFirstRender] = useState(true);
+
+  function separateMessages(chatText: string): void {
+    const allMessages = chatText.split("$$").filter((msg) => msg.trim() !== "");
+    let counter = 0;
     let msgs: Message[] = [];
-    for(const msg of allMessages)
-    {
-      let Sender = "";
-      if(counter%2===0)
-      {
-        Sender = "user";
-      }
-      else
-      {
-        Sender="ai";
-      }
-      msgs.push({text:msg, sender:Sender});
-
+    for (const msg of allMessages) {
+      let Sender = counter % 2 === 0 ? "user" : "ai";
+      msgs.push({ text: msg, sender: Sender });
       counter++;
     }
     setMessages(msgs);
-    
-    counter=0;
   }
 
-  const retrieveMessages = async (chatId: Number) =>
-  {
-    
-    if(chatId==0)
-    {
+  const retrieveMessages = async (chatId: number) => {
+    if (chatId === 0) {
       setMessages([{ text: "Hello! How can I help you today?", sender: "ai" }]);
       return;
     }
-    
-    const body = {chatId:chatId};
+    const body = { chatId: chatId };
 
-    try 
-    {
+    try {
       const response = await fetch("http://localhost:8080/chat/getMessages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`, // Send the JWT token for authorization
         },
         body: JSON.stringify(body),
       });
 
-      if (response.ok) 
-      {
+      if (response.ok) {
         const data = await response.json();
         separateMessages(data.chatText);
-        
-      } 
-      else 
-      {
+      } else {
         setError("Chat Not Found!");
       }
-    } 
-    catch (error) 
-    {
+    } catch (error) {
       console.error("Error:", error);
       setError("Couldn't get messages!");
     }
-  }
+  };
 
   const sendMessage = async (message: string) => 
   {  
@@ -118,6 +127,7 @@ export default function Chat()
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify(body),
         });
@@ -155,7 +165,8 @@ export default function Chat()
               const userResponse = await fetch("http://localhost:8080/chat/sendMessage", {
                 method: "POST",
                 headers: {
-                  "Content-Type": "application/json"
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify(userBody)
               });
@@ -175,6 +186,7 @@ export default function Chat()
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                   },
                   body: JSON.stringify(aiBody),
                 });
@@ -219,7 +231,8 @@ export default function Chat()
       const response = await fetch("http://localhost:8080/chat/sendMessage", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(body)
       });
@@ -251,6 +264,7 @@ export default function Chat()
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
             },
             body: JSON.stringify(aiBody),
           });

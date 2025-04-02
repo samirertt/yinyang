@@ -20,18 +20,40 @@ function CharactersBarGraph() {
   const colors = ["#ffa500", "#dc143c", "#4682b4", "#301934", "#b06239"];
 
   useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+
+    // Check if token exists; optionally redirect if not authenticated
+    if (!token) {
+      console.error("No token found, authentication required");
+      return; // You could redirect here if using React Router
+    }
+
+    // Common headers with Authorization token
+    const headers = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
     // Fetch character usage data
-    fetch('http://localhost:8080/admin/characters/usage')
+    fetch('http://localhost:8080/admin/characters/usage',{
+      method: 'GET',
+      headers: headers,
+    })
       .then(response => response.json())
       .then(data => setCharacterUsage(data));
 
     // Fetch character personality data
-    fetch('http://localhost:8080/admin/characters/personality')
+    fetch('http://localhost:8080/admin/characters/personality',{
+      method: 'GET',
+      headers: headers,
+    })
       .then(response => response.json())
       .then(data => setCharacterPersonality(data));
 
     // Fetch user count by year
-    fetch('http://localhost:8080/admin/users/yearly')
+    fetch('http://localhost:8080/admin/users/yearly',{
+      method: 'GET',
+      headers: headers,
+    })
       .then(response => response.json())
       .then(data => {
         // Data is already in the correct format from backend

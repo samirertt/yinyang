@@ -35,7 +35,7 @@ function SignupPage() {
 
   return (
     <div className="flex items-center justify-center h-screen bg-[#212121] relative">
-      <LoginNav />
+      <LoginNav username={null} />
       {/* GIF Background Card */}
       <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[900px] h-[450px] rounded-[30px] shadow-2xl overflow-hidden">
         <img
