@@ -56,6 +56,10 @@ const RemoveCharacter = () => {
     try {
       const response = await fetch(`http://localhost:8080/moderator/characters/${selectedCharacter.charId}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
       });
 
       if (!response.ok) {
