@@ -19,8 +19,8 @@ import com.example.backend.service.AdminService;
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin(origins = "http://localhost:5173")
-@PreAuthorize("hasAuthority('admin')") // Use hasAuthority instead of hasRole
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@PreAuthorize("hasAuthority('admin')")
 public class AdminController {
 
     @Autowired

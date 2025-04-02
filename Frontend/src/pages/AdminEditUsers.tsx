@@ -2,7 +2,13 @@ import { useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import UsersSmallBoxesBox from "../components/AdminEditUsersComponents/UsersSmallBoxes_Box";
 import { Navigate, useLocation } from "react-router-dom";
-import { adminService, User } from "../services/adminService";
+
+interface User {
+    userId: number;
+    username: string;
+    roles: string[];
+    userImg?: string;
+}
 
 function AdminEditUsers()
 {
@@ -22,8 +28,29 @@ function AdminEditUsers()
     }, []);
 
     const fetchUsers = async () => {
+        const token = localStorage.getItem("jwtToken");
+        
+        if (!token) {
+            console.error('No JWT token found, redirecting to login...');
+            setError('Unauthorized access. Please log in again.');
+            window.location.href = '/login';
+            return;
+        }
+    
         try {
-            const data = await adminService.getAllUsers();
+            const response = await fetch('http://localhost:8080/admin/users', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Failed to fetch users: ${response.status}`);
+            }
+    
+            const data = await response.json();
+            console.log('Raw user data from backend:', JSON.stringify(data, null, 2));
             setUsers(data);
         } catch (err) {
             setError('Failed to fetch users');
@@ -32,6 +59,7 @@ function AdminEditUsers()
             setLoading(false);
         }
     };
+    
 
     function handleModerator()
     {
@@ -45,12 +73,36 @@ function AdminEditUsers()
 
     const handleRoleToggle = async (userId: number) => {
         try {
-            const updatedUser = await adminService.toggleUserRole(userId);
-            setUsers(users.map(user => 
-                user.userId === userId ? updatedUser : user
-            ));
+            const token = localStorage.getItem("jwtToken");
+            if (!token) {
+                console.error('No token found');
+                return;
+            }
+
+            console.log('Toggling role for user:', userId); // Debug log
+            const response = await fetch(`http://localhost:8080/admin/users/${userId}/toggle-role`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+            
+            if (response.status === 401) {
+                console.error('Unauthorized - Please log in again');
+                return;
+            }
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to toggle user role: ${errorText}`);
+            }
+            
+            console.log('Role toggled successfully'); // Debug log
+            await fetchUsers(); // Refresh the user list
         } catch (err) {
             console.error('Error toggling user role:', err);
+            setError(err instanceof Error ? err.message : 'Failed to toggle user role');
         }
     };
 

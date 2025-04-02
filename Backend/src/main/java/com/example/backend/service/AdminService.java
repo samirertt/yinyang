@@ -32,7 +32,6 @@ public class AdminService {
 
         List<String> roles = user.getRoles();
         if (roles.contains("user")) {
-            roles.remove("user");
             roles.add("moderator");
         } else if (roles.contains("moderator")) {
             roles.remove("moderator");

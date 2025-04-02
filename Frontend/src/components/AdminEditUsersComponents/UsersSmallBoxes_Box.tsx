@@ -1,7 +1,13 @@
 import { useState } from "react";
 import UserCard from "./UserCard";
 import { motion } from "framer-motion";
-import { User } from "../../services/adminService";
+
+interface User {
+    userId: number;
+    username: string;
+    roles: string[];
+    userImg?: string;
+}
 
 interface UsersSmallBoxesBoxProps {
     users: User[];
@@ -15,8 +21,12 @@ function UsersSmallBoxesBox({ users, moderator, onRoleToggle }: UsersSmallBoxesB
     const numPerPage = 4;
 
     const filteredUsers = users.filter(user => 
-        moderator ? user.role === 'moderator' : user.role === 'user'
+        user.roles && (moderator ? user.roles.includes("moderator") : user.roles.includes("user"))
     );
+    
+    console.log('Filtered users:', filteredUsers); // Debug log
+
+    const maxPages = Math.ceil(filteredUsers.length / numPerPage);
 
     const variants = {
         enter: (direction: number) => ({
@@ -31,21 +41,21 @@ function UsersSmallBoxesBox({ users, moderator, onRoleToggle }: UsersSmallBoxesB
     };
 
     function pageIncrease() {
-        if (page + 1 < Math.max(1, filteredUsers.length / numPerPage)) {
-            setPage(page + 1);
+        if (page + 1 < maxPages) {
+            setPage((prevPage) => prevPage + 1);
             setDirection(1);
         }
     }
 
     function pageDecrease() {
-        if (page >= Math.min(1, Math.ceil(filteredUsers.length / numPerPage))) {
-            setPage(page - 1);
+        if (page > 0) {
+            setPage((prevPage) => prevPage - 1);
             setDirection(-1);
         }
     }
 
     return (
-        <div className='w-[100%] flex flex-col gap-5 items-center'>
+        <div className="w-[100%] flex flex-col gap-5 items-center">
             <motion.div
                 key={page}
                 variants={variants}
@@ -59,21 +69,40 @@ function UsersSmallBoxesBox({ users, moderator, onRoleToggle }: UsersSmallBoxesB
                 {filteredUsers.slice(numPerPage * page, numPerPage * (page + 1)).map((user) => (
                     <UserCard
                         key={user.userId}
-                        img={user.userImg || "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352"}
+                        img={
+                            user.userImg ||
+                            "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352"
+                        }
                         name={user.username}
                         Id={user.userId}
-                        role={user.role === 'moderator'}
+                        role={user.roles.includes("moderator")}
                         onRoleToggle={() => onRoleToggle(user.userId)}
                     />
                 ))}
             </motion.div>
 
-            <div className='flex gap-3 items-center'>
-                <button className='bg-[#efefef] rounded-full p-[20px]' onClick={pageDecrease}>
-                    <img src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000" className='w-5' alt="Previous" />
+            <div className="flex gap-3 items-center">
+                <button
+                    className="bg-[#efefef] rounded-full p-[20px] disabled:opacity-50"
+                    onClick={pageDecrease}
+                    disabled={page === 0}
+                >
+                    <img
+                        src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000"
+                        className="w-5"
+                        alt="Previous"
+                    />
                 </button>
-                <button className='bg-[#efefef] rounded-full p-[20px]' onClick={pageIncrease}>
-                    <img src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000" className='w-5 rotate-180' alt="Next" />
+                <button
+                    className="bg-[#efefef] rounded-full p-[20px] disabled:opacity-50"
+                    onClick={pageIncrease}
+                    disabled={page + 1 >= maxPages}
+                >
+                    <img
+                        src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000"
+                        className="w-5 rotate-180"
+                        alt="Next"
+                    />
                 </button>
             </div>
         </div>
