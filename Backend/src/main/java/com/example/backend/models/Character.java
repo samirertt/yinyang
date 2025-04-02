@@ -17,7 +17,7 @@ public class Character {
     @Column(name = "char_Personality")
     private String charPersonality;
 
-    @Column(name = "char_Img")
+    @Column(name = "char_Img", length = 1000)
     private String charImg;
 
     @Column(name = "char_Description")

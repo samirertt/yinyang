@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/upload")
@@ -17,22 +19,38 @@ public class ImageUploadController {
     private ImageUploadService imageUploadService;
 
     @PostMapping("/character")
-    public ResponseEntity<String> uploadCharacterImage(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadCharacterImage(@RequestParam("file") MultipartFile file) {
         try {
             String imageUrl = imageUploadService.uploadImage(file, "characters");
-            return ResponseEntity.ok(imageUrl);
+            Map<String, String> response = new HashMap<>();
+            response.put("url", imageUrl);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         } catch (IOException e) {
-            return ResponseEntity.internalServerError().body("Failed to upload image");
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Failed to upload image");
+            return ResponseEntity.internalServerError().body(error);
         }
     }
 
     @PostMapping("/profile")
-    public ResponseEntity<String> uploadProfileImage(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadProfileImage(@RequestParam("file") MultipartFile file) {
         try {
             String imageUrl = imageUploadService.uploadImage(file, "profiles");
-            return ResponseEntity.ok(imageUrl);
+            Map<String, String> response = new HashMap<>();
+            response.put("url", imageUrl);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         } catch (IOException e) {
-            return ResponseEntity.internalServerError().body("Failed to upload image");
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Failed to upload image");
+            return ResponseEntity.internalServerError().body(error);
         }
     }
 } 

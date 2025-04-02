@@ -56,53 +56,74 @@ const AddCharacter = () => {
       return;
     }
 
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      setErrorMessage("You must be logged in to add a character");
+      setIsError(true);
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      // Convert image to base64
-      const reader = new FileReader();
-      reader.readAsDataURL(image);
-      
-      reader.onload = async () => {
-        const base64Image = reader.result as string;
-        
-        // Prepare character data
-        const characterData = {
-          charName: name,
-          charImg: base64Image,
-          charDescription: details,
-          charPersonality: characteristics,
-          charPrompt: `You are ${name}. ${characteristics}`,
-          charUsage: 0
-        };
+      // First upload the image to Cloudinary
+      const formData = new FormData();
+      formData.append('file', image);
 
-        // Send to backend
-        const response = await fetch('http://localhost:8080/moderator/characters', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(characterData),
-        });
+      const uploadResponse = await fetch('http://localhost:8080/api/upload/character', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to add character');
-        }
+      if (!uploadResponse.ok) {
+        throw new Error('Failed to upload image');
+      }
 
-        // Show success message
-        setIsSuccess(true);
-        setTimeout(() => setIsSuccess(false), 2000);
+      const uploadResult = await uploadResponse.json();
+      const imageUrl = uploadResult.url;
 
-        // Reset form
-        setName("");
-        setImage(null);
-        setPreview(null);
-        setDetails("");
-        setCharacteristics("");
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
+      // Now create the character with the Cloudinary URL
+      const characterData = {
+        charName: name,
+        charImg: imageUrl,
+        charDescription: details,
+        charPersonality: characteristics,
+        charPrompt: `You are ${name}. ${characteristics}`,
+        charUsage: 0
       };
+
+      // Send to backend
+      const response = await fetch('http://localhost:8080/moderator/characters', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(characterData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to add character');
+      }
+
+      // Show success message
+      setIsSuccess(true);
+      setTimeout(() => setIsSuccess(false), 2000);
+
+      // Reset form
+      setName("");
+      setImage(null);
+      setPreview(null);
+      setDetails("");
+      setCharacteristics("");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     } catch (error) {
+      console.error('Error:', error);
       setErrorMessage(error instanceof Error ? error.message : 'An error occurred while adding the character');
       setIsError(true);
     } finally {

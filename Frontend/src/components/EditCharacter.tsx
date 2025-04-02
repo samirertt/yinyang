@@ -95,101 +95,71 @@ const EditCharacter = () => {
       let imageUrl = selectedCharacter.charImg; // Keep existing image if no new image selected
 
       if (newImage) {
-        // Convert image to base64
-        const reader = new FileReader();
-        reader.readAsDataURL(newImage);
-        
-        reader.onload = async () => {
-          imageUrl = reader.result as string;
-          
-          const updatedCharacter = {
-            ...selectedCharacter,
-            charName: newName,
-            charImg: imageUrl,
-            charDescription: newDescription,
-            charPersonality: newCharacteristics,
-            charPrompt: `You are ${newName}. ${newCharacteristics}`
-          };
+        // First upload the image to Cloudinary
+        const formData = new FormData();
+        formData.append('file', newImage);
 
-          const response = await fetch(`http://localhost:8080/moderator/characters/${selectedCharacter.charId}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify(updatedCharacter),
-          });
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Failed to update character');
-          }
-
-          // Update local state
-          setCharacters(prevCharacters =>
-            prevCharacters.map(char =>
-              char.charId === selectedCharacter.charId ? updatedCharacter : char
-            )
-          );
-
-          setIsSuccess(true);
-          setTimeout(() => setIsSuccess(false), 2000);
-          setIsPopupOpen(false);
-          setSelectedCharacter(null);
-          setNewName("");
-          setNewImage(null);
-          setImagePreview("");
-          setNewDescription("");
-          setNewCharacteristics("");
-          if (fileInputRef.current) {
-            fileInputRef.current.value = "";
-          }
-        };
-      } else {
-        // If no new image, update without changing the image
-        const updatedCharacter = {
-          ...selectedCharacter,
-          charName: newName,
-          charDescription: newDescription,
-          charPersonality: newCharacteristics,
-          charPrompt: `You are ${newName}. ${newCharacteristics}`
-        };
-
-        const response = await fetch(`http://localhost:8080/moderator/characters/${selectedCharacter.charId}`, {
-          method: 'PUT',
+        const uploadResponse = await fetch('http://localhost:8080/api/upload/character', {
+          method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify(updatedCharacter),
+          body: formData
         });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to update character');
+        if (!uploadResponse.ok) {
+          throw new Error('Failed to upload image');
         }
 
-        // Update local state
-        setCharacters(prevCharacters =>
-          prevCharacters.map(char =>
-            char.charId === selectedCharacter.charId ? updatedCharacter : char
-          )
-        );
+        const uploadResult = await uploadResponse.json();
+        imageUrl = uploadResult.url;
+      }
 
-        setIsSuccess(true);
-        setTimeout(() => setIsSuccess(false), 2000);
-        setIsPopupOpen(false);
-        setSelectedCharacter(null);
-        setNewName("");
-        setNewImage(null);
-        setImagePreview("");
-        setNewDescription("");
-        setNewCharacteristics("");
-        if (fileInputRef.current) {
-          fileInputRef.current.value = "";
-        }
+      // Now update the character with the new image URL
+      const updatedCharacter = {
+        ...selectedCharacter,
+        charName: newName || selectedCharacter.charName,
+        charImg: imageUrl,
+        charDescription: newDescription || selectedCharacter.charDescription,
+        charPersonality: newCharacteristics || selectedCharacter.charPersonality,
+        charPrompt: `You are ${newName || selectedCharacter.charName}. ${newCharacteristics || selectedCharacter.charPersonality}`
+      };
+
+      const response = await fetch(`http://localhost:8080/moderator/characters/${selectedCharacter.charId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(updatedCharacter)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update character');
+      }
+
+      // Update local state
+      setCharacters(prevCharacters =>
+        prevCharacters.map(char =>
+          char.charId === selectedCharacter.charId ? updatedCharacter : char
+        )
+      );
+
+      setIsSuccess(true);
+      setTimeout(() => setIsSuccess(false), 2000);
+      setIsPopupOpen(false);
+      setSelectedCharacter(null);
+      setNewName("");
+      setNewImage(null);
+      setImagePreview("");
+      setNewDescription("");
+      setNewCharacteristics("");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
       }
     } catch (error) {
+      console.error('Error:', error);
       setErrorMessage(error instanceof Error ? error.message : 'An error occurred while updating the character');
       setIsError(true);
     } finally {
