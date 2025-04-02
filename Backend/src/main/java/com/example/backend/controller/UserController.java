@@ -1,5 +1,7 @@
 package com.example.backend.controller;
 
+import com.example.backend.models.User;
+import com.example.backend.security.JwtUtil; // Import your JwtUtil class
 import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,20 +17,30 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    //Handles the login of the user
+    @Autowired
+    private JwtUtil jwtUtil;
+
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Map<String, String> credentials) {
+    public ResponseEntity<Object> login(@RequestBody Map<String, String> credentials) {
         String username = credentials.get("username");
         String password = credentials.get("password");
 
-        boolean isValid = userService.validateUser(username, password);
 
-        if (isValid) {
-            return ResponseEntity.ok("Login Successful");
+        User user = userService.validateUser(username, password);
+
+        if (user != null) {
+
+            String token = jwtUtil.generateToken(user);
+
+
+            return ResponseEntity.ok(Map.of("token", token));
         } else {
-            return ResponseEntity.status(401).body("Invalid Crendentials");
+
+            return ResponseEntity.status(401).body("Invalid Credentials");
+
         }
     }
 
-    //gets the recent chats of the user
+    // You can add other endpoints like getting recent chats, etc.
 }

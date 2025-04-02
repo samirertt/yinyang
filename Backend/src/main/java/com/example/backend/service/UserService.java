@@ -1,9 +1,10 @@
 package com.example.backend.service;
 
-import com.example.backend.Models.UserModel;
-import com.example.backend.UserLogic.repository.UserRepository;
+
+import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.backend.models.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,12 +15,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<UserModel> getUserByUsername(String username) {
+    public Optional<User> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
 
     }
 
-    public List<UserModel> getAllUsers() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -27,20 +28,33 @@ public class UserService {
         return userRepository.existsByUsername(username);
     }
 
-    public boolean validateUser(String username, String password) {
-        Optional<UserModel> userModel = userRepository.findByUsername(username);
-        return userModel.map(value -> value.getPassword().equals(password)).orElse(false);
+    public User validateUser(String username, String password) {
+        Optional<User> userModel = userRepository.findByUsername(username);
+        if(userModel.isPresent())
+        {
+            if(userModel.get().getPassword().equals(password))
+            {
+                return userModel.get();
+            }
+            else
+            {
+                return null;
+            }
+        }
+        return null;
     }
 
     public User toggleUserRole(int userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Toggle between 'user' and 'moderator' roles
-        if ("user".equals(user.getRole())) {
-            user.setRole("moderator");
-        } else if ("moderator".equals(user.getRole())) {
-            user.setRole("user");
+        List<String> roles = user.getRoles();
+        if (roles.contains("user")) {
+            roles.remove("user");
+            roles.add("moderator");
+        } else if (roles.contains("moderator")) {
+            roles.remove("moderator");
+            roles.add("user");
         }
 
         return userRepository.save(user);

@@ -1,8 +1,8 @@
-package com.example.backend.UserLogic.repository;
+package com.example.backend.repository;
 
-import com.example.backend.Models.CharacterModel;
+import com.example.backend.models.Character;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CharacterRepository extends JpaRepository<CharacterModel,Integer> {
-    CharacterModel findByCharName(String charName);
+
+public interface CharacterRepository extends JpaRepository<Character, Integer> {
 }

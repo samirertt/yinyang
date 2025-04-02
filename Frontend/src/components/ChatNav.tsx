@@ -4,15 +4,15 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
-  username: string;
+  user:{username:string, userId:number};
 }
 
-const Navbar = ({ username }: NavbarProps) => {
+const Navbar = ({ user }: NavbarProps) => {
   const navigate = useNavigate();
   
   const handleBack = () => {
-    // Pass the 2username when navigating back
-    navigate("/", { state: { username } });
+    // Pass the user when navigating back
+    navigate("/", { state: { user } });
   };
 
   return (
@@ -31,9 +31,9 @@ const Navbar = ({ username }: NavbarProps) => {
         </div>
 
         <div className="flex items-center gap-3 ml-4">
-          {username !== "guest" ? (
+          {user.username !== "guest" ? (
             <div className="flex justify-center items-center w-10 h-10 bg-[#FF5733] text-white font-bold text-lg rounded-full">
-              <ProfileImage name={username} />
+              <ProfileImage name={user.username} />
             </div>
           ) : (
             <button className="bg-[#212121] text-[#acacaf] px-2 md:px-3 py-1 md:py-2 rounded-md cursor-pointer hover:bg-[#2F2F2F] transition font-semibold text-sm md:text-base whitespace-nowrap">

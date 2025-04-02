@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import LoginNav from "../components/LoginNav";
 import { useNavigate } from "react-router-dom";
-import Auth from "../utils/Auth";
+import Auth from "../utils/Auth"; // Ensure this util can handle JWT storage
+
+import { jwtDecode } from "jwt-decode";
+
 
 function Login() {
   const [isEmailClicked, setIsEmailClicked] = useState(false);
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleEmailClick = () => {
     setIsEmailClicked(true);
   };
-  const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const credentials = { username, password };
@@ -25,59 +28,41 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(credentials),
       });
 
       if (response.ok) {
-        const data = await response.text();
-        setError(data);
+        const data = await response.json();
+        const { token } = data;
 
-        if (username == "moderator" && password == "asd") {
-          if (Auth.login(username, password)) {
-            navigate("/Moderator", { state: { username } });
-          } else {
-            setError("Invalid username or password");
-          }
-        } else if (username == "admin" && password == "asd") {
-          if (Auth.login(username, password)) {
-            navigate("/AdminDashboard", { state: { username } });
-          } else {
-            setError("Invalid username or password");
-          }
+        // Store JWT token in localStorage
+        localStorage.setItem("jwtToken", token);
+
+        console.log("Token stored in localStorage:", token);
+
+        // Decode the JWT token to extract the roles
+        const decoded: any = jwtDecode(token);
+        const roles = decoded.roles || [];
+        console.log("Decoded roles:", roles);
+        
+        Auth.login(token);
+
+        // Redirect based on the user's role
+        if (roles.includes("admin")) {
+          navigate("/AdminDashboard", { state: { username } });
+        } else if (roles.includes("moderator")) {
+          navigate("/Moderator", { state: { username } });
         } else {
-          if (Auth.login(username, password)) {
-            navigate("/", { state: { username } });
-          } else {
-            setError("Invalid username or password");
-          }
+          navigate("/", { state: { username } });
         }
       } else {
         setError("Invalid Credentials");
       }
     } catch (error) {
       console.error("Error:", error);
-      setError("An error occured while logging in");
+      setError("An error occurred while logging in");
     }
-    // if(username== "moderator" && password == "asd"){
-    //   if (Auth.login(username, password)) {
-    //     navigate("/Moderator", { state: { username } });
-    //   } else {
-    //     setError("Invalid username or password");
-    //   }
-    // } else if (username == "admin" && password == "asd"){
-    //     if (Auth.login(username, password)) {
-    //       navigate("/AdminDashboard", { state: { username } });
-    //     } else {
-    //       setError("Invalid username or password");
-    //     }
-    //   }
-    //   else{
-    //     if (Auth.login(username, password)) {
-    //       navigate("/", { state: { username } });
-    //     } else {
-    //       setError("Invalid username or password");
-    //     }
-    //   };
   };
 
   return (
@@ -126,7 +111,7 @@ function Login() {
                 Continue with Email
               </button>
               <button
-                onClick={() => navigate("/", { state: { username: "Guest" } })}
+                onClick={() => navigate("/", { state: { username: "Guest", userId:0 } })}
                 className="cursor-pointer w-full bg-gray-900 text-white flex items-center justify-center gap-1 p-1.5 sm:p-2 rounded-md shadow text-xs sm:text-sm md:text-base"
               >
                 <svg

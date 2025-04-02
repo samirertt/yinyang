@@ -1,0 +1,77 @@
+# Yinyang Setup Guide
+
+## Prerequisites
+To ensure that your Spring Boot application runs smoothly, make sure you have the following installed:
+
+### 1. Java 23
+- Verify your Java version by running:
+
+  java -version
+
+- If Java 23 is not installed, download and install it from [Oracle JDK](https://www.oracle.com/java/technologies/javase-downloads.html) or use an OpenJDK distribution.
+
+### 2. MySQL
+- Ensure MySQL is installed and running.
+- Verify by running:
+
+  mysql --version
+
+- If MySQL is not installed, download it from [MySQL Downloads](https://dev.mysql.com/downloads/).
+- Create a database for your application using the script in the "SQL" folder:
+
+  CREATE DATABASE yinyang;
+
+  Update your `application.properties` file with the appropriate database connection settings.
+
+## Running the Project
+
+### 1. Build and Run the Application
+#### **With Terminal:**
+Navigate to the backend folder and build the project:
+
+cd Backend
+./gradlew build
+
+Run the application:
+
+./gradlew bootRun
+
+#### **Without Terminal:**
+- Open the project in an IDE (IntelliJ IDEA, Eclipse, or VS Code).
+- Locate `build.gradle` under the Backend folder and run it.
+- Navigate to `BackendApplication.java` inside `src/main` and run it.
+
+### 3. Adding Dependencies
+#### **With Terminal:**
+Edit `build.gradle`, then run:
+
+./gradlew build
+
+#### **Without Terminal:**
+- Open `build.gradle` in your IDE.
+- Add dependencies under the `dependencies` section.
+- Click **Reload Gradle Project** in the IDE.
+
+## Troubleshooting
+
+### 1. Java Version Issues
+Check which Java version Gradle is using:
+
+./gradlew -version
+
+If incorrect, update your `JAVA_HOME` environment variable.
+
+### 2. MySQL Connection Errors
+- Ensure MySQL is running (`mysql.server start` or via Workbench).
+- Check `application.properties` for correct database credentials.
+
+### 3. Gradle Build Issues
+If the build fails, try:
+
+./gradlew clean
+./gradlew build
+
+If it fails to clean manually delete the build folder and rebuild the project
+---
+Now, you're all set! Enjoy yinyang
+

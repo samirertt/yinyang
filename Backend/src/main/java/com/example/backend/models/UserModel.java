@@ -1,8 +1,9 @@
 package com.example.backend.models;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -20,7 +21,7 @@ public class UserModel {
     private String password;
 
     @Column(name = "role", nullable = false)
-    private String role;
+    private String rolesString; // Store roles as a comma-separated string
 
     @Column(name = "joinDate")
     private LocalDate joinDate;
@@ -30,6 +31,18 @@ public class UserModel {
         this.joinDate = LocalDate.now();
     }
 
+    // Transient method to get roles as a List<String>
+    @Transient
+    public List<String> getRoles() {
+        return rolesString != null ? Arrays.asList(rolesString.split(",")) : List.of();
+    }
+
+    // Transient method to set roles from a List<String>
+    public void setRoles(List<String> roles) {
+        this.rolesString = roles != null ? String.join(",", roles) : null;
+    }
+
+    // Other getters and setters
     public int getUserId() {
         return userId;
     }
@@ -52,14 +65,6 @@ public class UserModel {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public LocalDate getJoinDate() {
