@@ -30,16 +30,28 @@ public class AdminService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<String> roles = user.getRoles();
-        if (roles.contains("user")) {
-            roles.add("moderator");
-        } else if (roles.contains("moderator")) {
+        List<String> roles = new ArrayList<>(user.getRoles());
+
+        if (roles.contains("moderator")) {
+            // If currently moderator, remove moderator and ensure user role is set exclusively.
             roles.remove("moderator");
-            roles.add("user");
+            if (!roles.contains("user")) {
+                roles.add("user");
+            }
+        } else if (roles.contains("user")) {
+            // If currently user, remove user and switch to moderator exclusively.
+            roles.remove("user");
+            roles.add("moderator");
+        } else {
+            // In case neither role is set, you could define a default behavior.
+            roles.add("user");  // or roles.add("moderator");
         }
 
+        user.setRoles(roles);
         return userRepository.save(user);
     }
+
+
 
     // Character Viewing Methods
     public List<Character> getAllCharacters() {
