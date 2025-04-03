@@ -5,9 +5,11 @@ import com.example.backend.security.JwtUtil; // Import your JwtUtil class
 import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -39,6 +41,30 @@ public class UserController {
 
             return ResponseEntity.status(401).body("Invalid Credentials");
 
+        }
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@RequestBody User user, BindingResult result)
+    {
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest().body(result.getAllErrors());
+        }
+
+        try{
+
+            if (user.getJoinDate() == null) {
+                user.setJoinDate(LocalDate.now());
+            }
+            if (user.getRoles() == null || user.getRoles().isEmpty()) {
+                user.setRoles(Collections.singletonList("user")); 
+            }
+            
+            User newUser = userService.registerUser(user);
+            return ResponseEntity.ok(newUser);
+        }catch (Exception e)
+        {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

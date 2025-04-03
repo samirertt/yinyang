@@ -7,12 +7,14 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    surname VARCHAR(255) NOT NULL,
     username VARCHAR(20) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    role VARCHAR(9) NOT NULL DEFAULT 'user',
+    email VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL DEFAULT 'user',
     user_img VARCHAR(1000),
-    join_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT check_role CHECK (role IN ('user', 'admin', 'moderator'))
+    join_date DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
 CREATE TABLE characters (
@@ -34,10 +36,10 @@ CREATE TABLE chats (
     FOREIGN KEY (char_id) REFERENCES characters(char_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-INSERT INTO users(username, password, role)
-VALUES  ('user', 'asd', 'user'),
-        ('admin', 'asd', 'admin'),
-        ('moderator', 'asd', 'moderator');
+INSERT INTO users(first_name, surname,email, username, password, role)
+VALUES  ('Luay','Hamed','luay@yinyang.com','user', 'asd', 'user'),
+        ('Samir','Erturk','samir@yinyang.com','admin', 'asd', 'admin'),
+        ('Teca','Ahmad','teca@yinyang.com','moderator', 'asd', 'moderator');
 
 INSERT INTO characters(char_name, char_personality, char_img, char_description, char_usage, char_prompt)
 VALUES  ('Garen', 'Aggressive', null, "Garen: Spin, ult, repeat. Garen players enjoy the simple things: free health, easy damage, and a point-and-click kill button. If you main Garen, you've clearly opted for minimal effort, maximum reward.", 12.5, "I want you to respond to my prompts considering that you are the character Garen from League of Legends. Your responses should also be aggressive towards me. Okay?"),
@@ -50,8 +52,7 @@ VALUES  (1, 1, "Don't you get dizzy from your E? $$ Ha! A foolish question from 
         (1, 3, "How come you charm everyone around you? $$ Oh, darling, it's just natural~ Some people fight with swords, others with brute strength… but me? I prefer a little finesse. A glance, a smile, a well-timed word—before they even realize it, they're right where I want them. But don't feel bad~ It's not your fault. I'm simply… irresistible.");
 Select * from users;
 Select * from characters;
-Select * from Chats where user_id=1 and char_id=2;
-
+Select * from Chats ;
 
 
 

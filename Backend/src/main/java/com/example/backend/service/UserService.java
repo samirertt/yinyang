@@ -20,13 +20,19 @@ public class UserService {
 
     }
 
+    public User registerUser(User user)
+    {
+        if(userRepository.findByUsername(user.getUsername()).isPresent()){
+            throw new RuntimeException("Username already exists");
+        }
+
+        return userRepository.save(user);
+    }
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public boolean userExists(String username) {
-        return userRepository.existsByUsername(username);
-    }
 
     public User validateUser(String username, String password) {
         Optional<User> userModel = userRepository.findByUsername(username);
