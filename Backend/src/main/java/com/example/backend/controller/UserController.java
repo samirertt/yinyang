@@ -68,5 +68,7 @@ public class UserController {
         }
     }
 
+    /// 
+
     // You can add other endpoints like getting recent chats, etc.
 }
