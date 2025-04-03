@@ -24,11 +24,11 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `user_id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
+  `username` varchar(20) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` varchar(255) NOT NULL,
+  `role` varchar(9) NOT NULL DEFAULT 'user',
   `user_img` varchar(1000) DEFAULT NULL,
-  `join_date` date DEFAULT NULL,
+  `join_date` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`),
   CONSTRAINT `check_role` CHECK ((`role` in (_utf8mb4'user',_utf8mb4'admin',_utf8mb4'moderator')))
@@ -41,7 +41,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'user','asd','user',NULL,'2025-04-03'),(2,'admin','asd','admin',NULL,'2025-04-03'),(3,'moderator','asd','moderator',NULL,'2025-04-03');
+INSERT INTO `users` VALUES (1,'user','asd','user',NULL,'2025-04-03 16:46:58'),(2,'admin','asd','admin',NULL,'2025-04-03 16:46:58'),(3,'moderator','asd','moderator',NULL,'2025-04-03 16:46:58');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-03  1:59:26
+-- Dump completed on 2025-04-03 17:31:16

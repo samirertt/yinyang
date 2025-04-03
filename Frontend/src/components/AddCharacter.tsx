@@ -90,7 +90,7 @@ const AddCharacter = () => {
         charImg: imageUrl,
         charDescription: details,
         charPersonality: characteristics,
-        charPrompt: `You are ${name}. ${characteristics}`,
+        charPrompt: `I want you to respond to my prompts considering that you are the character ${name} with the following description ${details}. Your responses should also be ${characteristics} towards me. Okay?`,
         charUsage: 0
       };
 

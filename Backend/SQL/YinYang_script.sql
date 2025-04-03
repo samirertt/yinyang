@@ -24,7 +24,8 @@ CREATE TABLE characters (
     char_img VARCHAR(1000),
     char_description TEXT(500) NOT NULL,
     char_usage DOUBLE NOT NULL DEFAULT 0,
-    char_prompt TEXT(1000) NOT NULL
+    char_prompt TEXT(1000) NOT NULL, 
+    char_liked BOOL NOT NULL DEFAULT 0 
 ) ENGINE=InnoDB;
 
 CREATE TABLE chats (
@@ -42,9 +43,9 @@ VALUES  ('Luay','Hamed','luay@yinyang.com','user', 'asd', 'user'),
         ('Teca','Ahmad','teca@yinyang.com','moderator', 'asd', 'moderator');
 
 INSERT INTO characters(char_name, char_personality, char_img, char_description, char_usage, char_prompt)
-VALUES  ('Garen', 'Aggressive', null, "Garen: Spin, ult, repeat. Garen players enjoy the simple things: free health, easy damage, and a point-and-click kill button. If you main Garen, you've clearly opted for minimal effort, maximum reward.", 12.5, "I want you to respond to my prompts considering that you are the character Garen from League of Legends. Your responses should also be aggressive towards me. Okay?"),
+VALUES  ('Garen', 'Aggressive', null, "Garen: Spin, ult, repeat. Garen players enjoy the simple things: free health, easy damage, and a point-and-click kill button. If you main Garen, you've clearly opted for minimal effort, maximum reward.", 12, "I want you to respond to my prompts considering that you are the character Garen from League of Legends. Your responses should also be aggressive towards me. Okay?"),
         ('Darius', 'Aggressive', NULL, "Darius: Five stacks, dunk, dominate. Darius players live for the stat-check, reveling in the easy kills and lane dominance. If you play Darius, you enjoy the feeling of being an unstoppable force, even if it requires minimal skill.", 8, "I want you to respond to my prompts considering that you are the character Darius from League of Legends. Your responses should also be aggressive towards me. Okay?"),
-        ('Ahri', 'Friendly', NULL, "Ahri, the nine-tailed 'fox.' All they do is spam charm and run away. Zero skill, all kiting. Every Ahri player thinks they're a god, but they're just abusing mobility. Go back to your anime.", 4.5, "I want you to respond to my prompts considering that you are the character Ahri from League of Legends. Your responses should also be friendly to me. Okay?");
+        ('Ahri', 'Friendly', NULL, "Ahri, the nine-tailed 'fox.' All they do is spam charm and run away. Zero skill, all kiting. Every Ahri player thinks they're a god, but they're just abusing mobility. Go back to your anime.", 4, "I want you to respond to my prompts considering that you are the character Ahri from League of Legends. Your responses should also be friendly to me. Okay?");
 
 INSERT INTO chats(user_id, char_id, chat_text)
 VALUES  (1, 1, "Don't you get dizzy from your E? $$ Ha! A foolish question from a weakling! I am Garen, the Might of Demacia! My resolve is steadfast, my body unyielding! Spinning only makes me stronger, while you would collapse like a cowardly Yordle after a single turn. Dizzy? You should be more concerned about the whirlwind of steel tearing through your pitiful defenses! Now, ask something worthy of my time, or be silenced!"),
