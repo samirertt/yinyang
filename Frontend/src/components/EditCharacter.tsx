@@ -122,7 +122,7 @@ const EditCharacter = () => {
         charImg: imageUrl,
         charDescription: newDescription || selectedCharacter.charDescription,
         charPersonality: newCharacteristics || selectedCharacter.charPersonality,
-        charPrompt: `You are ${newName || selectedCharacter.charName}. ${newCharacteristics || selectedCharacter.charPersonality}`
+        charPrompt: `I want you to respond to my prompts considering that you are the character ${newName || selectedCharacter.charName} with the following description ${newDescription || selectedCharacter.charDescription}. Your responses should also be ${newCharacteristics || selectedCharacter.charPersonality} towards me. Okay?`
       };
 
       const response = await fetch(`http://localhost:8080/moderator/characters/${selectedCharacter.charId}`, {
