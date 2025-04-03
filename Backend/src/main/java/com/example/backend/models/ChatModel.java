@@ -17,7 +17,7 @@ public class ChatModel {
     @Column(name = "chatId", nullable = false)
     private int chatId;
 
-    @Column(name = "chatText", nullable = false)
+    @Column(name = "chatText", nullable = false, columnDefinition = "TEXT")
     private String chatText;
 
 //Constructors, Getters, and Setters
