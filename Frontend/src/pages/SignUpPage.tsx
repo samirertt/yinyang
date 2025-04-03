@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LoginNav from '../components/LoginNav'
+import LoginNav from "../components/LoginNav";
+
 function SignupPage() {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
     surname: "",
     username: "",
     email: "",
@@ -20,17 +23,42 @@ function SignupPage() {
   };
 
   // Explicitly defining the event type for form submission
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!emailRegex.test(formData.email)) {
+      setError("Invalid email address");
+      return;
+    }
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
 
+    
     // Proceed with signup logic (e.g., API call)
     console.log("Form Data:", formData);
-    navigate("/login"); // Redirect to login after successful signup
+     // Redirect to login after successful signup
+
+    try {
+      const response = await fetch("http://localhost:8080/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      console.log(JSON.stringify(formData));
+
+      const data = await response.json();
+      if (response.ok) {
+        setError("User registered successfully!");
+        navigate("/login");
+      } else {
+        setError(`Error: ${data}`);
+      }
+    } catch (error) {
+      setError("Failed to connect to server");
+    }
   };
 
   return (
@@ -55,9 +83,9 @@ function SignupPage() {
         <form onSubmit={handleSubmit} className="mt-6 space-y-3">
           <input
             type="text"
-            name="name"
-            placeholder="Name"
-            value={formData.name}
+            name="firstName"
+            placeholder="First Name"
+            value={formData.firstName}
             onChange={handleChange}
             required
             className="w-full p-2 bg-gray-900 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-white"
@@ -118,8 +146,13 @@ function SignupPage() {
 
         <p className="text-xs text-gray-500 mt-4 text-center">
           By signing up, you agree with the{" "}
-          <a href="/TermsOfService" className="underline">Terms</a> and{" "}
-          <a href="/PrivacyPolicy" className="underline">Privacy Policy</a>
+          <a href="/TermsOfService" className="underline">
+            Terms
+          </a>{" "}
+          and{" "}
+          <a href="/PrivacyPolicy" className="underline">
+            Privacy Policy
+          </a>
         </p>
 
         <p className="text-sm text-gray-400 mt-4 text-center">
