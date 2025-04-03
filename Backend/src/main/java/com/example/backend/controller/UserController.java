@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -57,9 +58,9 @@ public class UserController {
                 user.setJoinDate(LocalDate.now());
             }
             if (user.getRoles() == null || user.getRoles().isEmpty()) {
-                user.setRoles(Collections.singletonList("user")); 
+                user.setRoles(Collections.singletonList("user"));
             }
-            
+
             User newUser = userService.registerUser(user);
             return ResponseEntity.ok(newUser);
         }catch (Exception e)
@@ -67,8 +68,6 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    /// 
 
     // You can add other endpoints like getting recent chats, etc.
 }

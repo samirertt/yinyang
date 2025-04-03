@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import LoginNav from "../components/LoginNav";
 import { useNavigate } from "react-router-dom";
 import Auth from "../utils/Auth"; // Ensure this util can handle JWT storage
@@ -111,7 +112,16 @@ function Login() {
                 Continue with Email
               </button>
               <button
-                onClick={() => navigate("/", { state: { username: "Guest", userId:0 } })}
+                  onClick={async () => {
+                    setUsername("Guest");
+                    setPassword("Guest");
+
+                    // Wait for state updates before calling handleLogin
+                    await new Promise((resolve) => setTimeout(resolve, 0));
+
+                    await handleLogin({ preventDefault: () => {} } as React.FormEvent<HTMLFormElement>);
+                  }}
+                
                 className="cursor-pointer w-full bg-gray-900 text-white flex items-center justify-center gap-1 p-1.5 sm:p-2 rounded-md shadow text-xs sm:text-sm md:text-base"
               >
                 <svg
