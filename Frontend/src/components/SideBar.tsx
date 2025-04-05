@@ -7,17 +7,18 @@ import Pin from "../assets/Pin.svg";
 import Cross from "../assets/Cross.svg";
 import Info from "../assets/info.svg";
 import { useNavigate } from "react-router-dom";
+import { Character } from "./UserStuff/CharacterGrid";
 
 
 interface SidebarProps {
-  character:{img: string, name:string, Id:number, details:string, usage: number },
+  character:Character,
   historyList:{ name: string; image: string,details:string,chatId:number }[],
   updateActive:any,
   user:{username:string, userId:number},
   chatId:Number
 }
 
-const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:number}, character:{img: string, name:string, Id:number, details:string, usage: number },historyList:{ name: string; image: string,details:string,chatId:number }[],updateActive:any,chatId:Number }) => {
+const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:number}, character:Character ,historyList:{ name: string; image: string,details:string,chatId:number }[],updateActive:any,chatId:Number }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isInfoCollapsed, setIsInfoCollapsed] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);

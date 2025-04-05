@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.models.Character;
 import com.example.backend.models.User;
 import com.example.backend.security.JwtUtil; // Import your JwtUtil class
 import com.example.backend.service.UserService;
@@ -28,18 +29,12 @@ public class UserController {
     public ResponseEntity<Object> login(@RequestBody Map<String, String> credentials) {
         String username = credentials.get("username");
         String password = credentials.get("password");
-
-
         User user = userService.validateUser(username, password);
 
         if (user != null) {
-
             String token = jwtUtil.generateToken(user);
-
-
             return ResponseEntity.ok(Map.of("token", token));
         } else {
-
             return ResponseEntity.status(401).body("Invalid Credentials");
 
         }
@@ -68,6 +63,10 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/characters/all")
+    public List<Character> getAllCharacters()
+    { return userService.getAllCharacters();}
 
     // You can add other endpoints like getting recent chats, etc.
 }
