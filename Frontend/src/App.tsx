@@ -16,26 +16,35 @@ import AdminDashboard from "./pages/AdminDashboard";
 import UserCharacterSelection from "./pages/UserDashboard";
 import Profile from "./components/UserStuff/ProfilePage";
 import UserSettings from "./components/UserStuff/Settings";
+import { CharacterContext } from "./components/UserStuff/CharacterContext";
 const App: React.FC = () => {
-  const [chatList, setChatList] = useState<{ name: string; image: string; details:string }[]>(
-    []
-  );
-
+  const [chatList, setChatList] = useState<
+    { name: string; image: string; details: string }[]
+  >([]);
 
   const handleDelete = (buttonName: string) => {
     setChatList((prevChat) =>
       prevChat.filter((chat) => chat.name !== buttonName)
     );
   };
-  const addChat = (characterName: string, characterImage: string,characterDetails:string) => {
+  const addChat = (
+    characterName: string,
+    characterImage: string,
+    characterDetails: string
+  ) => {
     if (!chatList.some((chat) => chat.name === characterName)) {
       setChatList((prevChats) => [
         ...prevChats,
-        { name: characterName, image: characterImage, details:characterDetails },
+        {
+          name: characterName,
+          image: characterImage,
+          details: characterDetails,
+        },
       ]);
     }
   };
-  
+
+  let user:{username:string, userId:number};
 
   useEffect(() => {
     if (chatList.length > 0) {
@@ -46,19 +55,8 @@ const App: React.FC = () => {
 
   return (
     <Router>
+      <CharacterContext.Provider value={{user,chatList,addChat}}>
       <Routes>
-        <Route
-          path="/UserDashBoard/FilterPage/FilterList"
-          element={
-            <FilterList chatList={chatList} handleDelete={handleDelete} />
-          }
-        />
-        <Route
-          path="/UserDashboard/FilterPage"
-          element={
-            <FilterPage chatList={chatList} handleDelete={handleDelete} />
-          }
-        />
         <Route path="/Login" element={<Login />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/SignUp" element={<SignupPage />} />
@@ -79,16 +77,30 @@ const App: React.FC = () => {
               chatList={chatList}
               handleDelete={handleDelete}
               addChat={addChat}
-              
             />
           }
         />
-        <Route
-          path="/UserDashboard/Profile"
-          element={<Profile   />}
-        />
-        <Route path="/UserDashboard/Settings" element={<UserSettings chatList={chatList}/>} />
+        
+          <Route path="/UserDashboard/Profile" element={<Profile />} />
+          <Route
+            path="/UserDashboard/Settings"
+            element={<UserSettings chatList={chatList} />}
+          />
+          <Route
+            path="/UserDashBoard/FilterPage/FilterList"
+            element={
+              <FilterList chatList={chatList} handleDelete={handleDelete} />
+            }
+          />
+          <Route
+            path="/UserDashboard/FilterPage"
+            element={
+              <FilterPage chatList={chatList} handleDelete={handleDelete} />
+            }
+          />
+        
       </Routes>
+      </CharacterContext.Provider>
     </Router>
   );
 };

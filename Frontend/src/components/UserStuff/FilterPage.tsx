@@ -9,6 +9,7 @@ import Footer from "../Footer";
 import UserNavBar from "./UserNavBar";
 import {UserNavBarProps} from "./UserNavBar"
 
+
 interface GridItem {
   title: string;
   icon: string;
@@ -16,6 +17,7 @@ interface GridItem {
 }
 
 const FilterPage : React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
+  
   const categories: GridItem[] = [
     {
       title: "Friendly",

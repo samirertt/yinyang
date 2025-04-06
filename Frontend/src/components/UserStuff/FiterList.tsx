@@ -1,21 +1,24 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import CharacterGrid, { Character } from "./CharacterGrid";
+import { Character } from "./CharacterGrid";
 import { ArrowLeft } from "lucide-react";
 import UserNavBar, { UserNavBarProps } from "./UserNavBar";
 import { useEffect, useState } from "react";
 import CharacterInfo from "./CharacterInfo";
+import { useCharacterContext } from "./CharacterContext";
 
 const FilterList: React.FC<UserNavBarProps> = ({
-  chatList,
   handleDelete,
   username,
 }) => {
+
+  const {user, chatList, addChat} = useCharacterContext();
   const location = useLocation();
   const { icon, title, bgColor } = location.state;
 
   const navigate = useNavigate();
 
   const [characters, setCharacters] = useState<Character[]>([]);
+
 
   useEffect(() => {
     const fetchCharacters = async () => {
@@ -33,6 +36,47 @@ const FilterList: React.FC<UserNavBarProps> = ({
 
     fetchCharacters();
   }, [title]);
+
+  const mappingCharacterInfo = (character: Character) => {
+    return {
+      img: character.charImg,
+      name: character.charName,
+      details: character.charDescription,
+      usage: character.charUsage,
+      Id: character.charId,
+    };
+  };
+
+
+  const goToChat = (character: {
+    img: string;
+    name: string;
+    details: string;
+    usage: number;
+    Id: number;
+  },Id:number ) =>{
+    addChat(character.name, character.img, character.details, Id);
+
+    if (!chatList.some((chat) => chat.name === character.name)) {
+      const temp = chatList;
+      temp.push({
+        name: character.name,
+        image: character.img,
+        details: character.details,
+      });
+      
+    }
+
+    navigate("/Chat", {
+      state: {
+        character: character,
+        historyList: chatList,
+        user: user, // Pass user data here
+        chatId: 0, // Pass chatId data here (if it's 0 then a new chat is created)
+      },
+      replace: true,
+    });
+  }
 
   return (
     <div className="bg-[#212121] min-h-screen pt-5 px-4 sm:px-6 md:px-10 lg:px-40">
@@ -77,9 +121,7 @@ const FilterList: React.FC<UserNavBarProps> = ({
                 name={character.charName}
                 details={character.charDescription}
                 usage={character.charUsage}
-                onClick={() => {
-                  /* your logic here */
-                }}
+                onClick={() => goToChat(mappingCharacterInfo(character),0)}
               />
             ))}
           </div>

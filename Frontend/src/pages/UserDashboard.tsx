@@ -4,6 +4,7 @@ import SuggestionBanner from "../components/UserStuff/SuggestionBanner";
 import UserNavBar from "../components/UserStuff/UserNavBar";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { CharacterContext } from "../components/UserStuff/CharacterContext";
 
 interface UserCharacterSelectionProps {
   chatList: { name: string; image: string; details: string }[];
@@ -56,10 +57,12 @@ const UserCharacterSelection = ({
 
   return (
     <div className="bg-[#212121] flex flex-col min-h-screen px-4 sm:px-6 md:px-10 lg:px-40">
+      
       <UserNavBar
         username={username}
         chatList={chatList}
         handleDelete={handleDelete}
+        
       />
       <MainPage
         addChat={addChat}

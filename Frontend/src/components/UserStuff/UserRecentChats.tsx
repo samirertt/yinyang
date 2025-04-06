@@ -12,9 +12,6 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-
-
-
 //This is the chat history of the user
 const UserRecentChats = ({
   chatList,
@@ -32,7 +29,6 @@ const UserRecentChats = ({
   return (
     <div className="relative ">
       <div className="fixed top-4 left-4 text-[var(--white)] px-4 py-2 flex flex-col items-center gap-5">
-        
         <button
           className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition-all"
           onClick={() => setIsOpen(true)}
@@ -92,7 +88,7 @@ const UserRecentChats = ({
           </div>
 
           <div className="relative h-full w-full">
-            <LoginInfo name={name} image_path={user_image}/>
+            <LoginInfo name={name} image_path={user_image} />
           </div>
         </div>
       </div>
@@ -100,7 +96,13 @@ const UserRecentChats = ({
   );
 };
 
-const LoginInfo = ({name, image_path}: {name?: string; image_path: string}) => {
+const LoginInfo = ({
+  name,
+  image_path,
+}: {
+  name?: string;
+  image_path: string;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -108,10 +110,28 @@ const LoginInfo = ({name, image_path}: {name?: string; image_path: string}) => {
       {/* Context Menu (Positioned above the button) */}
       {isOpen && (
         <div className="absolute bottom-full mb-2 w-55 bg-[#212121]rounded-2xl shadow-lg p-3">
-          <PopUpMenuItems icon={User} label="Profile" to="/UserDashboard/Profile" name={name} image_path={image_path}/>
+          <PopUpMenuItems
+            icon={User}
+            label="Profile"
+            to="/UserDashboard/Profile"
+            name={name}
+            image_path={image_path}
+          />
 
-          <PopUpMenuItems icon={Settings} label="Settings" to="/UserDashboard/Settings" name={name} image_path={image_path}/>
-          <PopUpMenuItems icon={LogOut} label="Logout" to="/Login" name="" image_path=""/>
+          <PopUpMenuItems
+            icon={Settings}
+            label="Settings"
+            to="/UserDashboard/Settings"
+            name={name}
+            image_path={image_path}
+          />
+          <PopUpMenuItems
+            icon={LogOut}
+            label="Logout"
+            to="/Login"
+            name=""
+            image_path=""
+          />
         </div>
       )}
 
@@ -121,7 +141,11 @@ const LoginInfo = ({name, image_path}: {name?: string; image_path: string}) => {
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-3">
-          <img src={image_path} alt="YinYang Logo" className="h-10 w-10 ml-3 rounded-full" />
+          <img
+            src={image_path}
+            alt="YinYang Logo"
+            className="h-10 w-10 ml-3 rounded-full"
+          />
           <p>{name}</p>
         </div>
         {/* Arrow with rotation animation */}
@@ -130,7 +154,7 @@ const LoginInfo = ({name, image_path}: {name?: string; image_path: string}) => {
             isOpen ? "rotate-180" : ""
           }`}
         >
-          <ArrowDown size={18} className="self-end"/>
+          <ArrowDown size={18} className="self-end" />
         </div>
       </div>
     </div>
@@ -142,15 +166,22 @@ type MenuItemsProps = {
   to: string;
   name?: string;
   image_path: string;
-
 };
 
-const PopUpMenuItems = ({ icon: Icon, label, to, name, image_path }: MenuItemsProps) => {
+const PopUpMenuItems = ({
+  icon: Icon,
+  label,
+  to,
+  name,
+  image_path,
+}: MenuItemsProps) => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex justify-between hover:bg-[#454545] p-1 rounded-2xl w-full"
-    onClick={() => navigate(to,{ state: {name, image_path}})} >
+    <div
+      className="flex justify-between hover:bg-[#454545] p-1 rounded-2xl w-full"
+      onClick={() => navigate(to, { state: { name, image_path } })}
+    >
       <p className="text-xm ml-1">{label}</p>
       <Icon size={20} className="mr-1" />
     </div>
