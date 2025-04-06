@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import YinYang from "../../assets/yinyang.png";
 import {
@@ -10,10 +11,10 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+
 import ProfileImage from "../profileimg";
 
-//This is the chat history of the user
+// Main UserRecentChats component
 const UserRecentChats = ({
   chatList,
   handleDelete,
@@ -28,7 +29,8 @@ const UserRecentChats = ({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="relative ">
+    <div className="relative">
+      {/* Menu button */}
       <div className="fixed top-4 left-4 text-[var(--white)] px-4 py-2 flex flex-col items-center gap-5">
         <button
           className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition-all"
@@ -38,15 +40,18 @@ const UserRecentChats = ({
         </button>
       </div>
 
+      {/* Backdrop */}
       {isOpen && (
         <div className="fixed inset-0" onClick={() => setIsOpen(false)} />
       )}
 
+      {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 h-full w-64 bg-[var(--gray-black)] border-r border-[var(--gray-medium-dark)] shadow-lg z-50 transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
+        {/* Close button */}
         <button
           onClick={() => setIsOpen(false)}
           className="absolute top-4 right-4 text-[var(--white)] px-2 py-1 rounded hover:bg-[var(--gray-medium-dark)]"
@@ -55,19 +60,17 @@ const UserRecentChats = ({
         </button>
 
         <div className="w-full h-full p-4 flex flex-col">
-          <div className="flex items-center justify-between mb-4 ">
-            <div className="flex items-center gap-2 w-10 h-10 mb-8 mt-10">
-              <img
-                src={YinYang}
-                alt="User"
-                className="flex items-center gap-2 pt-3"
-              />
-              <h2 className="text-lg font-semibold text-[var(--white)] ">
-                YinYang
-              </h2>
-            </div>
+          {/* Header */}
+          <div className="flex items-center gap-2 w-10 h-10 mb-8 mt-10">
+            <img
+              src={YinYang}
+              alt="YinYang Logo"
+              className="flex items-center pt-3"
+            />
+            <h2 className="text-lg font-semibold text-[var(--white)]">YinYang</h2>
           </div>
 
+          {/* Recent Chats */}
           <h2 className="text-xm mb-5">Recent Chats</h2>
           <div
             className="h-300"
@@ -88,6 +91,7 @@ const UserRecentChats = ({
             ))}
           </div>
 
+          {/* User Info at bottom */}
           <div className="relative h-full w-full">
             <LoginInfo name={name} image_path={user_image} />
           </div>
@@ -97,99 +101,7 @@ const UserRecentChats = ({
   );
 };
 
-const LoginInfo = ({
-  name,
-  image_path,
-}: {
-  name: string;
-  image_path: string;
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="absolute bottom-0 left-0 flex flex-col items-center w-55">
-      {/* Context Menu (Positioned above the button) */}
-      {isOpen && (
-        <div className="absolute bottom-full mb-2 w-55 bg-[#212121]rounded-2xl shadow-lg p-3">
-          <PopUpMenuItems
-            icon={User}
-            label="Profile"
-            to="/UserDashboard/Profile"
-            name={name}
-            image_path={image_path}
-          />
-
-          <PopUpMenuItems
-            icon={Settings}
-            label="Settings"
-            to="/UserDashboard/Settings"
-            name={name}
-            image_path={image_path}
-          />
-          <PopUpMenuItems
-            icon={LogOut}
-            label="Logout"
-            to="/Login"
-            name=""
-            image_path=""
-          />
-        </div>
-      )}
-
-      {/* Login Info Button */}
-      <div
-        className="flex items-center gap-20 hover:bg-[#454545] h-15 w-55 rounded-2xl p-3 cursor-pointer "
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <div className="flex items-center gap-3">
-        {image_path === null ? (
-        <img src={image_path} alt={name} className="h-10 w-10 ml-3 rounded-full" />
-      ) : (
-        <ProfileImage name={name} /> // If image_path is null, show the ProfileImage component
-      )}
-          
-          <p>{name}</p>
-        </div>
-        {/* Arrow with rotation animation */}
-        <div
-          className={`transition-transform duration-300 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        >
-          <ArrowDown size={18} className="self-end" />
-        </div>
-      </div>
-    </div>
-  );
-};
-type MenuItemsProps = {
-  icon: React.ElementType;
-  label: string;
-  to: string;
-  name?: string;
-  image_path: string;
-};
-
-const PopUpMenuItems = ({
-  icon: Icon,
-  label,
-  to,
-  name,
-  image_path,
-}: MenuItemsProps) => {
-  const navigate = useNavigate();
-
-  return (
-    <div
-      className="flex justify-between hover:bg-[#454545] p-1 rounded-2xl w-full"
-      onClick={() => navigate(to, { state: { name, image_path } })}
-    >
-      <p className="text-xm ml-1">{label}</p>
-      <Icon size={20} className="mr-1" />
-    </div>
-  );
-};
-//This is are the cards that show the info of the character interacted with
+// Chat card for each recent chat
 const ChatCard = ({
   name,
   image_path,
@@ -215,7 +127,7 @@ const ChatCard = ({
         <img
           src={image_path}
           alt="Character"
-          className=" bg-white rounded-full flex flex-row h-10 w-10 mr-2 "
+          className="bg-white rounded-full h-10 w-10 mr-2"
         />
         <span>{name}</span>
       </button>
@@ -231,7 +143,7 @@ const ChatCard = ({
 
       {showConfirm && (
         <div
-          className=" absolute top-0 bg-gray-800 text-white text-sm p-2 rounded shadow-lg  ml-2 cursor-pointer"
+          className="absolute top-0 bg-gray-800 text-white text-sm p-2 rounded shadow-lg ml-2 cursor-pointer"
           onClick={onDelete}
         >
           <p>You will remove your chat with this character.</p>
@@ -240,4 +152,105 @@ const ChatCard = ({
     </div>
   );
 };
+
+// Login Info with popup menu
+const LoginInfo = ({
+  name,
+  image_path,
+}: {
+  name: string;
+  image_path: string;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="absolute bottom-0 left-0 flex flex-col items-center w-55">
+      {isOpen && (
+        <div className="absolute bottom-full mb-2 w-55 bg-[#212121] rounded-2xl shadow-lg p-3">
+          <PopUpMenuItems
+            icon={User}
+            label="Profile"
+            to="/UserDashboard/Profile"
+            name={name}
+            image_path={image_path}
+          />
+          <PopUpMenuItems
+            icon={Settings}
+            label="Settings"
+            to="/UserDashboard/Settings"
+            name={name}
+            image_path={image_path}
+          />
+          <PopUpMenuItems
+            icon={LogOut}
+            label="Logout"
+            to="/Login"
+            name=""
+            image_path=""
+            onClick={() => {
+              localStorage.removeItem("jwtToken");
+            }}
+          />
+        </div>
+      )}
+
+      {/* Login Info Button */}
+      <div
+        className="flex items-center gap-20 hover:bg-[#454545] h-15 w-55 rounded-2xl p-3 cursor-pointer "
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className="flex items-center gap-3">
+        {image_path === null ? (
+        <img src={image_path} alt={name} className="h-10 w-10 ml-3 rounded-full" />
+      ) : (
+        <ProfileImage name={name} /> // If image_path is null, show the ProfileImage component
+      )}
+          <p>{name}</p>
+        </div>
+        <div
+          className={`transition-transform duration-300 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        >
+          <ArrowDown size={18} className="self-end" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Menu items inside login info popup
+type MenuItemsProps = {
+  icon: React.ElementType;
+  label: string;
+  to: string;
+  name?: string;
+  image_path: string;
+  onClick?: () => void;
+};
+
+const PopUpMenuItems = ({
+  icon: Icon,
+  label,
+  to,
+  name,
+  image_path,
+  onClick,
+}: MenuItemsProps) => {
+  const navigate = useNavigate();
+
+  return (
+    <div
+      className="flex justify-between hover:bg-[#454545] p-1 rounded-2xl w-full"
+      onClick={() => {
+        if (onClick) onClick();
+        navigate(to, { state: { name, image_path } });
+      }}
+    >
+      <p className="text-xm ml-1">{label}</p>
+      <Icon size={20} className="mr-1" />
+    </div>
+  );
+};
+
 export default UserRecentChats;
