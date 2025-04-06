@@ -30,6 +30,10 @@ public class UserService {
         return characterRepository.findAll();
     }
 
+    public List<String> getCharacterPersonalities() {
+        return characterRepository.findDistinctPersonalities();
+    }
+
     public User registerUser(User user)
     {
         if(userRepository.findByUsername(user.getUsername()).isPresent()){
@@ -74,5 +78,10 @@ public class UserService {
         }
 
         return userRepository.save(user);
+    }
+
+    public List<Character> getCharacterByPersonality(String personality)
+    {
+        return characterRepository.findByCharPersonality(personality);
     }
 }

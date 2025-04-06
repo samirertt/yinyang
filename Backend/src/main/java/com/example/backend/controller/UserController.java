@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.models.Character;
 import com.example.backend.models.User;
+import com.example.backend.repository.CharacterRepository;
 import com.example.backend.security.JwtUtil; // Import your JwtUtil class
 import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -48,7 +51,6 @@ public class UserController {
         }
 
         try{
-
             if (user.getJoinDate() == null) {
                 user.setJoinDate(LocalDate.now());
             }
@@ -68,5 +70,16 @@ public class UserController {
     public List<Character> getAllCharacters()
     { return userService.getAllCharacters();}
 
+
+    @GetMapping("/characters/personalities")
+    public List<String> getAllCharacterPersonalities() {
+        return userService.getCharacterPersonalities();
+    }
+
+    @GetMapping("/{personality}")
+    public List<Character> getByCharacterByPersonality(@PathVariable String personality)
+    {
+        return userService.getCharacterByPersonality(personality);
+    }
     // You can add other endpoints like getting recent chats, etc.
 }
