@@ -4,11 +4,11 @@ import calmImage from "../../assets/filter_image/calm.png";
 import mysteriousImage from "../../assets/filter_image/mysterious.jpeg";
 import pridefulImage from "../../assets/filter_image/prideful.jpeg";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 import UserNavBar from "./UserNavBar";
 import {UserNavBarProps} from "./UserNavBar"
-
+import { jwtDecode } from "jwt-decode";
 
 interface GridItem {
   title: string;
@@ -46,10 +46,43 @@ const FilterPage : React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
     },
   ];
   const navigate = useNavigate();
+  
+  const token = localStorage.getItem("jwtToken");
 
+  // If no token, redirect to login
+  if (!token) {
+    return <Navigate to="/Login" replace />;
+  }
+
+  let username: string;
+  let userId: number;
+
+  // Decode token and handle potential errors
+  try {
+    const decoded: any = jwtDecode(token);
+    const roles = decoded.roles || [];
+
+    // Check if user has the "user" role
+    if (!roles.includes("user")) {
+      return <Navigate to="/Login" replace />;
+    }
+
+    username = decoded.sub; // Typically, 'sub' is the username or subject
+    userId = decoded.userId; // Assumes userId is included in the token
+
+    // If userId is not in the token, this will be undefined; handle accordingly if needed
+    if (userId === undefined) {
+      console.error("userId not found in token");
+      // Optionally redirect or set a default value
+      return <Navigate to="/Login" replace />;
+    }
+  } catch (error) {
+    console.error("Invalid token:", error);
+    return <Navigate to="/Login" replace />;
+  }
   return (
     <div className="bg-[#212121] min-h-screen pt-5 px-4 sm:px-6 md:px-10 lg:px-40">
-      <UserNavBar chatList={chatList} handleDelete={handleDelete } />
+      <UserNavBar chatList={chatList} handleDelete={handleDelete} username={username} />
       <div className="w-auto mx-auto pl-20 pr-20 pb-20 mt-10">
         <div className="flex justify-center align-start relative">
           <ArrowLeft
