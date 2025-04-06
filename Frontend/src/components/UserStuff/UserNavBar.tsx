@@ -1,8 +1,9 @@
 import UserAvatar from "../UserStuff/UserAvatar";
 import UserRecentChats from "../UserStuff/UserRecentChats";
 import UserSearchBar from "./UserSearch";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
+import { useCharacterContext } from "./CharacterContext";
 
 
 
@@ -22,12 +23,12 @@ const UserNavBar: React.FC<UserNavBarProps> = ({
   
 }) => {
 
-  const [avatar, setAvatar] = useState<string>("");
+  const { avatar, setAvatar } = useCharacterContext();
   
   useEffect(() => {
     const fetchAvatar = async () => {
       try {
-        // Replace this URL with the actual endpoint that provides the user's profile image
+        
         const response = await axios.get(`/auth/${username}/profile-image`);
         setAvatar(response.data); // Update avatar state with the image URL
       } catch (error) {
@@ -36,7 +37,7 @@ const UserNavBar: React.FC<UserNavBarProps> = ({
     };
     
     if (username) {
-      fetchAvatar(); // Only fetch avatar if username exists
+      fetchAvatar(); 
     }
   }, [username]);
   

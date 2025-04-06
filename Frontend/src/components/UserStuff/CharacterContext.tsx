@@ -1,4 +1,3 @@
-// CharacterContext.tsx
 import { createContext, useContext } from "react";
 
 export interface CharacterContextType {
@@ -10,6 +9,9 @@ export interface CharacterContextType {
     details: string,
     chatId: number
   ) => void;
+  avatar: string;
+  setAvatar: (newImage: string) => void;
+
 }
 
 export const CharacterContext = createContext<CharacterContextType | null>(null);

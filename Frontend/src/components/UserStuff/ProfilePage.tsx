@@ -4,11 +4,12 @@ import { useState, useRef } from "react";
 import { ArrowLeft, Camera, Edit } from "lucide-react"; // Icon for uploading
 import Footer from "../Footer";
 import ProfileImage from "../profileimg";
+import { useCharacterContext } from "./CharacterContext";
 
 const Profile = () => {
   const location = useLocation();
   const { name, image_path } = location.state || {};
-  const [profileImage, setProfileImage] = useState(image_path);
+  const { avatar, setAvatar } = useCharacterContext();
   const fileInputRef = useRef(null);
 
   const [editableName, setEditableName] = useState(name);
@@ -16,13 +17,55 @@ const Profile = () => {
   const nameInputRef = useRef(null);
 
   // Function to handle file selection
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
+      try {
+        // Step 1: Upload the image to Cloudinary via your backend
+        const formData = new FormData();
+        formData.append("file", file);
+  
+        // Send file to the backend API to upload to Cloudinary
+        const response = await fetch("http://localhost:8080/api/upload/profile", {
+          method: "POST",
+          body: formData,
+        });
+  
+        
+        if (!response.ok) {
+          throw new Error("Failed to upload image to Cloudinary");
+        }
+  
+        const data = await response.json();
+        const imageUrl = data.url;  
+  
+    
+        setAvatar(imageUrl);
+  
+      
+        const username = "currentUsername"; 
+  
+        const userResponse = await fetch("http://localhost:8080/auth/update-profile/image", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, imageUrl }), 
+        });
+  
+        if (!userResponse.ok) {
+          throw new Error("Failed to update user profile image");
+        }
+  
+        console.log("User profile updated with new image URL");
+  
+      } catch (error) {
+        console.error("Error occurred during file upload or user update:", error);
+      }
     }
   };
+  
+  
 
   const handleNameChange = (event) => {
     setEditableName(event.target.value);
@@ -49,7 +92,7 @@ const Profile = () => {
           className="mt-23 rounded-full w-50 h-50  "
         /> */}
         {image_path === null ? (
-        <img src={image_path} alt={name} className="mt-23 rounded-full w-50 h-50" />
+        <img src={avatar} alt={name} className="mt-23 rounded-full w-50 h-50" />
       ) : (
         <div  className="w-20 h-20">
         <ProfileImage name={name} />

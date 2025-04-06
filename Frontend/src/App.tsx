@@ -53,9 +53,10 @@ const App: React.FC = () => {
     }
   }, [chatList]);
 
+  const [avatar, setAvatar] = useState<string>("");
   return (
     <Router>
-      <CharacterContext.Provider value={{user,chatList,addChat}}>
+      <CharacterContext.Provider value={{user,chatList,addChat, avatar, setAvatar}}>
       <Routes>
         <Route path="/Login" element={<Login />} />
         <Route path="/chat" element={<Chat />} />

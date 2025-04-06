@@ -92,5 +92,20 @@ public class UserController {
         return userService.searchCharactersByName(name);
     }
 
+
+    @PostMapping("/update-profile/image")
+    public ResponseEntity<?> updateProfileImage(@RequestBody Map<String, String> request) {
+        String imageUrl = request.get("imageUrl");
+        String username = request.get("username");  // Assuming username is passed in the request
+
+        // Update user profile image URL in the database
+        boolean success = userService.updateProfileImage(imageUrl, username);
+
+        if (success) {
+            return ResponseEntity.ok("Profile image updated");
+        } else {
+            return ResponseEntity.badRequest().body("Failed to update profile image");
+        }
+    }
     // You can add other endpoints like getting recent chats, etc.
 }

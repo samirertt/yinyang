@@ -93,4 +93,22 @@ public class UserService {
                 .orElse(null);
     }
 
+    public boolean updateProfileImage(String imageUrl, String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();  // Get the User object
+
+            user.setUserImg(imageUrl);  // Set the profile image URL
+            userRepository.save(user);  // Save the updated user to the database
+
+            return true;
+        }
+
+        // If no user is found with the given username, return false
+        return false;
+    }
 }
+
+
+
