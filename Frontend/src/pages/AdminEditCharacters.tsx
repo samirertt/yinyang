@@ -4,12 +4,13 @@ import SmallBoxesBox from '../components/AdminEditCharactersComponents/SmallBoxe
 import { Navigate, useLocation } from 'react-router-dom';
 
 interface Character {
-    charId: number;
-    charName: string;
-    charImg: string;
-    charDescription: string;
-    charUsage: number;
+    img: string;
+    name: string;
+    Id: number;
+    details: string;
+    usage: number;
 }
+
 
 function AdminEditCharacters() {
     const [characters, setCharacters] = useState<Character[]>([]);

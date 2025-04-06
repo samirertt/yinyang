@@ -62,18 +62,36 @@ function CharactersBarGraph() {
   }, []);
 
   // Format data for pie chart (character usage)
-  const usageData = Object.entries(characterUsage).map(([name, usage]) => ({
+  const usageData = Object.entries(characterUsage)
+  .filter(([_, usage]) => usage > 0) // <- this filters out 0-usage entries
+  .map(([name, usage]) => ({
     name,
     usage,
     characters: 1
   }));
 
+
   // Format data for bar chart (personality count)
-  const personalityData = Object.entries(characterPersonality).map(([title, count]) => ({
-    title,
-    characters: count,
-    usage: 0
-  }));
+  // Flatten personality counts if multiple personalities are comma-separated
+const personalityCountMap: { [key: string]: number } = {};
+
+Object.entries(characterPersonality).forEach(([title, count]) => {
+  const personalities = title.split(',').map(p => p.trim());
+  personalities.forEach(personality => {
+    if (personalityCountMap[personality]) {
+      personalityCountMap[personality] += count;
+    } else {
+      personalityCountMap[personality] = count;
+    }
+  });
+});
+
+const personalityData = Object.entries(personalityCountMap).map(([title, count]) => ({
+  title,
+  characters: count,
+  usage: 0
+}));
+
 
   return (
     <div className="w-full max-w-6xl mx-auto gap-4 sm:gap-6 p-4 sm:p-6 md:p-8 lg:p-10 grid grid-cols-1 md:grid-cols-2 bg-[#2F2F2F] rounded-xl">

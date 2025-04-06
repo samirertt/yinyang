@@ -108,43 +108,6 @@ function NavBar(props: {logged: any; admin: any }) {
           </Link>
         </div>
       )}
-
-      <div
-        id="searchBtnContainer"
-        style={{ position: "relative", marginLeft: "auto" }}
-      >
-        {!isExpanded && (
-          <img
-            src={searchIcon}
-            style={{
-              maxWidth: "50px",
-              padding: "0",
-              width: "100%",
-              height: "50px",
-              pointerEvents: "none",
-              position: "absolute",
-              left: "19px",
-              top: "9px",
-              filter: "invert(1)",
-            }}
-          ></img>
-        )}
-        <input
-          value={inputValue}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onChange={handleChange}
-          className={isExpanded ? "expanded" : ""}
-          type="search"
-          style={{
-            outline: "none",
-            backgroundColor: "#202024",
-            color: "white",
-            backgroundImage: searchIcon,
-          }}
-          placeholder={isExpanded ? "Search" : ""}
-        ></input>
-      </div>
     </div>
   );
 }

@@ -15,7 +15,7 @@ function CharacterCard(props: { img: string; name: string; Id: number; details: 
                 <div className="items-center">
                     <h3 className="font-bold">{character.charName}</h3>
                     <p className="text-gray-400">ID: {character.charId}</p>
-                    <p className="text-gray-400">{character.charUsage}%</p>
+                    <p className="text-gray-400">Usage: {character.charUsage}</p>
                 </div>
             </div>
             <p style={{alignSelf:"center",justifySelf:"center"}} className="font-bold">{character.charDetails}</p>

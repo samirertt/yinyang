@@ -16,6 +16,7 @@ function AdminEditUsers()
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState(''); // 🔍 New: search state
 
     const location = useLocation();
     const username = location.state?.username;
@@ -106,6 +107,10 @@ function AdminEditUsers()
         }
     };
 
+    const filteredUsers = users.filter(user =>
+        user.username.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     if (loading) {
         return (
             <div>
@@ -130,21 +135,31 @@ function AdminEditUsers()
 
     return (
         <div>
-            <NavBar admin={true} logged={true}/>
+            <NavBar admin={true} logged={true} />
             <div className='w-full min-w-[800px] flex flex-col gap-10 items-center'>
                 <div className={`mt-10 flex gap-6`}>
                     <button className={`transition-colors duration-500 ease-in-out text-[#2f2f2f] px-[20px] py-[10px] rounded-xl ${toggleModerator ? 'bg-[#ffffff]' :'border border-[#303136] bg-transparent text-[#ffffff]'}`} onClick={handleModerator}> {'Moderator'}</button>
                     <button className={`transition-colors duration-500 ease-in-out text-[#2f2f2f] px-[20px] py-[10px] rounded-xl ${toggleModerator ? 'border border-[#303136] bg-transparent text-[#ffffff]' :'bg-[#ffffff]'}`} onClick={handleUser}> {'User'}</button>
                 </div>
+
+                <div className="flex flex-col items-center w-full max-w-md">
+                    <input
+                        type="text"
+                        placeholder="Search username"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="mt-1 bg-[#2F2F2F] rounded-xl p-2 pl-4 outline-none"
+                    />
+                </div>
+
                 <UsersSmallBoxesBox 
-                    users={users} 
+                    users={filteredUsers} 
                     moderator={toggleModerator}
                     onRoleToggle={handleRoleToggle}
                 />
             </div>
-            
         </div>
-    )
+    );
 }
 
 export default AdminEditUsers;

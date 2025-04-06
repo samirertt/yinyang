@@ -20,13 +20,13 @@ public class Character {
     @Column(name = "char_Img", length = 1000)
     private String charImg;
 
-    @Column(name = "char_Description")
+    @Column(name = "char_Description", length = 500)
     private String charDescription;
 
     @Column(name = "char_Usage")
     private double charUsage;
 
-    @Column(name = "char_Prompt")
+    @Column(name = "char_Prompt", length = 1000)
     private String charPrompt;
 
     public int getCharId() {
