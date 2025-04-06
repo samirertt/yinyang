@@ -81,5 +81,11 @@ public class UserController {
     {
         return userService.getCharacterByPersonality(personality);
     }
+
+    @GetMapping("/characters/search")
+    public List<Character> searchCharacters(@RequestParam String name) {
+        return userService.searchCharactersByName(name);
+    }
+
     // You can add other endpoints like getting recent chats, etc.
 }

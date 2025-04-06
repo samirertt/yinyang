@@ -3,6 +3,7 @@ package com.example.backend.repository;
 import com.example.backend.models.Character;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface CharacterRepository extends JpaRepository<Character, Integer> {
     List<String> findDistinctPersonalities();
 
     List<Character> findByCharPersonality(String personality);
+
+    List<Character> findByCharNameContainingIgnoreCase(String name);
 }

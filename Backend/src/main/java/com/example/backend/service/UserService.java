@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.backend.models.User;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,4 +85,9 @@ public class UserService {
     {
         return characterRepository.findByCharPersonality(personality);
     }
+
+    public List<Character> searchCharactersByName(String name) {
+        return characterRepository.findByCharNameContainingIgnoreCase(name);
+    }
+
 }
