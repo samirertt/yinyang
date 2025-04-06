@@ -8,7 +8,7 @@ import {
   X,
   ArrowDown,
   User,
-  Settings,
+  
   LogOut,
 } from "lucide-react";
 
@@ -174,13 +174,7 @@ const LoginInfo = ({
             name={name}
             image_path={image_path}
           />
-          <PopUpMenuItems
-            icon={Settings}
-            label="Settings"
-            to="/UserDashboard/Settings"
-            name={name}
-            image_path={image_path}
-          />
+          
           <PopUpMenuItems
             icon={LogOut}
             label="Logout"

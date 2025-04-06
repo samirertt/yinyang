@@ -1,10 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import { ArrowLeft, Camera, Edit } from "lucide-react"; // Icon for uploading
 import Footer from "../Footer";
 import ProfileImage from "../profileimg";
 import { useCharacterContext } from "./CharacterContext";
+import NavigationTabs from "./Settings";
 
 const Profile = () => {
   const location = useLocation();
@@ -64,7 +65,7 @@ const Profile = () => {
       }
     }
   };
-  
+  const {chatList} = useCharacterContext();
   
 
   const handleNameChange = (event) => {
@@ -139,6 +140,8 @@ const Profile = () => {
           />
         </button>
       </div>
+
+      <NavigationTabs chatList={chatList}/>
 
       <Footer />
     </div>

@@ -26,7 +26,7 @@ public class AdminService {
         return userRepository.findAll();
     }
 
-    public User toggleUserRole(int userId) {
+    public User toggleUserRole(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

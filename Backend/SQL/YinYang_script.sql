@@ -28,6 +28,17 @@ CREATE TABLE characters (
     char_liked BOOL NOT NULL DEFAULT 0 
 ) ENGINE=InnoDB;
 
+CREATE TABLE favourites (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    character_id INT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (character_id) REFERENCES characters(char_id) ON DELETE CASCADE,
+    UNIQUE (user_id, character_id)  -- Prevent duplicate favourites
+) ENGINE=InnoDB;
+
+
 CREATE TABLE chats (
     chat_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -54,6 +65,7 @@ VALUES  (1, 1, "Don't you get dizzy from your E? $$ Ha! A foolish question from 
 Select * from users;
 Select * from characters;
 Select * from Chats ;
+Select * from favourites;
 
 
 

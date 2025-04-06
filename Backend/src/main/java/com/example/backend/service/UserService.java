@@ -60,7 +60,7 @@ public class UserService {
     }
 
     public User toggleUserRole(int userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById((long) userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<String> roles = user.getRoles();

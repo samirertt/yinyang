@@ -32,7 +32,7 @@ public class AdminController {
     }
 
     @PutMapping("/users/{userId}/toggle-role")
-    public ResponseEntity<User> toggleUserRole(@PathVariable int userId) {
+    public ResponseEntity<User> toggleUserRole(@PathVariable Long userId) {
         User updatedUser = adminService.toggleUserRole(userId);
         return ResponseEntity.ok(updatedUser);
     }
