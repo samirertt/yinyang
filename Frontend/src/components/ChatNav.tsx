@@ -32,7 +32,7 @@ const Navbar = ({ user }: NavbarProps) => {
 
         <div className="flex items-center gap-3 ml-4">
           {user.username !== "guest" ? (
-            <div className="flex justify-center items-center w-10 h-10 bg-[#FF5733] text-white font-bold text-lg rounded-full">
+            <div className="flex justify-center items-center w-10 h-10  text-white font-bold text-lg rounded-full">
               <ProfileImage name={user.username} />
             </div>
           ) : (
