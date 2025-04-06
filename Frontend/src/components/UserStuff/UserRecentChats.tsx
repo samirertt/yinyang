@@ -11,6 +11,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ProfileImage from "../profileimg";
 
 //This is the chat history of the user
 const UserRecentChats = ({
@@ -21,7 +22,7 @@ const UserRecentChats = ({
 }: {
   chatList: { name: string; image: string }[];
   handleDelete: (name: string) => void;
-  name?: string;
+  name: string;
   user_image: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -100,7 +101,7 @@ const LoginInfo = ({
   name,
   image_path,
 }: {
-  name?: string;
+  name: string;
   image_path: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -141,11 +142,12 @@ const LoginInfo = ({
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-3">
-          <img
-            src={image_path}
-            alt="YinYang Logo"
-            className="h-10 w-10 ml-3 rounded-full"
-          />
+        {image_path === null ? (
+        <img src={image_path} alt={name} className="h-10 w-10 ml-3 rounded-full" />
+      ) : (
+        <ProfileImage name={name} /> // If image_path is null, show the ProfileImage component
+      )}
+          
           <p>{name}</p>
         </div>
         {/* Arrow with rotation animation */}

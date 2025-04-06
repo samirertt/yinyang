@@ -42,6 +42,9 @@ public class User {
     @Column(name = "joinDate")
     private LocalDate joinDate;
 
+    @Column(name = "user_img")
+    private String userImg;
+
     public String getEmail() {
         return email;
     }
@@ -114,5 +117,13 @@ public class User {
 
     public void setJoinDate(LocalDate joinDate) {
         this.joinDate = joinDate;
+    }
+
+    public String getUserImg() {
+        return userImg;
+    }
+
+    public void setUserImg(String userImg) {
+        this.userImg = userImg;
     }
 }

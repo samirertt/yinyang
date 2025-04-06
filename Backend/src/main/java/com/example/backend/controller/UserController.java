@@ -28,6 +28,11 @@ public class UserController {
     private JwtUtil jwtUtil;
 
 
+    @GetMapping("/{username}/profile-image")
+    public String getProfileImage(@PathVariable String username) {
+        return userService.getProfileImage(username);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody Map<String, String> credentials) {
         String username = credentials.get("username");

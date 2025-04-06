@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useRef } from "react";
 import { ArrowLeft, Camera, Edit } from "lucide-react"; // Icon for uploading
 import Footer from "../Footer";
+import ProfileImage from "../profileimg";
 
 const Profile = () => {
   const location = useLocation();
@@ -30,6 +31,7 @@ const Profile = () => {
     setIsEditing(false);
   };
 
+
   const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-[#212121] flex flex-col items-center relative">
@@ -41,11 +43,18 @@ const Profile = () => {
         Profile
       </h1>
       <div className="relative">
-        <img
+        {/* <img
           src={profileImage}
           alt={name}
           className="mt-23 rounded-full w-50 h-50  "
-        />
+        /> */}
+        {image_path === null ? (
+        <img src={image_path} alt={name} className="mt-23 rounded-full w-50 h-50" />
+      ) : (
+        <div  className="w-20 h-20">
+        <ProfileImage name={name} />
+        </div>
+      )}
 
         <button
           onClick={() => fileInputRef.current.click()}

@@ -26,8 +26,7 @@ public class UserService {
 
     }
 
-    public List<Character> getAllCharacters ()
-    {
+    public List<Character> getAllCharacters() {
         return characterRepository.findAll();
     }
 
@@ -35,9 +34,8 @@ public class UserService {
         return characterRepository.findDistinctPersonalities();
     }
 
-    public User registerUser(User user)
-    {
-        if(userRepository.findByUsername(user.getUsername()).isPresent()){
+    public User registerUser(User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new RuntimeException("Username already exists");
         }
 
@@ -51,14 +49,10 @@ public class UserService {
 
     public User validateUser(String username, String password) {
         Optional<User> userModel = userRepository.findByUsername(username);
-        if(userModel.isPresent())
-        {
-            if(userModel.get().getPassword().equals(password))
-            {
+        if (userModel.isPresent()) {
+            if (userModel.get().getPassword().equals(password)) {
                 return userModel.get();
-            }
-            else
-            {
+            } else {
                 return null;
             }
         }
@@ -81,13 +75,22 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<Character> getCharacterByPersonality(String personality)
-    {
+    public List<Character> getCharacterByPersonality(String personality) {
         return characterRepository.findByCharPersonality(personality);
     }
 
     public List<Character> searchCharactersByName(String name) {
         return characterRepository.findByCharNameContainingIgnoreCase(name);
+    }
+
+    public String getProfileImage(String username) {
+        // Fetch the user from the database using the username
+        Optional<User> userOptional = userRepository.findByUsername(username);
+
+        return userOptional
+                .filter(user -> user.getUserImg() != null)
+                .map(User::getUserImg)
+                .orElse(null);
     }
 
 }

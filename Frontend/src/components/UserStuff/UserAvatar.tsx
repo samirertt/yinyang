@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ProfileImage from "../profileimg";
 
 const truncateText = (text: string, maxCharsPerLine = 12, maxLines = 3) => {
   const maxTotalChars = maxCharsPerLine * maxLines;
@@ -13,17 +14,20 @@ const UserAvatar = ({
   image_path: string;
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
+
+  
   return (
     <div className="flex flex-col items-start gap-2 px-9 lg:px-13">
       <div>
         <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300">Welcome back,</p>
       </div>
       <div className="flex flex-row space-x-3 sm:space-x-4 items-center">
-        <img
-          src={image_path}
-          alt={name}
-          className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full object-cover bg-white"
-        />
+      {image_path === null ? (
+        <img src={image_path} alt={name} className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full object-cover bg-white" />
+      ) : (
+        <ProfileImage name={name} /> // If image_path is null, show the ProfileImage component
+      )}
+        
         <p
           className="text-lg sm:text-xl text-white mt-1 whitespace-pre-wrap break-words cursor-pointer"
           onMouseEnter={() => setShowTooltip(true)}
