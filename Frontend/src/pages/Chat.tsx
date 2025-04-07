@@ -152,7 +152,7 @@ export default function Chat() {
           const stringUserId = "" + userId;
 
           const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
-          console.log(modelBody);
+          
           const modelResponse = await fetch("https://stallion-valued-painfully.ngrok-free.app/chat", {
             method: "POST",
             headers: {
@@ -184,7 +184,20 @@ export default function Chat() {
               else
               {
                 const aiData =await modelResponse.json();
-                const aiReply = aiData.response.content;
+                let aiReply = aiData.response.content;
+                
+                if(aiReply.includes("role="))
+                  {
+                    console.log("Before: \n" + aiReply);
+                    aiReply = aiReply.slice(aiReply.search(' content"="')+13, aiReply.length);
+                  }
+        
+                  if(aiReply.includes("images=None"))
+                  {
+                    
+                    aiReply = aiReply.slice(0,aiReply.search('images=None')-2);
+                    console.log("After: \n" + aiReply);
+                  }
                 
                 const aiBody = {chatId:data.chatId, message:aiReply};
                 const aiResponse = await fetch("http://localhost:8080/chat/sendMessage", {
@@ -216,7 +229,7 @@ export default function Chat() {
             else
             {
               setError("Couldn't reach the model!");
-              console.log(modelResponse);
+
             }
 
         } 
@@ -252,7 +265,7 @@ export default function Chat() {
         const stringUserId = "" + userId;
 
         const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
-        console.log(modelBody);
+
         const modelResponse = await fetch("https://stallion-valued-painfully.ngrok-free.app/chat", {
           method: "POST",
           headers: {
@@ -264,7 +277,24 @@ export default function Chat() {
         if(modelResponse.ok)
         {
           const data =await modelResponse.json();
-          const aiReply = data.response.content;
+          let aiReply:string = data.response.content;
+
+          if(aiReply.includes("role="))
+          {
+            console.log("Before: \n" + aiReply);
+            aiReply = aiReply.slice(aiReply.search(' content"="')+13, aiReply.length);
+          }
+
+          if(aiReply.includes("images=None"))
+          {
+            
+            aiReply = aiReply.slice(0,aiReply.search('images=None')-2);
+            console.log("After: \n" + aiReply);
+          }
+
+          
+
+          
 
           const aiBody = {chatId:chatId, message:aiReply};
           const aiResponse = await fetch("http://localhost:8080/chat/sendMessage", {
