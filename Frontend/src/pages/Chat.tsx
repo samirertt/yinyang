@@ -148,15 +148,20 @@ export default function Chat() {
           setTyping(true);
 
           const stringId = "" + data.chatId;
-            
-          const modelBody = {chat_id: stringId, message:message};
+          const stringCharId = "" + character.Id;
+          const stringUserId = "" + userId;
+
+          const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
+          console.log(modelBody);
           const modelResponse = await fetch("https://stallion-valued-painfully.ngrok-free.app/chat", {
             method: "POST",
             headers: {
-              "Content-Type": "application/json"
+              "Content-Type": "application/json",
             },
-            body: JSON.stringify(modelBody)
+            body: JSON.stringify(modelBody),
           });
+          
+  
 
           if(modelResponse.ok)
             {
@@ -243,9 +248,11 @@ export default function Chat() {
         setTyping(true);
 
         const stringId = "" + chatId;
+        const stringCharId = "" + character.Id;
+        const stringUserId = "" + userId;
 
-        const modelBody = {chat_id: stringId, message:message};
-        
+        const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
+        console.log(modelBody);
         const modelResponse = await fetch("https://stallion-valued-painfully.ngrok-free.app/chat", {
           method: "POST",
           headers: {
