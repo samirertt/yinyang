@@ -1,10 +1,13 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.FavouriteRequest;
 import com.example.backend.models.Character;
 import com.example.backend.models.User;
 import com.example.backend.repository.CharacterRepository;
 import com.example.backend.security.JwtUtil; // Import your JwtUtil class
+import com.example.backend.service.FavouriteService;
 import com.example.backend.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,6 +25,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private FavouriteService favouriteService;
 
 
     @Autowired
@@ -90,6 +95,26 @@ public class UserController {
     @GetMapping("/characters/search")
     public List<Character> searchCharacters(@RequestParam String name) {
         return userService.searchCharactersByName(name);
+    }
+
+
+    @PostMapping("/favourites/like")
+    public ResponseEntity<String> likeCharacter(@RequestBody FavouriteRequest request) {
+        favouriteService.likeCharacter( request.getUserName() , request.getCharacterName());
+        return ResponseEntity.ok("Character added to favourites.");
+    }
+
+    @Transactional
+    @DeleteMapping("/favourites/unlike")
+    public ResponseEntity<String> unlikeCharacter(@RequestBody FavouriteRequest request) {
+        favouriteService.unlikeCharacter(request.getUserName() , request.getCharacterName());
+        return ResponseEntity.ok("Character removed from favourites.");
+    }
+
+    @GetMapping("/favourites/user/{username}")
+    public ResponseEntity<List<Character>> getUserFavourites(@PathVariable String username) {
+        List<com.example.backend.models.Character> favourites = favouriteService.getFavouritesByUser(username);
+        return ResponseEntity.ok(favourites);
     }
     // You can add other endpoints like getting recent chats, etc.
 }

@@ -77,7 +77,6 @@ const UserSearchBar = () => {
     });
   };
 
-  console.log(characters);
   return (
     <div className="flex items-center gap-2 w-full">
       <div className="relative flex-1">
@@ -103,16 +102,19 @@ const UserSearchBar = () => {
       </div>
 
       {isExpanded && inputValue.trim().length > 0 && (
-        <div className="absolute mr-60 right-0 mt-70 bg-[#212121] rounded-lg shadow-lg overflow-y-auto z-30 w-3/16">
+      <div className="absolute right-60 top-30 bg-[#313131] rounded-lg shadow-lg z-30 w-70 overflow-hidden">
+        <div className="overflow-y-auto max-h-60 transition-all ">
           {characters.length === 0 ? (
             <p className="text-white text-center p-2">No characters found</p>
           ) : (
-            <div className="space-y-2 p-2">
+            <ul className="space-y-2 p-2">
               {characters.map((character) => (
                 <li
                   key={character.charId}
-                  className="flex items-center gap-3 p-2 hover:bg-[#333] rounded-lg"
-                  onClick={() => goToChat(mappingCharacterInfo(character), 0)}
+                  className="flex items-center gap-3 p-2 hover:bg-[#414141] rounded-lg "
+                  onMouseDown={() =>
+                    goToChat(mappingCharacterInfo(character), 0)
+                  } 
                 >
                   <img
                     src={character.charImg}
@@ -122,10 +124,12 @@ const UserSearchBar = () => {
                   <h3 className="text-white">{character.charName}</h3>
                 </li>
               ))}
-            </div>
+            </ul>
           )}
+          </div>
         </div>
       )}
+
       <FilterButton />
     </div>
   );

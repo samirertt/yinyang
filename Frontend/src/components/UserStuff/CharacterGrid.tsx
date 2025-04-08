@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CharacterInfo from "./CharacterInfo";
+import { useCharacterContext } from "./CharacterContext";
 
 export interface Character {
   charImg: string;
@@ -17,20 +18,20 @@ interface CharacterGridProps {
     characterDetails: string,
     chatId: number
   ) => void;
-  title: string;
   list: { name: string; image: string; details: string }[];
   user: { username: string; userId: number };
 }
 
 const CharacterGrid: React.FC<CharacterGridProps> = ({
   onCharacterSelect,
-  title,
   list,
   user,
 }) => {
   const [myList, setMyList] = useState(list);
   const navigate = useNavigate();
 
+  
+  
   //used for simplicity
   const mappingCharacterInfo = (character: Character) => {
     return {
@@ -75,6 +76,9 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
   };
 
   const [characters, setCharacters] = useState<Character[]>([]);
+  const {favourite} = useCharacterContext();
+
+  
 
   useEffect(() => {
     fetch("http://localhost:8080/auth/characters/all") // Fetch from Spring Boot backend
@@ -83,20 +87,21 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
       .catch((error) => console.error("Error fetching characters:", error));
   }, []);
 
+  const checkIfLiked = (character:Character) => {
+    return favourite.some((fav) => fav.charName === character.charName);
+  };
+
   return (
     <div className="space-y-0 bg-[#212121] px-4 sm:px-0">
       <p className="text-xl text-white mt-10 pl-8 text-center sm:text-left">
-        {title}
+        {"Featured"}
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-6 h-fit justify-items-center">
         {characters.map((character) => (
           <CharacterInfo
-            key={character.charId}
-            img_path={character.charImg}
-            name={character.charName}
-            details={character.charDescription}
-            usage={character.charUsage}
+            character={character}
+            liked = {checkIfLiked(character)}
             onClick={() => goToChat(mappingCharacterInfo(character), 0)}
           />
         ))}

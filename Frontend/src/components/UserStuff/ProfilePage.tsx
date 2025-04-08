@@ -1,10 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { ArrowLeft, Camera, Edit } from "lucide-react";
 import { motion } from "framer-motion";
 import Footer from "../Footer";
 import ProfileImage from "../profileimg";
 import { useCharacterContext } from "./CharacterContext";
+import NavigationTabs from "./NavigationsTab";
 
 const Profile = () => {
   const location = useLocation();
@@ -19,12 +20,26 @@ const Profile = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [imagePreview, setImagePreview] = useState<string>(image_path || avatar || "");
+  const [imagePreview, setImagePreview] = useState<string>(
+    image_path || avatar || ""
+  );
   const [newImage, setNewImage] = useState<File | null>(null);
 
   const token = localStorage.getItem("jwtToken");
+ console.log(window.history.length);
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const checkToken = async () => {
+    if (!token) {
+      navigate("/login");
+      return;
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       // Validate file size (max 5MB)
@@ -34,7 +49,7 @@ const Profile = () => {
         return;
       }
       // Validate file type
-      if (!file.type.startsWith('image/')) {
+      if (!file.type.startsWith("image/")) {
         setErrorMessage("Please upload a valid image file");
         setIsError(true);
         return;
@@ -44,6 +59,7 @@ const Profile = () => {
       setIsError(false);
     }
   };
+  const { chatList } = useCharacterContext();
 
   const handleImageUpload = async () => {
     if (!newImage) return;
@@ -54,18 +70,21 @@ const Profile = () => {
 
     try {
       const formData = new FormData();
-      formData.append('file', newImage);
+      formData.append("file", newImage);
 
-      const uploadResponse = await fetch('http://localhost:8080/api/upload/profile', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formData
-      });
+      const uploadResponse = await fetch(
+        "http://localhost:8080/api/upload/profile",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
 
       if (!uploadResponse.ok) {
-        throw new Error('Failed to upload image');
+        throw new Error("Failed to upload image");
       }
 
       const uploadResult = await uploadResponse.json();
@@ -75,8 +94,12 @@ const Profile = () => {
       setIsSuccess(true);
       setTimeout(() => setIsSuccess(false), 2000);
     } catch (error) {
-      console.error('Error:', error);
-      setErrorMessage(error instanceof Error ? error.message : 'An error occurred while uploading the image');
+      console.error("Error:", error);
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "An error occurred while uploading the image"
+      );
       setIsError(true);
     } finally {
       setIsLoading(false);
@@ -89,6 +112,7 @@ const Profile = () => {
 
   const saveName = async () => {
     setIsEditing(false);
+
     // Here you would typically make an API call to update the username
     // For now, we'll just update the local state
   };
@@ -97,7 +121,7 @@ const Profile = () => {
     <div className="min-h-screen bg-[#212121] flex flex-col items-center relative">
       <ArrowLeft
         className="absolute left-15 top-1/10 transform -translate-y-1/2 text-white cursor-pointer"
-        onClick={() => navigate(-1)}
+        onClick={() => {if (!token) ? navigate("/") : navigate("/Login")}}
       />
       <h1 className="text-2xl sm:text-3xl text-white pb-4 sm:pb-5 sm:pt-8 text-center">
         Profile
@@ -113,8 +137,17 @@ const Profile = () => {
           className="fixed top-6 right-6 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 z-50"
         >
           <div className="bg-white rounded-full p-1">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 text-green-500"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
             </svg>
           </div>
           <div>
@@ -134,8 +167,17 @@ const Profile = () => {
           className="fixed top-6 right-6 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 z-50"
         >
           <div className="bg-white rounded-full p-1">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 text-red-500"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
             </svg>
           </div>
           <div>
@@ -156,20 +198,22 @@ const Profile = () => {
           <div className="bg-[#1A1A1A] p-6 rounded-lg shadow-xl flex flex-col items-center gap-4">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4CAF50]"></div>
             <p className="text-white font-semibold">Processing...</p>
-            <p className="text-gray-400 text-sm">Please wait while we save your changes</p>
+            <p className="text-gray-400 text-sm">
+              Please wait while we save your changes
+            </p>
           </div>
         </motion.div>
       )}
 
       <div className="relative">
         {imagePreview ? (
-          <img 
-            src={imagePreview} 
-            alt={editableName} 
-            className="mt-23 rounded-full w-50 h-50 object-cover" 
+          <img
+            src={imagePreview}
+            alt={editableName}
+            className="mt-23 rounded-full w-50 h-50 object-cover"
           />
         ) : (
-          <div className="w-50 h-50">
+          <div className="">
             <ProfileImage name={editableName} />
           </div>
         )}
@@ -219,9 +263,10 @@ const Profile = () => {
           className="mt-4 bg-[#4CAF50] text-white px-4 py-2 rounded-md hover:bg-[#45a049] transition"
           disabled={isLoading}
         >
-          {isLoading ? 'Saving...' : 'Save Changes'}
+          {isLoading ? "Saving..." : "Save Changes"}
         </button>
       )}
+      <NavigationTabs chatList={chatList} />
 
       <Footer />
     </div>

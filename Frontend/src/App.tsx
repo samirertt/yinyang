@@ -15,8 +15,10 @@ import TermsOfService from "./pages/terms";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserCharacterSelection from "./pages/UserDashboard";
 import Profile from "./components/UserStuff/ProfilePage";
-import UserSettings from "./components/UserStuff/Settings";
+import UserSettings from "./components/UserStuff/NavigationsTab";
 import { CharacterContext } from "./components/UserStuff/CharacterContext";
+import { Character } from "./components/UserStuff/CharacterGrid";
+
 const App: React.FC = () => {
   const [chatList, setChatList] = useState<
     { name: string; image: string; details: string }[]
@@ -44,7 +46,16 @@ const App: React.FC = () => {
     }
   };
 
-  let user:{username:string, userId:number};
+  const [user, setUser] = useState<{ username: string; userId: number }>({
+    username: "",
+    userId: 1,
+  });
+
+  const [favourite, setFavourite] = useState<Character[]>([]);
+  const [refreshFav,setRefreshFav] = useState(false);
+  const toggleRefreshFav = () => {
+    setRefreshFav(prev => !prev);
+  };
 
   useEffect(() => {
     if (chatList.length > 0) {
@@ -54,39 +65,39 @@ const App: React.FC = () => {
   }, [chatList]);
 
   const [avatar, setAvatar] = useState<string>("");
+
   return (
     <Router>
-      <CharacterContext.Provider value={{user,chatList,addChat, avatar, setAvatar}}>
-      <Routes>
-        <Route path="/Login" element={<Login />} />
-        <Route path="/chat" element={<Chat />} />
-        <Route path="/SignUp" element={<SignupPage />} />
-        <Route
-          path="/AdminDashboard/Characters"
-          element={<AdminEditCharacters />}
-        />
-        <Route path="/AdminDashboard/Edit" element={<AdminEditUsers />} />
-        <Route path="/AdminDashboard" element={<AdminDashboard />} />
-        <Route path="/Moderator" element={<Moderator />} />
-        <Route path="/AboutUs" element={<AboutUs />} />
-        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
-        <Route path="/TermsOfService" element={<TermsOfService />} />
-        <Route
-          path="/"
-          element={
-            <UserCharacterSelection
-              chatList={chatList}
-              handleDelete={handleDelete}
-              addChat={addChat}
-            />
-          }
-        />
-        
-          <Route path="/UserDashboard/Profile" element={<Profile />} />
+      <CharacterContext.Provider
+        value={{ user,setUser, chatList, addChat, avatar, setAvatar, favourite, setFavourite, refreshFav, toggleRefreshFav }}
+      >
+        <Routes>
+          <Route path="/Login" element={<Login />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/SignUp" element={<SignupPage />} />
           <Route
-            path="/UserDashboard/Settings"
-            element={<UserSettings chatList={chatList} />}
+            path="/AdminDashboard/Characters"
+            element={<AdminEditCharacters />}
           />
+          <Route path="/AdminDashboard/Edit" element={<AdminEditUsers />} />
+          <Route path="/AdminDashboard" element={<AdminDashboard />} />
+          <Route path="/Moderator" element={<Moderator />} />
+          <Route path="/AboutUs" element={<AboutUs />} />
+          <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+          <Route path="/TermsOfService" element={<TermsOfService />} />
+          <Route
+            path="/"
+            element={
+              <UserCharacterSelection
+                chatList={chatList}
+                handleDelete={handleDelete}
+                addChat={addChat}
+              />
+            }
+          />
+
+          <Route path="/UserDashboard/Profile" element={<Profile />} />
+          
           <Route
             path="/UserDashBoard/FilterPage/FilterList"
             element={
@@ -99,8 +110,7 @@ const App: React.FC = () => {
               <FilterPage chatList={chatList} handleDelete={handleDelete} />
             }
           />
-        
-      </Routes>
+        </Routes>
       </CharacterContext.Provider>
     </Router>
   );

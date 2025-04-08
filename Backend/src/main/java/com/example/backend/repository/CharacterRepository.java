@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CharacterRepository extends JpaRepository<Character, Integer> {
@@ -18,4 +19,6 @@ public interface CharacterRepository extends JpaRepository<Character, Integer> {
     List<Character> findByCharPersonality(String personality);
 
     List<Character> findByCharNameContainingIgnoreCase(String name);
+
+    Optional<Character> findByCharName(String charName);
 }

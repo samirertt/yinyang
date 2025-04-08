@@ -16,34 +16,40 @@ public class FavouriteService {
 
     @Autowired
     private FavouriteRepository favouriteRepository;
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private CharacterRepository characterRepository;
 
-    public void likeCharacter(Long userId, Long characterId) {
-        User user = userRepository.findById(userId)
+    public void likeCharacter(String userName, String characterName) {
+        User user = userRepository.findByUsername(userName)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        Character character = characterRepository.findById(Math.toIntExact(characterId))
+        Character character = characterRepository.findByCharName(characterName)
                 .orElseThrow(() -> new RuntimeException("Character not found"));
 
         if (!favouriteRepository.existsByUserAndCharacter(user, character)) {
-            favouriteRepository.save(new Favourite(user, character));
+            Favourite favourite = new Favourite();
+            favourite.setCharacter(character);
+            favourite.setUser(user);
+
+            favouriteRepository.save(favourite);
         }
     }
 
-    public void unlikeCharacter(Long userId, Long characterId) {
-        User user = userRepository.findById(userId)
+    public void unlikeCharacter(String userName, String characterName) {
+        User user = userRepository.findByUsername(userName)
                         .orElseThrow(() -> new RuntimeException("User not found"));
-        Character character = characterRepository.findById(Math.toIntExact(characterId))
+        Character character = characterRepository.findByCharName(characterName)
                         .orElseThrow(() -> new RuntimeException("Character not found"));
 
         favouriteRepository.deleteByUserAndCharacter(user, character);
     }
 
-    public List<com.example.backend.models.Character> getFavouritesByUser(Long userId) {
-        User user = userRepository.findById(userId)
+    public List<Character> getFavouritesByUser(String username) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<Favourite> favourites = favouriteRepository.findByUser(user);
+        List<Favourite> favourites = favouriteRepository.findByUserId(user.getUserId());
         return favourites.stream()
                 .map(Favourite::getCharacter)
                 .toList();

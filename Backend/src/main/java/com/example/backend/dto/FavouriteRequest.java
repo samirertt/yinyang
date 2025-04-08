@@ -1,25 +1,30 @@
 package com.example.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class FavouriteRequest {
 
-    private Long userId;
-    private Long characterId;
+    @JsonProperty("userName")
+    private String userName;
+
+    @JsonProperty("charName")
+    private String charName;
 
     // Getters and setters
-    public Long getUserId() {
-        return userId;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserName(String username) {
+        this.userName = username;
     }
 
-    public Long getCharacterId() {
-        return characterId;
+    public String getCharacterName() {
+        return charName;
     }
 
-    public void setCharacterId(Long characterId) {
-        this.characterId = characterId;
+    public void setCharacterName(String charName) {
+        this.charName = charName;
     }
 
 }

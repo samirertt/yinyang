@@ -1,7 +1,10 @@
 import { createContext, useContext } from "react";
+import { Character } from "./CharacterGrid";
+
 
 export interface CharacterContextType {
   user: { username: string; userId: number };
+  setUser: React.Dispatch<React.SetStateAction<{username:string; userId:number}>>;
   chatList: { name: string; image: string; details: string }[];
   addChat: (
     name: string,
@@ -11,7 +14,10 @@ export interface CharacterContextType {
   ) => void;
   avatar: string;
   setAvatar: (newImage: string) => void;
-
+  favourite: Character[];
+  setFavourite: React.Dispatch<React.SetStateAction<Character[]>>;
+  refreshFav: boolean;
+  toggleRefreshFav: () => void;
 }
 
 export const CharacterContext = createContext<CharacterContextType | null>(null);

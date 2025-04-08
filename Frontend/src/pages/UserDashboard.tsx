@@ -4,7 +4,8 @@ import SuggestionBanner from "../components/UserStuff/SuggestionBanner";
 import UserNavBar from "../components/UserStuff/UserNavBar";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { CharacterContext } from "../components/UserStuff/CharacterContext";
+import FavouritesGrid from "../components/UserStuff/FavouritesGrid";
+import { useCharacterContext } from "../components/UserStuff/CharacterContext";
 
 interface UserCharacterSelectionProps {
   chatList: { name: string; image: string; details: string }[];
@@ -23,6 +24,7 @@ const UserCharacterSelection = ({
 }: UserCharacterSelectionProps) => {
   const token = localStorage.getItem("jwtToken");
 
+  const {setUser} = useCharacterContext();
   // If no token, redirect to login
   if (!token) {
     return <Navigate to="/Login" replace />;
@@ -44,6 +46,10 @@ const UserCharacterSelection = ({
     username = decoded.sub; // Typically, 'sub' is the username or subject
     userId = decoded.userId; // Assumes userId is included in the token
 
+    
+
+    setUser({username: username, userId: userId});
+    
     // If userId is not in the token, this will be undefined; handle accordingly if needed
     if (userId === undefined) {
       console.error("userId not found in token");
@@ -99,15 +105,9 @@ const MainPage: React.FC<MainPageProps> = ({
       <CharacterGrid
         onCharacterSelect={addChat}
         list={chatList}
-        title="Featured"
         user={{ username, userId }}
       />
-      <CharacterGrid
-        onCharacterSelect={addChat}
-        list={chatList}
-        title="Favourites"
-        user={{ username, userId }}
-      />
+      <FavouritesGrid/>
     </div>
   );
 };
