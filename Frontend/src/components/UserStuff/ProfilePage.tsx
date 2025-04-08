@@ -121,7 +121,7 @@ const Profile = () => {
     <div className="min-h-screen bg-[#212121] flex flex-col items-center relative">
       <ArrowLeft
         className="absolute left-15 top-1/10 transform -translate-y-1/2 text-white cursor-pointer"
-        onClick={() => {if (!token) ? navigate("/") : navigate("/Login")}}
+        onClick={() => { (!token) ? navigate("/") : navigate("/Login")}}
       />
       <h1 className="text-2xl sm:text-3xl text-white pb-4 sm:pb-5 sm:pt-8 text-center">
         Profile

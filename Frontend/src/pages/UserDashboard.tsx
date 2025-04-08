@@ -108,6 +108,8 @@ const MainPage: React.FC<MainPageProps> = ({
         user={{ username, userId }}
       />
       <FavouritesGrid/>
+
+      
     </div>
   );
 };
