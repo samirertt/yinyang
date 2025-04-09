@@ -100,7 +100,7 @@ public class UserController {
 
     @PostMapping("/favourites/like")
     public ResponseEntity<String> likeCharacter(@RequestBody FavouriteRequest request) {
-        favouriteService.likeCharacter( request.getUserName() , request.getCharacterName());
+           favouriteService.likeCharacter( request.getUserName() , request.getCharacterName());
         return ResponseEntity.ok("Character added to favourites.");
     }
 
@@ -113,6 +113,7 @@ public class UserController {
 
     @GetMapping("/favourites/user/{username}")
     public ResponseEntity<List<Character>> getUserFavourites(@PathVariable String username) {
+        System.out.println(username);
         List<com.example.backend.models.Character> favourites = favouriteService.getFavouritesByUser(username);
         return ResponseEntity.ok(favourites);
     }

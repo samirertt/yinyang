@@ -31,8 +31,6 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
   const [myList, setMyList] = useState(list);
   const navigate = useNavigate();
 
-  
-  
   //used for simplicity
   const mappingCharacterInfo = (character: Character) => {
     return {
@@ -77,65 +75,60 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
   };
 
   const [characters, setCharacters] = useState<Character[]>([]);
-  const {favourite} = useCharacterContext();
+  const { favourite } = useCharacterContext();
 
+  const [direction, setDirection] = useState(1);
 
-  const [direction,setDirection] = useState(1);
+  const variants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? "100%" : "-100%",
+      opacity: 0,
+    }),
+    center: { x: "0%", opacity: 1 },
+    exit: (direction: number) => ({
+      x: direction > 0 ? "-100%" : "100%",
+      opacity: 0,
+    }),
+  };
 
-    const variants = {
-        enter: (direction:number) => ({
-          x: direction > 0 ? "100%" : "-100%",
-          opacity: 0,
-        }),
-        center: { x: "0%", opacity: 1 },
-        exit: (direction:number) => ({
-          x: direction > 0 ? "-100%" : "100%",
-          opacity: 0,
-        }),
-      };
+  const numPerPage = 8;
 
+  const [page, setPage] = useState(0);
 
-    const numPerPage = 8;
-    
-    const [page,setPage] = useState(0);
-    
+  function pageIncrease() {
+    if (page + 1 <= Math.max(1, myList.length / numPerPage)) {
+      setPage(page + 1);
 
-    function pageIncrease()
-    {
-        if(page+1 <= Math.max(1,myList.length/numPerPage))
-        {
-            setPage(page+1);
-            
-            setDirection(1);
-            console.log("Right BTN:" + page); 
-        }
-        
+      setDirection(1);
+      console.log("Right BTN:" + page);
     }
+  }
 
-    function pageDecrease()
-    {
-        if(page > Math.min(1,Math.ceil(myList.length/numPerPage)))
-        {
-            setPage(page-1);
-            setDirection(-1);
-            console.log("Left BTN:" + page); 
-        }
-
+  function pageDecrease() {
+    if (page > Math.min(1, Math.ceil(myList.length / numPerPage))) {
+      setPage(page - 1);
+      setDirection(-1);
+      console.log("Left BTN:" + page);
     }
+  }
 
+  useEffect(() => {
+    fetch("http://localhost:8080/auth/characters/all") // Fetch from Spring Boot backend
+      .then((response) => response.json())
+      .then((data) => setCharacters(data))
+      .catch((error) => console.error("Error fetching characters:", error));
+    console.log("Start:" + page);
+  }, []);
 
-    useEffect(() => {
-      fetch("http://localhost:8080/auth/characters/all") // Fetch from Spring Boot backend
-        .then((response) => response.json())
-        .then((data) => setCharacters(data))
-        .catch((error) => console.error("Error fetching characters:", error));
-        console.log("Start:" + page);
-    }, []);
+  const checkIfLiked = (character: Character) => {
     
+    return favourite.some(
+      (fav) =>
+        fav.charName.trim().toLowerCase() ===
+        character.charName.trim().toLowerCase()
+    );
+  };
   
-    const checkIfLiked = (character:Character) => {
-      return favourite.some((fav) => fav.charName === character.charName);
-    };
 
   return (
     <div className="space-y-0 bg-[#212121] px-4 sm:px-0">
@@ -144,32 +137,49 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
       </p>
 
       <div className="flex items-center flex-col gap-10">
-        <motion.div 
+        <motion.div
           key={page} // Ensures re-animation on page change
           variants={variants}
           initial="enter"
           animate="center"
           exit="exit"
-          custom={direction} 
+          custom={direction}
           transition={{ duration: 0.5, ease: "easeInOut" }}
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-6 h-fit justify-items-center"
         >
-            {characters.slice(numPerPage*page,numPerPage*(page+1)).map((character) => (
-              <CharacterInfo key={character.charId}
+          {characters
+            .slice(numPerPage * page, numPerPage * (page + 1))
+            .map((character) => (
+              <CharacterInfo
+                key={character.charId}
                 character={character}
-                liked = {checkIfLiked(character)}
+                liked={checkIfLiked(character)}
                 onClick={() => goToChat(mappingCharacterInfo(character), 0)}
               />
             ))}
         </motion.div>
-          
-        <div className='flex gap-3 items-center'>
-            <button className='bg-[#efefef] rounded-full p-[20px] ' onClick={pageDecrease}> 
-                <img src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000" className='w-5' alt="" />
-            </button>
-            <button className='bg-[#efefef] rounded-full p-[20px] ' onClick={pageIncrease}> 
-                <img src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000" className='w-5 rotate-180' alt="" />
-            </button>
+
+        <div className="flex gap-3 items-center">
+          <button
+            className="bg-[#efefef] rounded-full p-[20px] "
+            onClick={pageDecrease}
+          >
+            <img
+              src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000"
+              className="w-5"
+              alt=""
+            />
+          </button>
+          <button
+            className="bg-[#efefef] rounded-full p-[20px] "
+            onClick={pageIncrease}
+          >
+            <img
+              src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000"
+              className="w-5 rotate-180"
+              alt=""
+            />
+          </button>
         </div>
       </div>
     </div>

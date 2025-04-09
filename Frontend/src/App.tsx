@@ -69,7 +69,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <CharacterContext.Provider
-        value={{ user,setUser, chatList, addChat, avatar, setAvatar, favourite, setFavourite, refreshFav, toggleRefreshFav }}
+        value={{ user, chatList, addChat, avatar, setAvatar, favourite, setFavourite, refreshFav, toggleRefreshFav }}
       >
         <Routes>
           <Route path="/Login" element={<Login />} />
@@ -92,6 +92,8 @@ const App: React.FC = () => {
                 chatList={chatList}
                 handleDelete={handleDelete}
                 addChat={addChat}
+                setUser={setUser}
+                user={user}
               />
             }
           />

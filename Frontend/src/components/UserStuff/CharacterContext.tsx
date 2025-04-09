@@ -4,7 +4,6 @@ import { Character } from "./CharacterGrid";
 
 export interface CharacterContextType {
   user: { username: string; userId: number };
-  setUser: React.Dispatch<React.SetStateAction<{username:string; userId:number}>>;
   chatList: { name: string; image: string; details: string }[];
   addChat: (
     name: string,

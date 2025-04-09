@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 import { MessageCircle } from "lucide-react";
 import { Character } from "./CharacterGrid";
@@ -60,9 +60,13 @@ const CharacterInfo = ({
   liked:boolean;
   onClick: () => void;
 }) => {
-  const [isLiked, setIsLiked] = useState(liked);
+  const [isLiked, setIsLiked] = useState<boolean>();
 
-  const {user, toggleRefreshFav} = useCharacterContext();
+  const {user, setFavourite} = useCharacterContext();
+  
+  useEffect(() => {
+    setIsLiked(liked);
+  }, [liked]);
   
 
   const toggleLike = async () => {
@@ -73,23 +77,30 @@ const CharacterInfo = ({
   
     try {
       if (!isLiked) {
-        await likeCharacter(data);  
+        await likeCharacter(data);
         setIsLiked(true);
-        
+  
+        // ✅ Add character to global favourite array
+        setFavourite((prev) => [...prev, character]);
+  
       } else {
-        await unlikeCharacter(data); 
-        setIsLiked(false);  
+        await unlikeCharacter(data);
+        setIsLiked(false);
+  
+        // ✅ Remove character from global favourite array
+        setFavourite((prev) =>
+          prev.filter((favChar) => favChar.charName !== character.charName)
+        );
       }
-
-      toggleRefreshFav();
-
+  
+      // Optional: toggleRefreshFav(); // if you still want to trigger refetch elsewhere
+      // toggleRefreshFav();
+  
     } catch (error) {
       console.error("Error toggling like:", error);
-      
     }
-
-    
   };
+  
 
   return (
     <div

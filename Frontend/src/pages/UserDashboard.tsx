@@ -2,10 +2,12 @@ import CharacterGrid from "../components/UserStuff/CharacterGrid";
 import Footer from "../components/Footer";
 import SuggestionBanner from "../components/UserStuff/SuggestionBanner";
 import UserNavBar from "../components/UserStuff/UserNavBar";
-import { Navigate } from "react-router-dom";
+import { Navigate, NavigateFunction, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import FavouritesGrid from "../components/UserStuff/FavouritesGrid";
-import { useCharacterContext } from "../components/UserStuff/CharacterContext";
+import { useEffect } from "react";
+
+
 
 interface UserCharacterSelectionProps {
   chatList: { name: string; image: string; details: string }[];
@@ -15,22 +17,33 @@ interface UserCharacterSelectionProps {
     characterImage: string,
     characterDetails: string
   ) => void;
+  setUser: React.Dispatch<
+    React.SetStateAction<{
+      username: string;
+      userId: number;
+    }>
+  >;
+  user:{ username: string; userId: number };
 }
 
 const UserCharacterSelection = ({
   chatList,
   handleDelete,
   addChat,
+  setUser,
+  user,
 }: UserCharacterSelectionProps) => {
-  const token = localStorage.getItem("jwtToken");
+  const navigate = useNavigate();
 
-  const {setUser} = useCharacterContext();
   // If no token, redirect to login
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
   if (!token) {
-    return <Navigate to="/Login" replace />;
+    navigate("/Login");
+    return;
   }
 
-  let username: string;
+
   let userId: number;
 
   // Decode token and handle potential errors
@@ -40,41 +53,48 @@ const UserCharacterSelection = ({
 
     // Check if user has the "user" role
     if (!roles.includes("user")) {
-      return <Navigate to="/Login" replace />;
+      navigate("/Login");
+      return;
     }
 
-    username = decoded.sub; // Typically, 'sub' is the username or subject
+
     userId = decoded.userId; // Assumes userId is included in the token
 
+    setUser({
+      username: decoded.sub,
+      userId: decoded.userId,
+    });
     
-
-    setUser({username: username, userId: userId});
-    
+  
     // If userId is not in the token, this will be undefined; handle accordingly if needed
     if (userId === undefined) {
       console.error("userId not found in token");
       // Optionally redirect or set a default value
-      return <Navigate to="/Login" replace />;
+      navigate("/Login");
+      return;
     }
   } catch (error) {
     console.error("Invalid token:", error);
-    return <Navigate to="/Login" replace />;
+    navigate("/Login");
+    return;
   }
+},[]);
+  
+
+  
 
   return (
     <div className="bg-[#212121] flex flex-col min-h-screen px-4 sm:px-6 md:px-10 lg:px-40">
-      
       <UserNavBar
-        username={username}
+        username={user.username}
         chatList={chatList}
         handleDelete={handleDelete}
-        
       />
       <MainPage
         addChat={addChat}
         chatList={chatList}
-        username={username}
-        userId={userId}
+        username={user.username}
+        userId={user.userId}
       />
       <Footer />
     </div>
@@ -99,6 +119,8 @@ const MainPage: React.FC<MainPageProps> = ({
   username,
   userId,
 }) => {
+
+  
   return (
     <div className="flex flex-col items-center justify-between px-4 bg-[#212121]">
       <SuggestionBanner />
@@ -107,9 +129,7 @@ const MainPage: React.FC<MainPageProps> = ({
         list={chatList}
         user={{ username, userId }}
       />
-      <FavouritesGrid/>
-
-      
+      <FavouritesGrid />
     </div>
   );
 };

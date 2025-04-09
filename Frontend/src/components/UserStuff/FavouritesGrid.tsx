@@ -13,13 +13,28 @@ function truncateText(text: string, maxCharsPerLine = 13, maxLines = 4) {
 const FavouritesGrid = () => {
   const { favourite, setFavourite, user, refreshFav, } = useCharacterContext();
   
+  
+
   useEffect(() => {
-    fetch(`http://localhost:8080/auth/favourites/user/${user.username}`) // Fetch from Spring Boot backend
-      .then((response) => response.json())
+    if (!user?.username) return;
+    fetch(`http://localhost:8080/auth/favourites/user/${user.username}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((data) => setFavourite(data))
-      .catch((error) => console.error("Error fetching favourites:", error));
-      console.log("Username: " + user.username);
-  }, [refreshFav]);
+      .catch((error) =>
+        console.error("Error fetching favourites:", error)
+      );
+  }, [user.username, refreshFav]);
+  
+  
 
   const [direction,setDirection] = useState(1);
   
@@ -121,36 +136,6 @@ const FavouritesGrid = () => {
       </div>
 
 
-
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-6 h-fit justify-items-center">
-        {favourite.map((character) => (
-          <div className="relative flex w-70 sm:w-fit  h-30  items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden cursor-pointer">
-            <button >
-              <Heart size={18} fill={"red"} />
-            </button>
-
-            <img
-              src={character.charImg}
-              alt={character.charName}
-              className="w-20 h-25 rounded-2xl "
-            />
-
-            <div className="ml-4 flex-1">
-              <h2 className="text-sm font-bold mb-1 text-white text-left">
-                {character.charName}
-              </h2>
-              <p className="mb-2 text-white text-left text-xs">
-                {truncateText(character.charDescription)}
-              </p>
-              <span className="text-gray-500 text-xs flex items-center gap-1">
-                <MessageCircle size={14} className="text-gray-500" />
-                Usage: {character.charUsage}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
