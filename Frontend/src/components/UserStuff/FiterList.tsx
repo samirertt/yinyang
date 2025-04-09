@@ -12,7 +12,7 @@ const FilterList: React.FC<UserNavBarProps> = ({
  
 }) => {
 
-  const {user, chatList, addChat} = useCharacterContext();
+  const {user, chatList, addChat, favourite} = useCharacterContext();
   const location = useLocation();
   const { icon, title, bgColor } = location.state;
 
@@ -111,6 +111,15 @@ const FilterList: React.FC<UserNavBarProps> = ({
     console.error("Invalid token:", error);
     return <Navigate to="/Login" replace />;
   }
+
+  const checkIfLiked = (character: Character) => {
+    
+    return favourite.some(
+      (fav) =>
+        fav.charName.trim().toLowerCase() ===
+        character.charName.trim().toLowerCase()
+    );
+  };
   return (
     <div className="bg-[#212121] min-h-screen pt-5 px-4 sm:px-6 md:px-10 lg:px-40">
       <UserNavBar
@@ -149,11 +158,8 @@ const FilterList: React.FC<UserNavBarProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center">
             {characters.map((character) => (
               <CharacterInfo
-                key={character.charId}
-                img_path={character.charImg}
-                name={character.charName}
-                details={character.charDescription}
-                usage={character.charUsage}
+                character={character}
+                liked={checkIfLiked(character)}
                 onClick={() => goToChat(mappingCharacterInfo(character),0)}
               />
             ))}

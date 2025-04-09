@@ -98,8 +98,8 @@ const FavouritesGrid = () => {
         >
 
             {favourite.slice(numPerPage*page,numPerPage*(page+1)).map((character) => (
-              <div key={character.charId} className="relative flex w-70 sm:w-fit  h-30  items-center p-4 rounded-lg bg-[#303030] hover:bg-[#454545] overflow-hidden cursor-pointer">
-                <button >
+              <div key={character.charId} className="relative flex w-70 sm:w-fit  h-30  items-center p-4 rounded-lg bg-[#303030] overflow-hidden ">
+                <button className="absolute right-3 top-3" >
                   <Heart size={18} fill={"red"} />
                 </button>
 
