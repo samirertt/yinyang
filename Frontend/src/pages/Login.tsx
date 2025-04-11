@@ -2,10 +2,9 @@ import * as React from "react";
 import { useState } from "react";
 import LoginNav from "../components/LoginNav";
 import { useNavigate } from "react-router-dom";
-import Auth from "../utils/Auth"; // Ensure this util can handle JWT storage
-
+import Auth from "../utils/Auth";
 import { jwtDecode } from "jwt-decode";
-
+import { uniqueNamesGenerator, Config, adjectives, colors, animals } from "unique-names-generator";
 
 function Login() {
   const [isEmailClicked, setIsEmailClicked] = useState(false);
@@ -14,14 +13,24 @@ function Login() {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  const customConfig: Config = {
+    dictionaries: [adjectives, colors],
+    separator: "-",
+    length: 2,
+  };
+
   const handleEmailClick = () => {
     setIsEmailClicked(true);
   };
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  // Modified handleLogin to optionally accept a credentials object.
+  const handleLogin = async (
+    e: React.FormEvent<HTMLFormElement>,
+    creds?: { username: string; password: string }
+  ) => {
     e.preventDefault();
-
-    const credentials = { username, password };
+    // Use passed credentials if available; otherwise, use state values.
+    const credentials = creds || { username, password };
 
     try {
       const response = await fetch("http://localhost:8080/auth/login", {
@@ -39,23 +48,22 @@ function Login() {
 
         // Store JWT token in localStorage
         localStorage.setItem("jwtToken", token);
-
         console.log("Token stored in localStorage:", token);
 
         // Decode the JWT token to extract the roles
         const decoded: any = jwtDecode(token);
         const roles = decoded.roles || [];
         console.log("Decoded roles:", roles);
-        
+
         Auth.login(token);
 
         // Redirect based on the user's role
         if (roles.includes("admin")) {
-          navigate("/AdminDashboard", { state: { username } });
+          navigate("/AdminDashboard", { state: { username: credentials.username } });
         } else if (roles.includes("moderator")) {
-          navigate("/Moderator", { state: { username } });
+          navigate("/Moderator", { state: { username: credentials.username } });
         } else {
-          navigate("/", { state: { username } });
+          navigate("/", { state: { username: credentials.username } });
         }
       } else {
         setError("Invalid Credentials");
@@ -111,17 +119,56 @@ function Login() {
                 </svg>
                 Continue with Email
               </button>
+
               <button
-                  onClick={async () => {
-                    setUsername("Guest");
-                    setPassword("Guest");
+                onClick={async () => {
+                  // Generate a random username for guest
+                  const randomName: string = uniqueNamesGenerator({
+                    dictionaries: [adjectives, animals],
+                  });
+                  // Optionally update state if needed for re-rendering UI.
+                  setUsername(randomName);
+                  setPassword("Guest");
 
-                    // Wait for state updates before calling handleLogin
-                    await new Promise((resolve) => setTimeout(resolve, 0));
+                  // Create complete guest signup data object
+                  const guestFormData = {
+                    firstName: randomName,
+                    surname: "Guest",
+                    username: randomName,
+                    email: `${randomName.toLowerCase()}@guest.com`,
+                    password: "Guest",
+                    confirmPassword: "Guest",
+                  };
 
-                    await handleLogin({ preventDefault: () => {} } as React.FormEvent<HTMLFormElement>);
-                  }}
-                
+                  // Wait for state updates (if any) to propagate
+                  await new Promise((resolve) => setTimeout(resolve, 0));
+
+                  try {
+                    // Signup request with all required fields
+                    const response = await fetch("http://localhost:8080/auth/signup", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(guestFormData),
+                    });
+                    console.log("Signup data:", JSON.stringify(guestFormData));
+
+                    const data = await response.json();
+                    if (response.ok) {
+                      setError("User registered successfully!");
+                      // Optional delay (if needed) to ensure backend is ready for login
+                      await new Promise((resolve) => setTimeout(resolve, 1000));
+                      // Call handleLogin with explicitly passed guest credentials
+                      await handleLogin(
+                        { preventDefault: () => {} } as React.FormEvent<HTMLFormElement>,
+                        { username: randomName, password: "Guest" }
+                      );
+                    } else {
+                      setError(`Error: ${JSON.stringify(data)}`);
+                    }
+                  } catch (error) {
+                    setError("Failed to connect to server");
+                  }
+                }}
                 className="cursor-pointer w-full bg-gray-900 text-white flex items-center justify-center gap-1 p-1.5 sm:p-2 rounded-md shadow text-xs sm:text-sm md:text-base"
               >
                 <svg

@@ -25,7 +25,8 @@
     "recharts": "^2.15.1",
     "tailwind-merge": "^3.0.1",
     "tailwind-scrollbar": "^4.0.1",
-    "tailwindcss": "^4.1.1"
+    "tailwindcss": "^4.1.1",
+    "unique-names-generator": "^4.7.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

@@ -6,7 +6,7 @@ import SideBar from "../components/SideBar";
 import ChatNav from "../components/ChatNav";
 import { Navigate, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-
+import { uniqueNamesGenerator, Config, adjectives, colors, animals } from 'unique-names-generator';
 // Define the shape of your decoded token
 interface DecodedToken {
   sub: string;        // username

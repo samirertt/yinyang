@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 import LoginNav from "../components/LoginNav";
 
 function SignupPage() {
+  // Regular expression for validating email format.
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  // Regular expression that requires at least one uppercase letter and one special character.
+  const passwordStrengthRegex = /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).+$/;
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -17,30 +20,35 @@ function SignupPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Explicitly defining the event type for input changes
+  // Handle input change events.
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Explicitly defining the event type for form submission
+  // Handle form submission.
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // Check for a proper email.
     if (!emailRegex.test(formData.email)) {
       setError("Invalid email address");
       return;
     }
 
+    // Check if passwords match.
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
 
-    
+    // Check password strength: must contain at least one uppercase letter and one special character.
+    if (!passwordStrengthRegex.test(formData.password)) {
+      setError("Password must include at least one uppercase letter and one special character");
+      return;
+    }
+
     // Proceed with signup logic (e.g., API call)
     console.log("Form Data:", formData);
-     // Redirect to login after successful signup
-
     try {
       const response = await fetch("http://localhost:8080/auth/signup", {
         method: "POST",

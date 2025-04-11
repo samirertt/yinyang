@@ -1,7 +1,4 @@
 import { useRef, useEffect, useState } from "react";
-import Avatar from "../assets/Avatar.png";
-import Delete from "../assets/Delete.svg";
-import Edit from "../assets/Edit.svg";
 import Copy from "../assets/Copy.svg";
 // import Emi from "../assets/Emi.jpg";
 
@@ -84,8 +81,6 @@ export default function MessageBubble({ text, sender,image,anim }: MessageProps)
       </div>
       {sender === "user" && (
         <div className="flex justify-end mt-2 gap-4">
-          <img src={Delete} alt="Delete icon" className="w-4 h-4 cursor-pointer" />
-          <img src={Edit} alt="Edit icon" className="w-4 h-4 cursor-pointer" />
           <img src={Copy} alt="Copy icon" className="w-4 h-4 cursor-pointer" />
         </div>
       )}
