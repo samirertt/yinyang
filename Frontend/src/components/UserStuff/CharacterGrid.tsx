@@ -100,7 +100,6 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
       setPage(page + 1);
 
       setDirection(1);
-      console.log("Right BTN:" + page);
     }
   }
 
@@ -108,7 +107,6 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
     if (page > Math.min(1, Math.ceil(myList.length / numPerPage))) {
       setPage(page - 1);
       setDirection(-1);
-      console.log("Left BTN:" + page);
     }
   }
 
@@ -136,7 +134,17 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
         {"Featured"}
       </p>
 
-      <div className="flex items-center flex-col gap-10">
+      <div className="flex items-center gap-10">
+        <button
+            className="bg-[#efefef] rounded-full p-[20px] "
+            onClick={pageDecrease}
+          >
+            <img
+              src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000"
+              className="w-5"
+              alt=""
+            />
+        </button>
         <motion.div
           key={page} // Ensures re-animation on page change
           variants={variants}
@@ -158,19 +166,7 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
               />
             ))}
         </motion.div>
-
-        <div className="flex gap-3 items-center">
-          <button
-            className="bg-[#efefef] rounded-full p-[20px] "
-            onClick={pageDecrease}
-          >
-            <img
-              src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000"
-              className="w-5"
-              alt=""
-            />
-          </button>
-          <button
+        <button
             className="bg-[#efefef] rounded-full p-[20px] "
             onClick={pageIncrease}
           >
@@ -179,8 +175,7 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
               className="w-5 rotate-180"
               alt=""
             />
-          </button>
-        </div>
+        </button>
       </div>
     </div>
   );
