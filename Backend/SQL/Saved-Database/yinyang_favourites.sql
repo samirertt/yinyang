@@ -16,35 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `users`
+-- Table structure for table `favourites`
 --
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `favourites`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users` (
-  `user_id` int NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(255) NOT NULL,
-  `surname` varchar(255) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `role` varchar(255) NOT NULL,
-  `user_img` varchar(255) DEFAULT NULL,
-  `join_date` date DEFAULT NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE KEY `username` (`username`)
+CREATE TABLE `favourites` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `character_id` int NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`character_id`),
+  UNIQUE KEY `UKhujb7jgtch6jodjosushtcjk7` (`user_id`,`character_id`),
+  KEY `character_id` (`character_id`),
+  CONSTRAINT `favourites_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  CONSTRAINT `favourites_ibfk_2` FOREIGN KEY (`character_id`) REFERENCES `characters` (`char_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `favourites`
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Luay','Hamed','user','asd','luay@yinyang.com','user','http://res.cloudinary.com/dx8qt8hiz/image/upload/v1743966528/profiles/tc81a5lq3lwbqqkjds1j.jpg','2025-04-06'),(2,'Samir','Erturk','admin','asd','samir@yinyang.com','admin',NULL,'2025-04-06'),(3,'Teca','Ahmad','moderator','asd','teca@yinyang.com','moderator',NULL,'2025-04-06');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+LOCK TABLES `favourites` WRITE;
+/*!40000 ALTER TABLE `favourites` DISABLE KEYS */;
+INSERT INTO `favourites` VALUES (1,1,5,'2025-04-09 01:47:52'),(2,1,2,'2025-04-09 01:47:52');
+/*!40000 ALTER TABLE `favourites` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
