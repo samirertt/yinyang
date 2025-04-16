@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.CharacterFilter;
 import com.example.backend.dto.FavouriteRequest;
 import com.example.backend.models.Character;
 import com.example.backend.models.User;
@@ -82,7 +83,7 @@ public class UserController {
 
 
     @GetMapping("/characters/personalities")
-    public List<String> getAllCharacterPersonalities() {
+    public List<CharacterFilter> getAllCharacterPersonalities() {
         return userService.getCharacterPersonalities();
     }
 

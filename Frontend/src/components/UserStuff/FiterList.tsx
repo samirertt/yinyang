@@ -6,6 +6,13 @@ import { useEffect, useState } from "react";
 import CharacterInfo from "./CharacterInfo";
 import { useCharacterContext } from "./CharacterContext";
 import { jwtDecode } from "jwt-decode";
+import { goToChat, mappingCharacterInfo } from "./constants";
+
+
+
+
+
+
 
 const FilterList: React.FC<UserNavBarProps> = ({
   handleDelete,
@@ -19,6 +26,7 @@ const FilterList: React.FC<UserNavBarProps> = ({
   const navigate = useNavigate();
 
   const [characters, setCharacters] = useState<Character[]>([]);
+ 
 
 
   useEffect(() => {
@@ -38,46 +46,6 @@ const FilterList: React.FC<UserNavBarProps> = ({
     fetchCharacters();
   }, [title]);
 
-  const mappingCharacterInfo = (character: Character) => {
-    return {
-      img: character.charImg,
-      name: character.charName,
-      details: character.charDescription,
-      usage: character.charUsage,
-      Id: character.charId,
-    };
-  };
-
-
-  const goToChat = (character: {
-    img: string;
-    name: string;
-    details: string;
-    usage: number;
-    Id: number;
-  },Id:number ) =>{
-    addChat(character.name, character.img, character.details, Id);
-
-    if (!chatList.some((chat) => chat.name === character.name)) {
-      const temp = chatList;
-      temp.push({
-        name: character.name,
-        image: character.img,
-        details: character.details,
-      });
-      
-    }
-
-    navigate("/Chat", {
-      state: {
-        character: character,
-        historyList: chatList,
-        user: user, // Pass user data here
-        chatId: 0, // Pass chatId data here (if it's 0 then a new chat is created)
-      },
-      replace: true,
-    });
-  }
   const token = localStorage.getItem("jwtToken");
 
   // If no token, redirect to login
@@ -160,7 +128,7 @@ const FilterList: React.FC<UserNavBarProps> = ({
               <CharacterInfo
                 character={character}
                 liked={checkIfLiked(character)}
-                onClick={() => goToChat(mappingCharacterInfo(character),0)}
+                onClick={() => goToChat(mappingCharacterInfo(character),0,addChat,user, navigate, chatList)}
               />
             ))}
           </div>

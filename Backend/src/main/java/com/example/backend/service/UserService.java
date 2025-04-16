@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 
+import com.example.backend.dto.CharacterFilter;
 import com.example.backend.models.Character;
 import com.example.backend.repository.CharacterRepository;
 import com.example.backend.repository.UserRepository;
@@ -30,7 +31,7 @@ public class UserService {
         return characterRepository.findAll();
     }
 
-    public List<String> getCharacterPersonalities() {
+    public List<CharacterFilter> getCharacterPersonalities() {
         return characterRepository.findDistinctPersonalities();
     }
 
