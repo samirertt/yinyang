@@ -2,15 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import YinYang from "../../assets/yinyang.png";
-import {
-  Trash2,
-  Menu,
-  X,
-  ArrowDown,
-  User,
-  
-  LogOut,
-} from "lucide-react";
+import { Trash2, Menu, X, ArrowDown, User, LogOut } from "lucide-react";
 
 import ProfileImage from "../profileimg";
 
@@ -67,7 +59,9 @@ const UserRecentChats = ({
               alt="YinYang Logo"
               className="flex items-center pt-3"
             />
-            <h2 className="text-lg font-semibold text-[var(--white)]">YinYang</h2>
+            <h2 className="text-lg font-semibold text-[var(--white)]">
+              YinYang
+            </h2>
           </div>
 
           {/* Recent Chats */}
@@ -174,7 +168,7 @@ const LoginInfo = ({
             name={name}
             image_path={image_path}
           />
-          
+
           <PopUpMenuItems
             icon={LogOut}
             label="Logout"
@@ -194,11 +188,15 @@ const LoginInfo = ({
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-3">
-        {image_path === null ? (
-        <img src={image_path} alt={name} className="h-10 w-10 ml-3 rounded-full" />
-      ) : (
-        <ProfileImage name={name} /> // If image_path is null, show the ProfileImage component
-      )}
+          {image_path === null ? (
+            <img
+              src={image_path}
+              alt={name}
+              className="h-10 w-10 ml-3 rounded-full"
+            />
+          ) : (
+            <ProfileImage name={name} /> // If image_path is null, show the ProfileImage component
+          )}
           <p>{name}</p>
         </div>
         <div

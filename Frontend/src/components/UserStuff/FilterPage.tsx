@@ -25,13 +25,14 @@ const FilterPage: React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        
+
         const withColours = data.map((item: GridItem) => ({
           title: item.charPersonality,
           icon: item.charImage,
           color: getRandomColor(), // Assign a random color
         }));
         setCategories(withColours);
+        
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -96,12 +97,11 @@ const FilterPage: React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
           {categories.map((category) => (
-          
             <FilterCards
-              key={category.title} // Add a key for React list rendering
+              key={category.title} 
               icon={category.icon}
               title={category.title}
-              bgColor={`bg-[${category.color}]`}
+              bgColor={category.color}
             />
           ))}
         </div>
@@ -131,8 +131,9 @@ const FilterCards = ({
   return (
     <div className="w-full ">
       <div
-        className={`w-full h-20 md:h-28 ${bgColor} text-left rounded-lg transition-all duration-300 cursor-pointer flex items-center px-4 gap-5 overflow-hidden hover:shadow-[0_0_25px_5px_rgba(255,255,255,0.6)]`}
+        className={`w-full h-20 md:h-28  text-left rounded-lg transition-all duration-300 cursor-pointer flex items-center px-4 gap-5 overflow-hidden hover:shadow-[0_0_25px_5px_rgba(255,255,255,0.6)]`}
         onClick={handleClick}
+        style={{backgroundColor: bgColor}}
       >
         <h2 className=" text-sm md:text-2xl text-white">{title}</h2>
 

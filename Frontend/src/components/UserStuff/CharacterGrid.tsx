@@ -119,31 +119,45 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
   }, []);
 
   const checkIfLiked = (character: Character) => {
-    
     return favourite.some(
       (fav) =>
         fav.charName.trim().toLowerCase() ===
         character.charName.trim().toLowerCase()
     );
   };
-  
+
+  const handleUsageUpdate = async (character: Character) => {
+    try {
+      await fetch("http://localhost:8080/auth/characters/update-usage", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          charName: character.charName,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="space-y-0 bg-[#212121] px-4 sm:px-0">
-      <p className="text-xl text-white mt-10 pl-8 text-center sm:text-left">
+      <p className="text-2xl text-white mt-10 relative justify-self-start">
         {"Featured"}
       </p>
 
       <div className="flex items-center gap-10">
         <button
-            className="bg-[#efefef] rounded-full p-[20px] "
-            onClick={pageDecrease}
-          >
-            <img
-              src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000"
-              className="w-5"
-              alt=""
-            />
+          className="bg-[#efefef] rounded-full p-[20px] "
+          onClick={pageDecrease}
+        >
+          <img
+            src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000"
+            className="w-5"
+            alt=""
+          />
         </button>
         <motion.div
           key={page} // Ensures re-animation on page change
@@ -162,19 +176,22 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
                 key={character.charId}
                 character={character}
                 liked={checkIfLiked(character)}
-                onClick={() => goToChat(mappingCharacterInfo(character), 0)}
+                onClick={() => {
+                  goToChat(mappingCharacterInfo(character), 0);
+                  handleUsageUpdate(character);
+                }}
               />
             ))}
         </motion.div>
         <button
-            className="bg-[#efefef] rounded-full p-[20px] "
-            onClick={pageIncrease}
-          >
-            <img
-              src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000"
-              className="w-5 rotate-180"
-              alt=""
-            />
+          className="bg-[#efefef] rounded-full p-[20px] "
+          onClick={pageIncrease}
+        >
+          <img
+            src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000"
+            className="w-5 rotate-180"
+            alt=""
+          />
         </button>
       </div>
     </div>

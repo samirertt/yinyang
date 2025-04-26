@@ -70,12 +70,14 @@ const FavouritesGrid = () => {
   }
 
   return (
-    <div className="space-y-0 bg-[#212121]  px-4 sm:px-0">
-      <p className="text-xl text-white mt-10 pl-8 text-center sm:text-left">
+    <div className="space-y-0 bg-[#212121]  px-4 sm:px-0 w-full">
+      <p className="text-2xl text-white mt-10 relative justify-self-start">
         Favourites
       </p>
+      
 
       {favourite.length === 0 ? (
+        
         <div className="flex justify-center items-center h-60">
           <p className="text-white text-lg">
             You haven't liked any characters yet.

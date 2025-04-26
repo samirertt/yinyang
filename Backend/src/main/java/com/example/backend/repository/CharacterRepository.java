@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface CharacterRepository extends JpaRepository<Character, Integer> {
 
-    //this is to get all the filters. Will use later in the 3rd phase
+
     @Query(value = """
     SELECT c.char_personality AS charPersonality, c.char_img AS charImage
     FROM characters c

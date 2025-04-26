@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.CharacterFilter;
+import com.example.backend.dto.CharacterUsageDto;
 import com.example.backend.dto.FavouriteRequest;
 import com.example.backend.models.Character;
 import com.example.backend.models.User;
@@ -55,13 +56,12 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody User user, BindingResult result)
-    {
+    public ResponseEntity<?> registerUser(@RequestBody User user, BindingResult result) {
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().body(result.getAllErrors());
         }
 
-        try{
+        try {
             if (user.getJoinDate() == null) {
                 user.setJoinDate(LocalDate.now());
             }
@@ -71,15 +71,15 @@ public class UserController {
 
             User newUser = userService.registerUser(user);
             return ResponseEntity.ok(newUser);
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @GetMapping("/characters/all")
-    public List<Character> getAllCharacters()
-    { return userService.getAllCharacters();}
+    public List<Character> getAllCharacters() {
+        return userService.getAllCharacters();
+    }
 
 
     @GetMapping("/characters/personalities")
@@ -88,8 +88,7 @@ public class UserController {
     }
 
     @GetMapping("/{personality}")
-    public List<Character> getByCharacterByPersonality(@PathVariable String personality)
-    {
+    public List<Character> getByCharacterByPersonality(@PathVariable String personality) {
         return userService.getCharacterByPersonality(personality);
     }
 
@@ -101,22 +100,31 @@ public class UserController {
 
     @PostMapping("/favourites/like")
     public ResponseEntity<String> likeCharacter(@RequestBody FavouriteRequest request) {
-           favouriteService.likeCharacter( request.getUserName() , request.getCharacterName());
+        favouriteService.likeCharacter(request.getUserName(), request.getCharacterName());
         return ResponseEntity.ok("Character added to favourites.");
     }
 
     @Transactional
     @DeleteMapping("/favourites/unlike")
     public ResponseEntity<String> unlikeCharacter(@RequestBody FavouriteRequest request) {
-        favouriteService.unlikeCharacter(request.getUserName() , request.getCharacterName());
+        favouriteService.unlikeCharacter(request.getUserName(), request.getCharacterName());
         return ResponseEntity.ok("Character removed from favourites.");
     }
 
     @GetMapping("/favourites/user/{username}")
     public ResponseEntity<List<Character>> getUserFavourites(@PathVariable String username) {
-        System.out.println(username);
         List<com.example.backend.models.Character> favourites = favouriteService.getFavouritesByUser(username);
         return ResponseEntity.ok(favourites);
     }
-    // You can add other endpoints like getting recent chats, etc.
+
+    @PutMapping("/characters/update-usage")
+    public ResponseEntity<String> updateCharacterUsage(@RequestBody CharacterUsageDto characterUsageDto) {
+        userService.incrementCharacterUsage(characterUsageDto.getCharacterName());
+//
+//            String error = "Error updating character usage";
+//            return ResponseEntity.internalServerError().body(error);
+//
+
+        return ResponseEntity.ok("Character usage updated successfully!");
+    }
 }

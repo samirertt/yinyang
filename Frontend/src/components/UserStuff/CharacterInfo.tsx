@@ -4,7 +4,7 @@ import { MessageCircle } from "lucide-react";
 import { Character } from "./CharacterGrid";
 import { useCharacterContext } from "./CharacterContext";
 
-function truncateText(text: string, maxCharsPerLine = 13, maxLines = 4) {
+function truncateText(text: string, maxCharsPerLine = 13, maxLines = 3) {
   const maxTotalChars = maxCharsPerLine * maxLines; // 10 * 3 = 30 characters max
   return text.length > maxTotalChars
     ? text.slice(0, maxTotalChars) + "..."
