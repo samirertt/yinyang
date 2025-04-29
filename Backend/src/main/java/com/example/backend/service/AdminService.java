@@ -3,9 +3,11 @@ package com.example.backend.service;
 import com.example.backend.models.Character;
 import com.example.backend.models.User;
 import com.example.backend.repository.CharacterRepository;
+import com.example.backend.ChatLogic.repository.ChatRepository;
 import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Year;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ public class AdminService {
     private UserRepository userRepository;
     @Autowired
     private CharacterRepository characterRepository;
+    @Autowired
+    private ChatRepository chatRepository;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -103,5 +107,28 @@ public class AdminService {
         }
 
         return result;
+    }
+
+    @Transactional
+    public void updateCharacterUsageCounts() {
+        // First, set all character usages to 0
+        List<Character> allCharacters = characterRepository.findAll();
+        for (Character character : allCharacters) {
+            character.setCharUsage(0);
+            characterRepository.save(character);
+        }
+
+        // Then update usage counts for characters that have chats
+        List<Object[]> usageCounts = chatRepository.countChatsPerCharacter();
+        for (Object[] result : usageCounts) {
+            int charId = (int) result[0];
+            long count = (long) result[1];
+            
+            Character character = characterRepository.findById(charId)
+                .orElseThrow(() -> new RuntimeException("Character not found with id: " + charId));
+            
+            character.setCharUsage(count);
+            characterRepository.save(character);
+        }
     }
 }
