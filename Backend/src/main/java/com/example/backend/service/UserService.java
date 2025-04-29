@@ -1,9 +1,11 @@
 package com.example.backend.service;
 
 
+import com.example.backend.dto.CharacterFilter;
 import com.example.backend.models.Character;
 import com.example.backend.repository.CharacterRepository;
 import com.example.backend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.backend.models.User;
@@ -30,7 +32,7 @@ public class UserService {
         return characterRepository.findAll();
     }
 
-    public List<String> getCharacterPersonalities() {
+    public List<CharacterFilter> getCharacterPersonalities() {
         return characterRepository.findDistinctPersonalities();
     }
 
@@ -108,6 +110,18 @@ public class UserService {
         // If no user is found with the given username, return false
         return false;
     }
+
+
+    public void incrementCharacterUsage(String characterName) {
+        Character character = characterRepository.findByCharName(characterName)
+                .orElseThrow(() -> new RuntimeException("Character not found"));
+
+        character.setCharUsage(character.getCharUsage() + 1);
+        characterRepository.save(character);
+
+    }
+
+
 }
 
 

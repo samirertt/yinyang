@@ -2,7 +2,7 @@ import CharacterGrid from "../components/UserStuff/CharacterGrid";
 import Footer from "../components/Footer";
 import SuggestionBanner from "../components/UserStuff/SuggestionBanner";
 import UserNavBar from "../components/UserStuff/UserNavBar";
-import { Navigate, NavigateFunction, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import FavouritesGrid from "../components/UserStuff/FavouritesGrid";
 import { useEffect } from "react";

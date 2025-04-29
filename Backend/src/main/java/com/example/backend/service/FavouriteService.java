@@ -38,9 +38,9 @@ public class FavouriteService {
 
     public void unlikeCharacter(String userName, String characterName) {
         User user = userRepository.findByUsername(userName)
-                        .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
         Character character = characterRepository.findByCharName(characterName)
-                        .orElseThrow(() -> new RuntimeException("Character not found"));
+                .orElseThrow(() -> new RuntimeException("Character not found"));
 
         favouriteRepository.deleteByUserAndCharacter(user, character);
     }

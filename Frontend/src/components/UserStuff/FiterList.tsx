@@ -6,20 +6,16 @@ import { useEffect, useState } from "react";
 import CharacterInfo from "./CharacterInfo";
 import { useCharacterContext } from "./CharacterContext";
 import { jwtDecode } from "jwt-decode";
+import { goToChat, mappingCharacterInfo } from "./constants";
 
-const FilterList: React.FC<UserNavBarProps> = ({
-  handleDelete,
- 
-}) => {
-
-  const {user, chatList, addChat, favourite} = useCharacterContext();
+const FilterList: React.FC<UserNavBarProps> = ({ handleDelete }) => {
+  const { user, chatList, addChat, favourite } = useCharacterContext();
   const location = useLocation();
   const { icon, title, bgColor } = location.state;
 
   const navigate = useNavigate();
 
   const [characters, setCharacters] = useState<Character[]>([]);
-
 
   useEffect(() => {
     const fetchCharacters = async () => {
@@ -38,46 +34,6 @@ const FilterList: React.FC<UserNavBarProps> = ({
     fetchCharacters();
   }, [title]);
 
-  const mappingCharacterInfo = (character: Character) => {
-    return {
-      img: character.charImg,
-      name: character.charName,
-      details: character.charDescription,
-      usage: character.charUsage,
-      Id: character.charId,
-    };
-  };
-
-
-  const goToChat = (character: {
-    img: string;
-    name: string;
-    details: string;
-    usage: number;
-    Id: number;
-  },Id:number ) =>{
-    addChat(character.name, character.img, character.details, Id);
-
-    if (!chatList.some((chat) => chat.name === character.name)) {
-      const temp = chatList;
-      temp.push({
-        name: character.name,
-        image: character.img,
-        details: character.details,
-      });
-      
-    }
-
-    navigate("/Chat", {
-      state: {
-        character: character,
-        historyList: chatList,
-        user: user, // Pass user data here
-        chatId: 0, // Pass chatId data here (if it's 0 then a new chat is created)
-      },
-      replace: true,
-    });
-  }
   const token = localStorage.getItem("jwtToken");
 
   // If no token, redirect to login
@@ -113,7 +69,6 @@ const FilterList: React.FC<UserNavBarProps> = ({
   }
 
   const checkIfLiked = (character: Character) => {
-    
     return favourite.some(
       (fav) =>
         fav.charName.trim().toLowerCase() ===
@@ -128,7 +83,8 @@ const FilterList: React.FC<UserNavBarProps> = ({
         username={username}
       />
       <div
-        className={`bg-gradient-to-b ${bgColor} from-[#yourColor] to-black rounded-t-4xl w-full h-45 md:h-90 relative overflow-hidden mt-25`}
+        className={`bg-gradient-to-b from-[#yourColor] to-black rounded-t-4xl w-full h-45 md:h-90 relative overflow-hidden mt-25`}
+      style={{backgroundColor: bgColor}}
       >
         <div
           className="absolute top-6 left-6 md:top-10 md:left-10 text-white text-4xl rounded-full h-10 w-10 cursor-pointer flex items-center justify-center hover:bg-[#818181]"
@@ -160,7 +116,16 @@ const FilterList: React.FC<UserNavBarProps> = ({
               <CharacterInfo
                 character={character}
                 liked={checkIfLiked(character)}
-                onClick={() => goToChat(mappingCharacterInfo(character),0)}
+                onClick={() =>
+                  goToChat(
+                    mappingCharacterInfo(character),
+                    0,
+                    addChat,
+                    user,
+                    navigate,
+                    chatList
+                  )
+                }
               />
             ))}
           </div>

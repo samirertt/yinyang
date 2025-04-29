@@ -1,52 +1,47 @@
-import friendlyImage from "../../assets/filter_image/friendly.jpeg";
-import aggressiveImage from "../../assets/filter_image/aggressive.jpeg";
-import calmImage from "../../assets/filter_image/calm.png";
-import mysteriousImage from "../../assets/filter_image/mysterious.jpeg";
-import pridefulImage from "../../assets/filter_image/prideful.jpeg";
 import { ArrowLeft } from "lucide-react";
 import { Navigate, useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 import UserNavBar from "./UserNavBar";
-import {UserNavBarProps} from "./UserNavBar"
+import { UserNavBarProps } from "./UserNavBar";
 import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
 
 interface GridItem {
-  title: string;
-  icon: string;
-  bgColor: string;
+  charImage: string;
+  charPersonality: string;
+  color: string;
 }
 
-const FilterPage : React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
-  
-  const categories: GridItem[] = [
-    {
-      title: "Friendly",
-      icon: friendlyImage,
-      bgColor: "bg-[#ffa500]",
-    },
-    {
-      title: "Aggressive",
-      icon: aggressiveImage,
-      bgColor: "bg-[#dc143c]",
-    },
-    {
-      title: "Calm",
-      icon: calmImage,
-      bgColor: "bg-[#4682b4]",
-    },
-    {
-      title: "Mysterious",
-      icon: mysteriousImage,
-      bgColor: "bg-[#301934]",
-    },
-    {
-      title: "Prideful",
-      icon: pridefulImage,
-      bgColor: "bg-[#b06239]",
-    },
-  ];
+const FilterPage: React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
+  const [categories, setCategories] = useState<GridItem[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/auth/characters/personalities"
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+
+        const withColours = data.map((item: GridItem) => ({
+          title: item.charPersonality,
+          icon: item.charImage,
+          color: getRandomColor(), // Assign a random color
+        }));
+        setCategories(withColours);
+        
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   const navigate = useNavigate();
-  
+
   const token = localStorage.getItem("jwtToken");
 
   // If no token, redirect to login
@@ -80,9 +75,14 @@ const FilterPage : React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
     console.error("Invalid token:", error);
     return <Navigate to="/Login" replace />;
   }
+
   return (
     <div className="bg-[#212121] min-h-screen pt-5 px-4 sm:px-6 md:px-10 lg:px-40">
-      <UserNavBar chatList={chatList} handleDelete={handleDelete} username={username} />
+      <UserNavBar
+        chatList={chatList}
+        handleDelete={handleDelete}
+        username={username}
+      />
       <div className="w-auto mx-auto pl-20 pr-20 pb-20 mt-10">
         <div className="flex justify-center align-start relative">
           <ArrowLeft
@@ -98,10 +98,10 @@ const FilterPage : React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
           {categories.map((category) => (
             <FilterCards
-              key={category.title} // Add a key for React list rendering
+              key={category.title} 
               icon={category.icon}
               title={category.title}
-              bgColor={category.bgColor}
+              bgColor={category.color}
             />
           ))}
         </div>
@@ -131,8 +131,9 @@ const FilterCards = ({
   return (
     <div className="w-full ">
       <div
-        className={`w-full h-20 md:h-28 ${bgColor} text-left rounded-lg transition-all duration-300 cursor-pointer flex items-center px-4 gap-5 overflow-hidden hover:shadow-[0_0_25px_5px_rgba(255,255,255,0.6)]`}
+        className={`w-full h-20 md:h-28  text-left rounded-lg transition-all duration-300 cursor-pointer flex items-center px-4 gap-5 overflow-hidden hover:shadow-[0_0_25px_5px_rgba(255,255,255,0.6)]`}
         onClick={handleClick}
+        style={{backgroundColor: bgColor}}
       >
         <h2 className=" text-sm md:text-2xl text-white">{title}</h2>
 
@@ -144,6 +145,20 @@ const FilterCards = ({
       </div>
     </div>
   );
+};
+
+const colors = [
+  "#ffa500",
+  "#dc143c",
+  "#4682b4",
+  "#301934",
+  "#b06239",
+  "#28a745",
+  "#6f42c1",
+];
+
+const getRandomColor = () => {
+  return colors[Math.floor(Math.random() * colors.length)];
 };
 
 export default FilterPage;

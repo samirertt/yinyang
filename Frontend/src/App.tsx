@@ -15,7 +15,7 @@ import TermsOfService from "./pages/terms";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserCharacterSelection from "./pages/UserDashboard";
 import Profile from "./components/UserStuff/ProfilePage";
-import UserSettings from "./components/UserStuff/NavigationsTab";
+
 import { CharacterContext } from "./components/UserStuff/CharacterContext";
 import { Character } from "./components/UserStuff/CharacterGrid";
 
