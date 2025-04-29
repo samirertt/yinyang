@@ -186,10 +186,18 @@ export default function Chat() {
                 const aiData =await modelResponse.json();
                 let aiReply = aiData.response.content;
                 
-                if(aiReply.includes("role="))
+                  if(aiReply.includes("role="))
                   {
                     console.log("Before: \n" + aiReply);
-                    aiReply = aiReply.slice(aiReply.search(' content"="')+13, aiReply.length);
+                    console.log(aiReply.search('="'));
+                    if(aiReply.search('="')==-1)
+                    {
+                      aiReply = aiReply.slice("role='assistant' content=".length, aiReply.length);
+                    }
+                    else
+                    {
+                      aiReply = aiReply.slice(aiReply.search('="')+2, aiReply.length);
+                    }
                   }
         
                   if(aiReply.includes("images=None"))
@@ -197,7 +205,7 @@ export default function Chat() {
                     
                     aiReply = aiReply.slice(0,aiReply.search('images=None')-2);
                     console.log("After: \n" + aiReply);
-                  }
+                  } 
                 
                 const aiBody = {chatId:data.chatId, message:aiReply};
                 const aiResponse = await fetch("http://localhost:8080/chat/sendMessage", {
@@ -282,7 +290,15 @@ export default function Chat() {
           if(aiReply.includes("role="))
           {
             console.log("Before: \n" + aiReply);
-            aiReply = aiReply.slice(aiReply.search(' content"="')+13, aiReply.length);
+            console.log(aiReply.search('="'));
+            if(aiReply.search('="')==-1)
+            {
+              aiReply = aiReply.slice("role='assistant' content=".length, aiReply.length);
+            }
+            else
+            {
+              aiReply = aiReply.slice(aiReply.search('="')+2, aiReply.length);
+            }
           }
 
           if(aiReply.includes("images=None"))

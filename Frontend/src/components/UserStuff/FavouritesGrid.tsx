@@ -148,16 +148,17 @@ const FavouritesGrid = () => {
             <button className='bg-[#efefef] rounded-full p-[20px] opacity-0' onClick={()=>{}}> 
               <img src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000" className='w-5' alt="" />
             </button>
-            <motion.div 
-              key={page} // Ensures re-animation on page change
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              custom={direction} 
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              className=" w-[90%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 h-fit justify-items-center"
-            >
+            {favourite.length > 0 ?
+              <motion.div 
+                key={page} // Ensures re-animation on page change
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                custom={direction} 
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className=" w-[90%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 h-fit justify-items-center"
+              >
                 {favourite.slice(numPerPage*page,numPerPage*(page+1)).map((character) => (
                   <div key={character.charId} className="relative flex w-70 sm:w-fit  h-30  items-center p-4 rounded-lg bg-[#303030] overflow-hidden ">
                     <button className="absolute right-3 top-3" >
@@ -183,8 +184,10 @@ const FavouritesGrid = () => {
                       </span>
                     </div>
                   </div>
-            ))}
-            </motion.div>
+                ))}
+              </motion.div> :
+              <p className="flex items-center"> No Favourite Characters Found! </p>
+            }
             <button className='bg-[#efefef] rounded-full p-[20px] opacity-0' onClick={()=>{}}> 
               <img src="https://img.icons8.com/?size=100&id=9149&format=png&color=000000" className='w-5 rotate-180' alt="" />
             </button>
