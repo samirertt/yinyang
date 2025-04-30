@@ -1,18 +1,31 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion"; // Import Framer Motion
+import { personalityTraits } from "./personalityTraits";
 
 const AddCharacter = () => {
   const [name, setName] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [details, setDetails] = useState("");
-  const [characteristics, setCharacteristics] = useState("");
+  const [characteristics, setCharacteristics] = useState<string>("");
+  const [selectedTraits, setSelectedTraits] = useState<string[]>([]);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Handle trait selection
+  const handleTraitToggle = (trait: string) => {
+    setSelectedTraits(prev => {
+      const newTraits = prev.includes(trait)
+        ? prev.filter(t => t !== trait)
+        : [...prev, trait];
+      setCharacteristics(newTraits.join(", "));
+      return newTraits;
+    });
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -119,6 +132,7 @@ const AddCharacter = () => {
       setPreview(null);
       setDetails("");
       setCharacteristics("");
+      setSelectedTraits([]);
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -249,14 +263,23 @@ const AddCharacter = () => {
           />
         </div>
         <div>
-          <label className="block text-[#acacaf] font-semibold mt-4">Character Characteristics</label>
-          <textarea
-            placeholder="Enter traits, abilities, or personality..."
-            className="border p-2 w-full rounded-md h-24 resize-none bg-[#2F2F2F] text-[#acacaf]"
-            value={characteristics}
-            onChange={(e) => setCharacteristics(e.target.value)}
-            required
-          />
+          <label className="block text-[#acacaf] font-semibold mt-4">Character Personality</label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-2">
+            {personalityTraits.map((trait) => (
+              <label
+                key={trait}
+                className="flex items-center space-x-2 p-2 rounded-md bg-[#2F2F2F] hover:bg-[#3A3A3A] cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedTraits.includes(trait)}
+                  onChange={() => handleTraitToggle(trait)}
+                  className="form-checkbox h-4 w-4 text-[#4CAF50] rounded border-[#3A3A3A]"
+                />
+                <span className="text-[#acacaf]">{trait}</span>
+              </label>
+            ))}
+          </div>
         </div>
 
         {/* Submit Button */}

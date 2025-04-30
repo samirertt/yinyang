@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { personalityTraits } from "./personalityTraits";
 
 interface Character {
   charId: number;
@@ -27,6 +28,8 @@ const EditCharacter = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [selectedTraits, setSelectedTraits] = useState<string[]>([]);
+
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
@@ -50,6 +53,29 @@ const EditCharacter = () => {
 
     fetchCharacters();
   }, []);
+
+  // Sync selectedTraits with the current character's traits when opening the popup
+  useEffect(() => {
+    if (isPopupOpen && selectedCharacter) {
+      const traits = selectedCharacter.charPersonality
+        ? selectedCharacter.charPersonality.split(',').map(t => t.trim()).filter(Boolean)
+        : [];
+      setSelectedTraits(traits);
+      setNewCharacteristics(traits.join(", "));
+    }
+    // eslint-disable-next-line
+  }, [isPopupOpen, selectedCharacter]);
+
+  // Handle trait selection
+  const handleTraitToggle = (trait: string) => {
+    setSelectedTraits(prev => {
+      const newTraits = prev.includes(trait)
+        ? prev.filter(t => t !== trait)
+        : [...prev, trait];
+      setNewCharacteristics(newTraits.join(", "));
+      return newTraits;
+    });
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -270,8 +296,8 @@ const EditCharacter = () => {
 
       {/* Edit Popup */}
       {isPopupOpen && selectedCharacter && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-[#1A1A1A] p-6 rounded-lg shadow-lg w-96 text-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center pt-12">
+          <div className="bg-[#1A1A1A] p-6 rounded-lg shadow-lg w-140 text-center max-h-[87vh] overflow-y-auto">
             <img 
               src={imagePreview || selectedCharacter.charImg} 
               alt={newName} 
@@ -329,15 +355,26 @@ const EditCharacter = () => {
                   required
                 ></textarea>
 
-                {/* Characteristics Input */}
-                <textarea
-                  placeholder="Characteristics"
-                  className="bg-[#2F2F2F] text-[#acacaf] border border-[#3A3A3A] rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50] resize-none"
-                  value={newCharacteristics}
-                  onChange={(e) => setNewCharacteristics(e.target.value)}
-                  rows={3}
-                  required
-                ></textarea>
+                {/* Characteristics Input - replaced with checkboxes */}
+                <div>
+                  <label className="block text-[#acacaf] font-semibold mt-2">Character Personality</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-2">
+                    {personalityTraits.map((trait) => (
+                      <label
+                        key={trait}
+                        className="flex items-center space-x-2 p-2 rounded-md bg-[#2F2F2F] hover:bg-[#3A3A3A] cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedTraits.includes(trait)}
+                          onChange={() => handleTraitToggle(trait)}
+                          className="form-checkbox h-4 w-4 text-[#4CAF50] rounded border-[#3A3A3A]"
+                        />
+                        <span className="text-[#acacaf]">{trait}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <div className="flex justify-between mt-4">
