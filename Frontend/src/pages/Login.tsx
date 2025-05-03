@@ -11,6 +11,7 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const customConfig: Config = {
@@ -23,13 +24,11 @@ function Login() {
     setIsEmailClicked(true);
   };
 
-  // Modified handleLogin to optionally accept a credentials object.
   const handleLogin = async (
     e: React.FormEvent<HTMLFormElement>,
     creds?: { username: string; password: string }
   ) => {
     e.preventDefault();
-    // Use passed credentials if available; otherwise, use state values.
     const credentials = creds || { username, password };
 
     try {
@@ -45,19 +44,11 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         const { token } = data;
-
-        // Store JWT token in localStorage
         localStorage.setItem("jwtToken", token);
-        console.log("Token stored in localStorage:", token);
-
-        // Decode the JWT token to extract the roles
         const decoded: any = jwtDecode(token);
         const roles = decoded.roles || [];
-        console.log("Decoded roles:", roles);
-
         Auth.login(token);
 
-        // Redirect based on the user's role
         if (roles.includes("admin")) {
           navigate("/AdminDashboard", { state: { username: credentials.username } });
         } else if (roles.includes("moderator")) {
@@ -78,7 +69,6 @@ function Login() {
     <div className="flex items-center justify-center min-h-screen bg-[#212121] relative overflow-x-hidden">
       <LoginNav username={username} />
 
-      {/* GIF Background Card */}
       <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[95vw] max-w-[900px] h-[50vh] max-h-[450px] rounded-[20px] md:rounded-[30px] shadow-2xl overflow-hidden">
         <img
           src="https://media.giphy.com/media/wM2jsoKbVTur6/giphy.gif"
@@ -87,7 +77,6 @@ function Login() {
         />
       </div>
 
-      {/* Login Card */}
       <div
         className={`absolute bg-[#121212] p-4 sm:p-6 rounded-xl md:rounded-2xl shadow-lg text-white w-[95vw] max-w-[350px] transition-all duration-500 ease-in-out ${
           isEmailClicked
@@ -122,15 +111,11 @@ function Login() {
 
               <button
                 onClick={async () => {
-                  // Generate a random username for guest
                   const randomName: string = uniqueNamesGenerator({
                     dictionaries: [adjectives, animals],
                   });
-                  // Optionally update state if needed for re-rendering UI.
                   setUsername(randomName);
                   setPassword("Guest");
-
-                  // Create complete guest signup data object
                   const guestFormData = {
                     firstName: randomName,
                     surname: "Guest",
@@ -139,25 +124,17 @@ function Login() {
                     password: "Guest",
                     confirmPassword: "Guest",
                   };
-
-                  // Wait for state updates (if any) to propagate
                   await new Promise((resolve) => setTimeout(resolve, 0));
-
                   try {
-                    // Signup request with all required fields
                     const response = await fetch("http://localhost:8080/auth/signup", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify(guestFormData),
                     });
-                    console.log("Signup data:", JSON.stringify(guestFormData));
-
                     const data = await response.json();
                     if (response.ok) {
                       setError("User registered successfully!");
-                      // Optional delay (if needed) to ensure backend is ready for login
                       await new Promise((resolve) => setTimeout(resolve, 1000));
-                      // Call handleLogin with explicitly passed guest credentials
                       await handleLogin(
                         { preventDefault: () => {} } as React.FormEvent<HTMLFormElement>,
                         { username: randomName, password: "Guest" }
@@ -210,13 +187,42 @@ function Login() {
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full p-1.5 sm:p-2 bg-gray-900 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-white text-xs sm:text-sm md:text-base"
               />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-1.5 sm:p-2 bg-gray-900 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-white text-xs sm:text-sm md:text-base"
-              />
+              
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full p-1.5 sm:p-2 bg-gray-900 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-white text-xs sm:text-sm md:text-base pr-8"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                >
+                  {showPassword ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="w-4 h-4 sm:w-5 sm:h-5"
+                      fill="currentColor"
+                    >
+                      <path d="M12 5c4.378 0 8.275 2.943 9.593 7.054a1 1 0 0 1 0 .892C20.275 17.057 16.378 20 12 20s-8.275-2.943-9.593-7.054a1 1 0 0 1 0-.892C3.725 7.943 7.622 5 12 5zm0 2a8 8 0 0 0-7.032 4.125C5.403 13.66 8.23 16 12 16s6.597-2.34 7.032-4.875A8 8 0 0 0 12 7zm0 3a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="w-4 h-4 sm:w-5 sm:h-5"
+                      fill="currentColor"
+                    >
+                      <path d="M2.808 1.393l19.799 19.8-1.415 1.414-3.608-3.608-2.673 2.673a8 8 0 0 1-9.879-1.901l-1.838 1.837-1.414-1.414 1.837-1.838a7.963 7.963 0 0 1-2.696-3.804A1 1 0 0 1 2.93 13H5v-2H2.93a1 1 0 0 1-.997-.923c-.055-.677-.108-1.276.217-1.885C2.756 7.024 3.345 5.71 4.282 4.45L1.393 2.808l1.415-1.415zM20.515 16.846l-1.592-1.592c.204-.458.375-.918.513-1.36a1 1 0 0 1 .997-.923H19v2h1.07c-.03.298-.064.59-.107.876zm-2.86-2.86l-1.473-1.473c.509-.157.92-.52 1.122-1.013.313-.76.204-1.638-.222-2.554C16.716 7.755 14.91 7 12 7c-.652 0-1.274.067-1.862.192L8.333 5.36a8.019 8.019 0 0 1 3.667-.36c3.377.476 6.168 2.694 7.395 5.276.112.233.215.47.306.711a9.954 9.954 0 0 1-1.086 2.239z"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
+
               {error && (
                 <p className="text-red-500 text-xs sm:text-sm">{error}</p>
               )}
@@ -228,7 +234,15 @@ function Login() {
               </button>
             </form>
           )}
-
+          <p className="text-xs text-gray-400 mt-2 sm:mt-3 text-center">
+            Forgot your password?{" "}
+            <span
+              className="text-blue-400 cursor-pointer hover:underline"
+              onClick={() => navigate("/ResetPassword")}
+            >
+              Reset it here
+            </span>
+          </p>
           <p className="text-[9px] xs:text-[10px] sm:text-xs text-gray-500 mt-2 sm:mt-3 text-center">
             By continuing, you agree with the{" "}
             <a href="/TermsOfService" className="underline">
