@@ -62,7 +62,11 @@ public class UserService {
 
         if (userModel.isPresent()) {
             User user = userModel.get();
-            if (passwordEncoder.matches(rawPassword, user.getPassword())) {
+//REMOVE THE NEXT IF STATEMENT BEFORE PRESENTATION
+            if (passwordEncoder.matches( rawPassword,passwordEncoder.encode(user.getPassword()) ) ) {
+                return user;
+            }
+            if (passwordEncoder.matches( rawPassword,user.getPassword() ) ) {
                 return user;
             }
         }
@@ -92,6 +96,10 @@ public class UserService {
 
     public List<Character> searchCharactersByName(String name) {
         return characterRepository.findByCharNameContainingIgnoreCase(name);
+    }
+
+    public Optional<Character> searchCharactersById(Integer Id) {
+        return characterRepository.findById(Id);
     }
 
     public String getProfileImage(String username) {

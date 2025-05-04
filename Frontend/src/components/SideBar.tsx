@@ -28,6 +28,7 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
   
   
   const [activeCharacter,setActiveCharacter] = useState(props.character);
+  const [activeChat,setActiveChat] = useState(props.chatId);
 
   const [user,setUser] = useState(props.user);
   // Retrieve token from localStorage
@@ -45,17 +46,17 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
 
   const changeCharacter = (nameP:string, imageP:string,detailsP:string,chatIdP:number) =>
   {
-    const character = {
-      img:imageP,
-      name:nameP,
-      details:detailsP,
-      chatId:chatIdP,
-      usage:0,
-      Id:0
+    const character:Character = {
+      charImg: imageP,
+      charName: nameP,
+      charId: 0,
+      charDescription: detailsP,
+      charUsage: 0
 
     }
     setActiveCharacter(character);
-    props.updateActive(character);
+    setActiveChat(chatIdP);
+    props.updateActive(character,chatIdP);
   }
 
   const navigate = useNavigate();
@@ -100,6 +101,7 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
   const getUserChats = async ()=>
     {
         const body = {userId:user.userId};
+        
         try 
         {
           const response = await fetch("http://localhost:8080/chat/getUserChats", {
@@ -285,17 +287,17 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
           <>
          <div className="p-4 z-0 border-b border-[var(--gray-black)] flex flex-col items-center">
         <img
-          src={activeCharacter.img}
+          src={activeCharacter.charImg}
           alt="Avatar"
           className="w-38 h-38 rounded-full border-2 border-[var(--gray-black)]"
         />
-        <h2 className="text-xl font-semibold mt-2 text-center">{activeCharacter.name}</h2>
+        <h2 className="text-xl font-semibold mt-2 text-center">{activeCharacter.charName}</h2>
       </div>
 
       <div className="px-4 py-3">
         <h3 className="text-xl font-semibold">Bio</h3>
         <p className="text-xm mt-1 text-justify">
-          {activeCharacter.details}
+          {activeCharacter.charDescription}
         </p>
       </div>
 

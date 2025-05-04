@@ -34,31 +34,33 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
   //used for simplicity
   const mappingCharacterInfo = (character: Character) => {
     return {
-      img: character.charImg,
-      name: character.charName,
-      details: character.charDescription,
-      usage: character.charUsage,
-      Id: character.charId,
+      charImg: character.charImg,
+      charName: character.charName,
+      charDescription: character.charDescription,
+      charUsage: character.charUsage,
+      charId: character.charId,
     };
   };
   const goToChat = (
     character: {
-      img: string;
-      name: string;
-      details: string;
-      usage: number;
-      Id: number;
+      
+      charImg: string;
+      charName: string;
+      charId: number; // Using uppercase "Id" to match your format
+      charDescription: string;
+      charUsage: number;
+      
     },
     id: number
   ) => {
-    onCharacterSelect(character.name, character.img, character.details, id);
+    onCharacterSelect(character.charName, character.charImg, character.charDescription, id);
 
-    if (!myList.some((chat) => chat.name === character.name)) {
+    if (!myList.some((chat) => chat.name === character.charName)) {
       const temp = myList;
       temp.push({
-        name: character.name,
-        image: character.img,
-        details: character.details,
+        name: character.charName,
+        image: character.charImg,
+        details: character.charDescription,
       });
       setMyList(temp);
     }

@@ -4,8 +4,9 @@ import Typing from "../components/Typing";
 import MessageBubble from "../components/MessageBubble";
 import SideBar from "../components/SideBar";
 import ChatNav from "../components/ChatNav";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useParams, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { Character } from "../components/UserStuff/CharacterGrid";
 import { uniqueNamesGenerator, Config, adjectives, colors, animals } from 'unique-names-generator';
 // Define the shape of your decoded token
 interface DecodedToken {
@@ -28,6 +29,7 @@ export default function Chat() {
 
   // Retrieve token from localStorage
   const token = localStorage.getItem("jwtToken");
+  const navigate = useNavigate();
 
   // If no token, redirect to login
   if (!token) {
@@ -62,17 +64,82 @@ export default function Chat() {
 
   // Create a user object from decoded data
   const user = { username, userId };
+  const { id } = useParams();
+  
 
   // Getting the username from location.state if available (optional)
   const location = useLocation();
-  const character = location.state?.character;
+  const [character,setCharacter] = useState<Character>({
+    charImg: "",
+    charName: "",
+    charId: 0,
+    charDescription: "",
+    charUsage: 0
+  });
+
   const [list, setList] = useState<
     { name: string; image: string; details: string; chatId: number }[]
   >([]);
   const [chatId, setChatId] = useState<number>(
-    location.state?.chatId || 0
+    location.state?.chatId || id?  parseInt(id? id:"0",10) : 0
   );
   const [firstRender, setFirstRender] = useState(true);
+
+  //Checks Shared Id
+  useEffect(()=>
+    {
+      const getCharFromId = async (charId:number)=>
+      {
+        const body = { charId: charId };
+
+        try {
+          const response = await fetch("http://localhost:8080/auth/characters", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              
+            },
+            body: JSON.stringify(body),
+          });
+          
+          if (response.ok) {
+            
+            const data = await response.json();
+            
+            return data;
+            
+          } else {
+            setError("Char Not Found!");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          setError("Couldn't get character!");
+        }
+      }
+      
+      const fetchCharId = async ()=>
+        {
+          const charId = await retrieveMessages(chatId);
+          const sharedChar = await getCharFromId(charId);
+          
+          setCharacter(sharedChar);
+        }
+      if(id)
+      {  
+        setChatId(parseInt(id,10));
+        
+        fetchCharId();
+      }
+      else
+      {
+        setCharacter(location.state?.character);
+      }
+    },[]);
+    
+    useEffect(() => {
+      setActiveCharacter(character);
+
+    }, [character]);
 
   function separateMessages(chatText: string): void {
     const allMessages = chatText.split("$$").filter((msg) => msg.trim() !== "");
@@ -102,10 +169,18 @@ export default function Chat() {
         },
         body: JSON.stringify(body),
       });
-
+      
       if (response.ok) {
+        
         const data = await response.json();
+        
         separateMessages(data.chatText);
+        if(id)
+        {
+
+          return data.charId;
+        }
+        
       } else {
         setError("Chat Not Found!");
       }
@@ -117,10 +192,20 @@ export default function Chat() {
 
   const sendMessage = async (message: string) => 
   {  
-
-    if(chatId==0)
+    if(chatId==0 || id)
     {
-      const body = {charId:character.Id, userId: userId, message:""};
+      
+      const body = {charId:character.charId, userId: userId, message:""};
+      if(id)
+      {
+        let tempMessages = ""
+        messages.map((msg)=>{
+          tempMessages+=msg.text+"$$";
+        });
+
+        body.message= tempMessages;
+      }
+
       try 
       {
         const response = await fetch("http://localhost:8080/chat/createChat", {
@@ -148,7 +233,7 @@ export default function Chat() {
           setTyping(true);
 
           const stringId = "" + data.chatId;
-          const stringCharId = "" + character.Id;
+          const stringCharId = "" + character.charId;
           const stringUserId = "" + userId;
 
           const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
@@ -178,8 +263,7 @@ export default function Chat() {
 
               if(!userResponse.ok)
               {
-                setError("Couldn't send message!");
-                //Delete Empty message
+                setError("Couldn't send message!");              
               }
               else
               {
@@ -226,22 +310,27 @@ export default function Chat() {
                     ]);
                     setTyping(false);
                   }, 1000);
+                  navigate("/Chat", {
+                    state: {
+                      character: character,
+                      historyList: list,
+                      user: user, // Pass user data here
+                      chatId: chatId, // Pass chatId data here (if it's 0 then a new chat is created)
+                    },
+                    replace: true,
+                  });
                 }
                 else
                 {
                   setError("Couldn't send Reply!");
                 }
               }
-             
             }
             else
             {
               setError("Couldn't reach the model!");
-
             }
-
         } 
-        
       } 
       catch (error) 
       {
@@ -254,6 +343,7 @@ export default function Chat() {
     try 
     {
       const body = {chatId:chatId, message:message};
+      
       const response = await fetch("http://localhost:8080/chat/sendMessage", {
         method: "POST",
         headers: {
@@ -266,14 +356,13 @@ export default function Chat() {
       if (response.ok) 
       {
         setMessages([...messages, { text: message, sender: "user" }]);
-        setTyping(true);
+        setTyping(true);       
 
         const stringId = "" + chatId;
-        const stringCharId = "" + character.Id;
+        let stringCharId = "" + character.charId;
         const stringUserId = "" + userId;
 
         const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
-
         const modelResponse = await fetch("https://stallion-valued-painfully.ngrok-free.app/chat", {
           method: "POST",
           headers: {
@@ -289,8 +378,6 @@ export default function Chat() {
 
           if(aiReply.includes("role="))
           {
-            console.log("Before: \n" + aiReply);
-            console.log(aiReply.search('="'));
             if(aiReply.search('="')==-1)
             {
               aiReply = aiReply.slice("role='assistant' content=".length, aiReply.length);
@@ -303,14 +390,8 @@ export default function Chat() {
 
           if(aiReply.includes("images=None"))
           {
-            
             aiReply = aiReply.slice(0,aiReply.search('images=None')-2);
-            console.log("After: \n" + aiReply);
           }
-
-          
-
-          
 
           const aiBody = {chatId:chatId, message:aiReply};
           const aiResponse = await fetch("http://localhost:8080/chat/sendMessage", {
@@ -337,12 +418,11 @@ export default function Chat() {
           {
             setError("Couldn't send Reply!");
           }
-
         }
         else
         {
           setError("Couldn't reach the model!");
-          
+
         }
 
       } 
@@ -360,17 +440,17 @@ export default function Chat() {
   };
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }) }, [messages, typing]);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }) 
+  }, [messages, typing]);
 
-  // Passing received character and list from location.state
-  const [receivedCharacter, setReceivedCharacter] = useState(location.state.character);
-  
 
-  const [activeCharacter,setActiveCharacter] = useState(receivedCharacter);
-  const updateActive:any = (character:any) =>
+
+  const [activeCharacter,setActiveCharacter] = useState(character);
+  const updateActive:any = (character:any,newChatId:number) =>
   {
     setActiveCharacter(character);
-    setChatId(character.chatId);
+    console.log(newChatId);
+    setChatId(newChatId);
   }
 
   useEffect(()=>
@@ -382,8 +462,8 @@ export default function Chat() {
       }
       retrieveMessages(chatId);
       
-      
     },[activeCharacter]);
+    
 
   return (
     <div>
@@ -394,7 +474,7 @@ export default function Chat() {
           <ChatNav user={user} />
           <div className="pt-15 mb-20 w-89 md:min-w-[10px] lg:min-w-[850px] items-center">
             {messages.map((msg, index) => (
-              <MessageBubble key={index} text={msg.text} sender={msg.sender} image={activeCharacter.img} anim={!firstRender} />
+              <MessageBubble key={index} text={msg.text} sender={msg.sender} image={activeCharacter.charImg} anim={!firstRender} />
             ))}
             <InputBar sendMessage={sendMessage} />
           </div>

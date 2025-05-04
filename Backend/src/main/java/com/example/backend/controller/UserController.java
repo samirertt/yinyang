@@ -4,6 +4,7 @@ import com.example.backend.dto.CharacterFilter;
 import com.example.backend.dto.CharacterUsageDto;
 import com.example.backend.dto.FavouriteRequest;
 import com.example.backend.models.Character;
+import com.example.backend.models.ChatModel;
 import com.example.backend.models.User;
 import com.example.backend.repository.CharacterRepository;
 import com.example.backend.security.JwtUtil; // Import your JwtUtil class
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.time.LocalDate;
 import java.util.*;
@@ -33,6 +36,9 @@ public class UserController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @GetMapping("/{username}/profile-image")
@@ -68,7 +74,7 @@ public class UserController {
             if (user.getRoles() == null || user.getRoles().isEmpty()) {
                 user.setRoles(Collections.singletonList("user"));
             }
-
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             User newUser = userService.registerUser(user);
             return ResponseEntity.ok(newUser);
         } catch (Exception e) {
@@ -95,6 +101,23 @@ public class UserController {
     @GetMapping("/characters/search")
     public List<Character> searchCharacters(@RequestParam String name) {
         return userService.searchCharactersByName(name);
+    }
+
+    @PostMapping("/characters")
+    public ResponseEntity<Object> getCharacter(@RequestBody Map<String, Integer> credentials) {
+        Integer charId = credentials.get("charId");
+
+        Optional<Character> character =  userService.searchCharactersById(charId);
+
+        if(character.isPresent())
+        {
+            return ResponseEntity.ok(character.get());
+        }
+        else
+        {
+            return ResponseEntity.status(404).body("Character not found");
+        }
+
     }
 
 
