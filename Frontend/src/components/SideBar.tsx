@@ -269,75 +269,72 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
         </div>
       )}
 
-      <div
-        className={`fixed z-10 top-15 right-0 transition-all duration-300 bg-[var(--page)] text-[var(--white)] border border-[var(--gray-black)] h-screen overflow-hidden ${
-          isInfoCollapsed ? "w-0 md:w-0 lg:w-0" : "w-100 md:w-100 lg:w-[230px]"
-        }`}
+      <button
+        className="fixed z-50 right-[calc(220px+10px)] top-16 rounded-lg px-1 text-token-text-secondary transition-all duration-1000 ease-in-out cursor-pointer"
+        aria-label="Toggle info Bar"
+        data-testid="toggle-infoBar-button"
+        onClick={toggleInfoBar}
       >
-        <button
-        className="fixed z-50 right-5 top-16 rounded-lg px-1 text-token-text-secondary transition-all duration-1000 ease-in-out cursor-pointer"          
-          aria-label="Toggle info Bar"
-          data-testid="toggle-infoBar-button"
-          onClick={toggleInfoBar}
-        >
-          <img src={Info} alt="info icon" className="lg:w-5 lg:h-5 w-4 h-4 cursor-pointer" />
-        </button>
-        
+        <img src={Info} alt="info icon" className="lg:w-5 lg:h-5 w-4 h-4 cursor-pointer" />
+      </button>
+
+      <div
+        className={`fixed z-10 top-0 right-0 transition-all duration-300 bg-[var(--page)] text-[var(--white)] border border-[var(--gray-black)] h-screen ${
+          isInfoCollapsed ? "w-0 md:w-0 lg:w-0" : "w-100 md:w-100 lg:w-[230px]"
+        } flex flex-col`}
+      >
         {!isInfoCollapsed && (
-          <>
-         <div className="p-4 z-0 border-b border-[var(--gray-black)] flex flex-col items-center">
-        <img
-          src={activeCharacter.charImg}
-          alt="Avatar"
-          className="w-38 h-38 rounded-full border-2 border-[var(--gray-black)]"
-        />
-        <h2 className="text-xl font-semibold mt-2 text-center">{activeCharacter.charName}</h2>
+          <div className="flex-1 flex flex-col overflow-y-auto">
+            <div className="p-4 z-0 border-b border-[var(--gray-black)] flex flex-col items-center mt-12">
+              <img
+                src={activeCharacter.charImg}
+                alt="Avatar"
+                className="w-38 h-38 rounded-full border-2 border-[var(--gray-black)]"
+              />
+              <h2 className="text-xl font-semibold mt-2 text-center">{activeCharacter.charName}</h2>
+            </div>
+            <div className="px-4 py-3">
+              <h3 className="text-xl font-semibold">Bio</h3>
+              <p className="text-xm mt-1 text-justify">
+                {activeCharacter.charDescription}
+              </p>
+            </div>
+            <nav className="mt-4 space-y-2 font-semibold px-4 z-100">
+              <button onClick={goToDashboard} className=" flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
+                <img
+                  src={NewChat}
+                  alt="New Chat icon"
+                  className="w-6 h-6 transition-transform duration-200 group-hover:scale-110 "
+                />
+                <span>New chat</span>
+              </button>
+              <button className="flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
+                <img
+                  src={History}
+                  alt="History icon"
+                  className="w-6 h-6 transition-transform duration-200 group-hover:scale-110"
+                />
+                <span>History</span>
+              </button>
+              <button className="flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer" onClick={()=>{
+                    props.chatId==0 ? "" : setShareWindow(!shareWindow)
+                    
+                  }}>
+                <img
+                  src={SendIcon}
+                  alt="Send chat icon"
+                  className="w-6 h-6 transition-transform duration-200 group-hover:scale-110 invert"
+                ></img>
+                <span>Share Chat</span>
+              </button>
+              <div className="rounded-xl self-center items-center z-22">
+                {shareWindow ? <ShareWindow url={shareUrl}/>:''}
+              </div>
+            </nav>
+          </div>
+        )}
       </div>
-
-      <div className="px-4 py-3">
-        <h3 className="text-xl font-semibold">Bio</h3>
-        <p className="text-xm mt-1 text-justify">
-          {activeCharacter.charDescription}
-        </p>
-      </div>
-
-      <nav className="mt-4 space-y-2 font-semibold px-4 z-100">
-        <button onClick={goToDashboard} className=" flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
-          <img
-            src={NewChat}
-            alt="New Chat icon"
-            className="w-6 h-6 transition-transform duration-200 group-hover:scale-110 "
-          />
-          <span>New chat</span>
-        </button>
-        <button className="flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
-          <img
-            src={History}
-            alt="History icon"
-            className="w-6 h-6 transition-transform duration-200 group-hover:scale-110"
-          />
-          <span>History</span>
-        </button>
-        <button className="flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer" onClick={()=>{
-              props.chatId==0 ? "" : setShareWindow(!shareWindow)
-              
-            }}>
-          <img
-            src={SendIcon}
-            alt="Send chat icon"
-            className="w-6 h-6 transition-transform duration-200 group-hover:scale-110 invert"
-          ></img>
-          <span>Share Chat</span>
-        </button>
-        <div className="rounded-xl self-center items-center z-22">
-          {shareWindow ? <ShareWindow url={shareUrl}/>:''}
-        </div>
-      </nav>
-      </>
-    )}
     </div>
-    
-  </div>
   );
 };
 
