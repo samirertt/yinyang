@@ -3,11 +3,12 @@ import SideBar from "../assets/SideBar.svg";
 import Search from "../assets/Search.svg";
 import NewChat from "../assets/NewChat.svg";
 import History from "../assets/History.svg";
-import Pin from "../assets/Pin.svg";
+import SendIcon from "../assets/SendIcon.svg";
 import Cross from "../assets/Cross.svg";
 import Info from "../assets/info.svg";
 import { useNavigate } from "react-router-dom";
 import { Character } from "./UserStuff/CharacterGrid";
+import ShareWindow from "./ShareWindow";
 
 
 interface SidebarProps {
@@ -24,11 +25,14 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   
+  
+  
   const [activeCharacter,setActiveCharacter] = useState(props.character);
 
   const [user,setUser] = useState(props.user);
   // Retrieve token from localStorage
   const token = localStorage.getItem("jwtToken");
+  const [shareWindow, setShareWindow] = useState(false);
   
 
   const toggleCollapse = () => {
@@ -168,7 +172,13 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
         getUserChats();
         
       },[props.chatId]);
-
+    
+      
+    const key = "YinYang"
+    let shareUrl = "http://localhost:5173/Chat/Share/"+props.chatId;
+    
+     
+  
   return (
     <div className="flex relative h-screen">
       {isCollapsed && (
@@ -306,18 +316,25 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
           />
           <span>History</span>
         </button>
-        <button className=" flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer">
+        <button className="flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer" onClick={()=>{
+              props.chatId==0 ? "" : setShareWindow(!shareWindow)
+              
+            }}>
           <img
-            src={Pin}
-            alt="Pin icon"
-            className="w-6 h-6 transition-transform duration-200 group-hover:scale-110"
-          />
-          <span>Pinned messages</span>
+            src={SendIcon}
+            alt="Send chat icon"
+            className="w-6 h-6 transition-transform duration-200 group-hover:scale-110 invert"
+          ></img>
+          <span>Share Chat</span>
         </button>
+        <div className="rounded-xl self-center items-center z-22">
+          {shareWindow ? <ShareWindow url={shareUrl}/>:''}
+        </div>
       </nav>
       </>
     )}
     </div>
+    
   </div>
   );
 };
