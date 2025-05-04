@@ -15,9 +15,9 @@ import TermsOfService from "./pages/terms";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserCharacterSelection from "./pages/UserDashboard";
 import Profile from "./components/UserStuff/ProfilePage";
-
 import { CharacterContext } from "./components/UserStuff/CharacterContext";
 import { Character } from "./components/UserStuff/CharacterGrid";
+import ResetPassword from "./components/ResetPassword";
 
 const App: React.FC = () => {
   const [chatList, setChatList] = useState<
@@ -85,6 +85,7 @@ const App: React.FC = () => {
           <Route path="/AboutUs" element={<AboutUs />} />
           <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
           <Route path="/TermsOfService" element={<TermsOfService />} />
+          <Route path="/ResetPassword" element={<ResetPassword />} />
           <Route
             path="/"
             element={

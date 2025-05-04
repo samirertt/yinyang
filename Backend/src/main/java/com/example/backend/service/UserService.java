@@ -7,6 +7,7 @@ import com.example.backend.repository.CharacterRepository;
 import com.example.backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.backend.models.User;
 
@@ -19,7 +20,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private CharacterRepository characterRepository;
 
@@ -49,15 +51,22 @@ public class UserService {
     }
 
 
-    public User validateUser(String username, String password) {
-        Optional<User> userModel = userRepository.findByUsername(username);
+    public User validateUser(String identifier, String rawPassword) {
+        Optional<User> userModel;
+
+        if (identifier.contains("@")) {
+            userModel = userRepository.findByEmail(identifier);
+        } else {
+            userModel = userRepository.findByUsername(identifier);
+        }
+
         if (userModel.isPresent()) {
-            if (userModel.get().getPassword().equals(password)) {
-                return userModel.get();
-            } else {
-                return null;
+            User user = userModel.get();
+            if (passwordEncoder.matches(rawPassword, user.getPassword())) {
+                return user;
             }
         }
+
         return null;
     }
 

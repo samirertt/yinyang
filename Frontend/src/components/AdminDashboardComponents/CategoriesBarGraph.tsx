@@ -176,44 +176,48 @@ const personalityData = Object.entries(personalityCountMap).map(([title, count])
       </div>
 
       {/* Character Personality Chart */}
-      <div className="w-full max-w-4xl h-[90%] sm:h-[350px] md:h-[90%] p-4 sm:p-5 md:col-span-2 justify-self-center bg-[#3e3e3e] rounded-xl">
+      <div className="w-full max-w-6xl h-[90%] sm:h-[350px] md:h-[90%] p-4 sm:p-5 md:col-span-2 justify-self-center bg-[#3e3e3e] rounded-xl">
         <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-4">Characters by Personality</h2>
-        <ResponsiveContainer>
-          <BarChart
-            data={personalityData}
-            margin={{ top: 20, right: 10, left: 0, bottom: 20 }}
-          >
-            <XAxis 
-              dataKey="title" 
-              stroke="#ffffff"
-              fontSize={12}
-              tickLine={false}
-              axisLine={true}
-            />
-            <YAxis 
-              stroke="#ffffff"
-              fontSize={12}
-              tickLine={false}
-              axisLine={true}
-            />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: '#2F2F2F', 
-                border: 'none',
-                borderRadius: '8px',
-                color: '#ffffff'
-              }}
-            />
-            <Bar dataKey="characters" barSize={60}>
-              {personalityData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={colors[index % colors.length]}
+        <div style={{ overflowX: 'auto', width: '100%' }}>
+          <div style={{ minWidth: Math.max(700, personalityData.length * 100) }}>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart
+                data={personalityData}
+                margin={{ top: 20, right: 10, left: 0, bottom: 20 }}
+              >
+                <XAxis 
+                  dataKey="title" 
+                  stroke="#ffffff"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={true}
                 />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+                <YAxis 
+                  stroke="#ffffff"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={true}
+                />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: '#2F2F2F', 
+                    border: 'none',
+                    borderRadius: '8px',
+                    color: '#ffffff'
+                  }}
+                />
+                <Bar dataKey="characters" barSize={60}>
+                  {personalityData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={colors[index % colors.length]}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </div>
     </div>
   );

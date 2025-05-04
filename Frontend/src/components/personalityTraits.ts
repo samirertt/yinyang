@@ -1,0 +1,23 @@
+export const personalityTraits = [
+  "Friendly",
+  "Professional",
+  "Humorous",
+  "Serious",
+  "Aggressive",
+  "Creative",
+  "Analytical",
+  "Prideful",
+  "Supportive",
+  "Challenging",
+  "Patient",
+  "Mysterious",
+  "Direct",
+  "Empathetic",
+  "Logical",
+  "Enthusiastic",
+  "Calm",
+  "Adventurous",
+  "Hostile",
+  "Crazy",
+  "Flirty"
+]; 

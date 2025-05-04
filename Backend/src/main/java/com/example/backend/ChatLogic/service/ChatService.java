@@ -1,9 +1,12 @@
 package com.example.backend.ChatLogic.service;
 
+import com.example.backend.models.Character;
 import com.example.backend.models.ChatModel;
 import com.example.backend.ChatLogic.repository.ChatRepository;
+import com.example.backend.repository.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,9 @@ import java.util.Optional;
 public class ChatService {
     @Autowired
     private ChatRepository chatRepository;
+
+    @Autowired
+    private CharacterRepository characterRepository;
 
     public Optional<ChatModel> getChatById(int Id) {
         return chatRepository.findById(Id);
@@ -86,6 +92,21 @@ public class ChatService {
         return chatRepository.existsById(Id);
     }
 
+    @Transactional
+    public void updateCharacterUsageCounts() {
+        List<Object[]> usageCounts = chatRepository.countChatsPerCharacter();
+        
+        for (Object[] result : usageCounts) {
+            int charId = (int) result[0];
+            long count = (long) result[1];
+            
+            Character character = characterRepository.findById(charId)
+                .orElseThrow(() -> new RuntimeException("Character not found with id: " + charId));
+            
+            character.setCharUsage(count);
+            characterRepository.save(character);
+        }
+    }
 
 
 }
