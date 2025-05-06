@@ -238,10 +238,11 @@ export default function Chat() {
 
           const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
           
-          const modelResponse = await fetch("https://stallion-valued-painfully.ngrok-free.app/chat", {
+          const modelResponse = await fetch("https://strong-yak-89.loca.lt/chat", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              "Authorization": "104.28.212.150",
             },
             body: JSON.stringify(modelBody),
           });
@@ -363,10 +364,11 @@ export default function Chat() {
         const stringUserId = "" + userId;
 
         const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
-        const modelResponse = await fetch("https://stallion-valued-painfully.ngrok-free.app/chat", {
+        const modelResponse = await fetch("https://strong-yak-89.loca.lt/chat", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": "104.28.212.150",
           },
           body: JSON.stringify(modelBody),
         });
