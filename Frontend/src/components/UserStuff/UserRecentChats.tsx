@@ -188,7 +188,7 @@ const LoginInfo = ({
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-3">
-          {image_path === null ? (
+          {image_path ? (
             <img
               src={image_path}
               alt={name}

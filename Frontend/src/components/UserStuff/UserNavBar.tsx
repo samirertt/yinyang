@@ -28,19 +28,25 @@ const UserNavBar: React.FC<UserNavBarProps> = ({
   useEffect(() => {
     const fetchAvatar = async () => {
       try {
-        
-        const response = await axios.get(`/auth/${username}/profile-image`);
-        setAvatar(response.data); // Update avatar state with the image URL
+        const response = await fetch(`http://localhost:8080/auth/${username}/profile-image`);
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        const data = await response.text(); // <- use .text() because you expect a string, not JSON
+        setAvatar(data); // data is now the URL string
       } catch (error) {
-        console.error("Error fetching avatar:", error);
+        console.error('Error fetching avatar:', error);
       }
     };
-    
+  
     if (username) {
-      fetchAvatar(); 
+      fetchAvatar();
     }
   }, [username]);
   
+
   return (
     <div className="mt-5 flex flex-col md:flex-row items-center justify-between bg-[#212121] ml-5 h-auto w-full">
       <div className="self-start">
