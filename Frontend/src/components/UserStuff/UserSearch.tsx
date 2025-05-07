@@ -37,32 +37,36 @@ const UserSearchBar = () => {
 
   const mappingCharacterInfo = (character: Character) => {
     return {
-      img: character.charImg,
-      name: character.charName,
-      details: character.charDescription,
-      usage: character.charUsage,
-      Id: character.charId,
+      charImg: character.charImg,
+      charName: character.charName,
+      charDescription: character.charDescription,
+      charUsage: character.charUsage,
+      charId: character.charId,
     };
   };
-
   const goToChat = (
     character: {
-      img: string;
-      name: string;
-      details: string;
-      usage: number;
-      Id: number;
+      charImg: string;
+      charName: string;
+      charId: number; // Using uppercase "Id" to match your format
+      charDescription: string;
+      charUsage: number;
     },
-    Id: number
+    id: number
   ) => {
-    addChat(character.name, character.img, character.details, Id);
+    addChat(
+      character.charName,
+      character.charImg,
+      character.charDescription,
+      id
+    );
 
-    if (!chatList.some((chat) => chat.name === character.name)) {
+    if (!chatList.some((chat) => chat.name === character.charName)) {
       const temp = chatList;
       temp.push({
-        name: character.name,
-        image: character.img,
-        details: character.details,
+        name: character.charName,
+        image: character.charImg,
+        details: character.charDescription,
       });
     }
 
@@ -102,30 +106,30 @@ const UserSearchBar = () => {
       </div>
 
       {isExpanded && inputValue.trim().length > 0 && (
-      <div className="absolute right-60 top-30 bg-[#313131] rounded-lg shadow-lg z-30 w-70 overflow-hidden">
-        <div className="overflow-y-auto max-h-60 transition-all ">
-          {characters.length === 0 ? (
-            <p className="text-white text-center p-2">No characters found</p>
-          ) : (
-            <ul className="space-y-2 p-2">
-              {characters.map((character) => (
-                <li
-                  key={character.charId}
-                  className="flex items-center gap-3 p-2 hover:bg-[#414141] rounded-lg "
-                  onMouseDown={() =>
-                    goToChat(mappingCharacterInfo(character), 0)
-                  } 
-                >
-                  <img
-                    src={character.charImg}
-                    alt={character.charName}
-                    className="w-10 h-10 object-cover rounded-full"
-                  />
-                  <h3 className="text-white">{character.charName}</h3>
-                </li>
-              ))}
-            </ul>
-          )}
+        <div className="absolute right-60 top-30 bg-[#313131] rounded-lg shadow-lg z-30 w-70 overflow-hidden">
+          <div className="overflow-y-auto max-h-60 transition-all ">
+            {characters.length === 0 ? (
+              <p className="text-white text-center p-2">No characters found</p>
+            ) : (
+              <ul className="space-y-2 p-2">
+                {characters.map((character) => (
+                  <li
+                    key={character.charId}
+                    className="flex items-center gap-3 p-2 hover:bg-[#414141] rounded-lg "
+                    onMouseDown={() =>
+                      goToChat(mappingCharacterInfo(character), 0)
+                    }
+                  >
+                    <img
+                      src={character.charImg}
+                      alt={character.charName}
+                      className="w-10 h-10 object-cover rounded-full"
+                    />
+                    <h3 className="text-white">{character.charName}</h3>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       )}

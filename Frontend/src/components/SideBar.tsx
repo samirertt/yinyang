@@ -16,7 +16,7 @@ interface SidebarProps {
   historyList:{ name: string; image: string,details:string,chatId:number }[],
   updateActive:any,
   user:{username:string, userId:number},
-  chatId:Number
+  chatId:number
 }
 
 const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:number}, character:Character ,historyList:{ name: string; image: string,details:string,chatId:number }[],updateActive:any,chatId:Number }) => {
@@ -28,6 +28,7 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
   
   
   const [activeCharacter,setActiveCharacter] = useState(props.character);
+
   const [activeChat,setActiveChat] = useState(props.chatId);
 
   const [user,setUser] = useState(props.user);
@@ -180,7 +181,7 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
     const key = "YinYang"
     let shareUrl = "http://localhost:5173/Chat/Share/"+props.chatId;
     
-     
+    
   
   return (
     <div className="flex relative h-screen">
