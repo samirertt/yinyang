@@ -237,8 +237,8 @@ export default function Chat() {
           const stringUserId = "" + userId;
 
           const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
-          
-          const modelResponse = await fetch("https://strong-yak-89.loca.lt/chat", {
+          console.log(modelBody);
+          const modelResponse = await fetch("https://qt8960e9abdedb851f8101ff2b98.free.beeceptor.com", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -364,7 +364,7 @@ export default function Chat() {
         const stringUserId = "" + userId;
 
         const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
-        const modelResponse = await fetch("https://strong-yak-89.loca.lt/chat", {
+        const modelResponse = await fetch("https://qt8960e9abdedb851f8101ff2b98.free.beeceptor.com", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
