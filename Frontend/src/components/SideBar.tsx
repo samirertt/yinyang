@@ -101,6 +101,7 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
   const getUserChats = async ()=>
     {
         const body = {userId:user.userId};
+        console.log(user.userId)
         
         try 
         {

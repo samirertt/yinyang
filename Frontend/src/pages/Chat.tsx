@@ -69,7 +69,7 @@ export default function Chat() {
 
   // Getting the username from location.state if available (optional)
   const location = useLocation();
-  const [character,setCharacter] = useState<Character>({
+  const [character,setCharacter] = useState<Character>(location.state?.character || {
     charImg: "",
     charName: "",
     charId: 0,
@@ -138,7 +138,7 @@ export default function Chat() {
     
     useEffect(() => {
       setActiveCharacter(character);
-
+      console.log(character);
     }, [character]);
 
   function separateMessages(chatText: string): void {
@@ -463,6 +463,7 @@ export default function Chat() {
         setFirstRender(false);
       }
       retrieveMessages(chatId);
+      console.log(activeCharacter);
       
     },[activeCharacter]);
     
