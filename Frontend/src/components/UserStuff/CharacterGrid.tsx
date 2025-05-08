@@ -98,20 +98,22 @@ const CharacterGrid: React.FC<CharacterGridProps> = ({
   };
 
   const numPerPage = 8;
+  const totalPages = Math.ceil(characters.length / numPerPage);
 
   const [page, setPage] = useState(0);
 
   function pageIncrease() {
-    if (page + 1 <= Math.max(1, myList.length / numPerPage)) {
-      setPage(page + 1);
-
+    
+    if (page < totalPages - 1) {
+      setPage((p) => p + 1);
       setDirection(1);
     }
   }
 
   function pageDecrease() {
-    if (page > Math.min(1, Math.ceil(myList.length / numPerPage))) {
-      setPage(page - 1);
+    
+    if (page > 0) {
+      setPage((p) => p - 1);
       setDirection(-1);
     }
   }

@@ -50,24 +50,25 @@ const FavouritesGrid = () => {
   };
 
   const numPerPage = 8;
-
+  const totalPages = Math.ceil(favourite.length / numPerPage);
   const [page, setPage] = useState(0);
 
   function pageIncrease() {
-    if (page + 1 <= Math.max(1, favourite.length / numPerPage)) {
-      setPage(page + 1);
+    
+    if (page < totalPages - 1) {
+      setPage((p) => p + 1);
       setDirection(1);
-      console.log("Right BTN:" + page);
-    } else console.log("no: Right BTN:" + page);
+    }
   }
 
   function pageDecrease() {
-    if (page > Math.min(0, Math.ceil(favourite.length / numPerPage))) {
-      setPage(page - 1);
+    
+    if (page > 0) {
+      setPage((p) => p - 1);
       setDirection(-1);
-      console.log("Left BTN:" + page);
-    } else console.log("no: Left BTN:" + page);
+    }
   }
+
 
   return (
     <div className="space-y-0 bg-[#212121]  px-4 sm:px-0 w-full">
