@@ -36,7 +36,6 @@ public class ChatController {
             return ResponseEntity.status(404).body("\nUser with id: "+userId + " not found!\n");
 
         }
-
     }
 
     @PostMapping("/createChat")

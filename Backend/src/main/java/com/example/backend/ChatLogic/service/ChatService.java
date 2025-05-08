@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -27,6 +28,25 @@ public class ChatService {
     public ChatModel createChat(ChatModel chat)
     {
         return chatRepository.save(chat);
+    }
+
+    public List<Object> getUserChatMetadata(int userId) {
+        List<ChatModel> userChats = getChatsByUserId(userId).orElse(new ArrayList<>());
+        List<Object> chatMetadataList = new ArrayList<>();
+        for (ChatModel chat : userChats) {
+            Character character = characterRepository.findById(chat.getCharId()).orElse(null);
+            if (character != null) {
+                chatMetadataList.add(
+                        Map.of(
+                                "chatId", chat.getChatId(),
+                                "charId", chat.getCharId(),
+                                "name", character.getCharName(),
+                                "image", character.getCharImg()
+                        )
+                );
+            }
+        }
+        return chatMetadataList; // Always return a list, even if empty
     }
 
     public boolean updateChat(int Id, String message)
@@ -54,38 +74,20 @@ public class ChatService {
 
     public Optional<List<ChatModel>> getChatsByUserId(int id) {
         Optional<List<ChatModel>> allChats = Optional.of(chatRepository.findAll());
-
-
-        if(allChats.isPresent())
-        {
+        if (allChats.isPresent()) {
             List<ChatModel> presentChats = allChats.get();
-            System.out.println(presentChats.getFirst());
+            System.out.println("All chats: " + presentChats); // Add this log
 
-            List<ChatModel> userChats = new ArrayList<ChatModel>();
-
-            for(int i = 0;i<presentChats.size();i++)
-            {
-                if(presentChats.get(i).getUserId()==id)
-                {
-                    userChats.add(presentChats.get(i));
+            List<ChatModel> userChats = new ArrayList<>();
+            for (ChatModel chat : presentChats) {
+                if (chat.getUserId() == id) {
+                    userChats.add(chat);
                 }
             }
-            if(userChats!=null)
-                return  Optional.of(userChats);
-            else
-            {
-
-                throw new RuntimeException("\nUser with id: " + id + " doesn't have chats!");
-            }
+            System.out.println("User chats for userId " + id + ": " + userChats); // Add this log
+            return Optional.of(userChats); // Return empty list instead of throwing
         }
-        else
-        {
-            throw new RuntimeException("\nCouldn't get Chats!\n");
-        }
-
-
-
-
+        return Optional.of(new ArrayList<>());
     }
 
     public boolean chatExists(int Id) {
@@ -107,6 +109,5 @@ public class ChatService {
             characterRepository.save(character);
         }
     }
-
 
 }

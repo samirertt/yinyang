@@ -12,13 +12,28 @@ const UserRecentChats = ({
   handleDelete,
   name,
   user_image,
+  user,
+  updateActive,
 }: {
-  chatList: { name: string; image: string }[];
+  chatList: { name: string; image: string; chatId: number; details?: string }[];
   handleDelete: (name: string) => void;
   name: string;
   user_image: string;
+  user?: { userId: number };
+  updateActive: (character: any, newChatId: number) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const changeCharacter = (nameP: string, imageP: string, detailsP: string, chatIdP: number) => {
+    const character = {
+      charImg: imageP,
+      charName: nameP,
+      charId: 0,
+      charDescription: detailsP,
+      charUsage: 0
+    };
+    updateActive(character, chatIdP);
+  };
 
   return (
     <div className="relative">
@@ -67,9 +82,9 @@ const UserRecentChats = ({
           {/* Recent Chats */}
           <h2 className="text-xm mb-5">Recent Chats</h2>
           <div
-            className="h-300"
+            className="h-900"
             style={{
-              maxHeight: "300px",
+              maxHeight: "900px",
               overflowY: "scroll",
               padding: "10px",
               scrollbarWidth: "none",
@@ -81,6 +96,9 @@ const UserRecentChats = ({
                 name={chat.name}
                 image_path={chat.image}
                 onDelete={() => handleDelete(chat.name)}
+                onClick={changeCharacter}
+                details={chat.details}
+                chatId={chat.chatId}
               />
             ))}
           </div>
@@ -100,10 +118,16 @@ const ChatCard = ({
   name,
   image_path,
   onDelete,
+  onClick,
+  details,
+  chatId,
 }: {
   name: string;
   image_path: string;
   onDelete: () => void;
+  onClick: (name: string, image: string, details: string, chatId: number) => void;
+  details?: string;
+  chatId: number;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -117,7 +141,10 @@ const ChatCard = ({
         setShowConfirm(false);
       }}
     >
-      <button className="w-full text-left p-2 text-[var(--white)] rounded hover:bg-[#3a3a3a] relative flex items-center justify-start gap-2">
+      <button 
+        className="w-full text-left p-2 text-[var(--white)] rounded hover:bg-[#3a3a3a] relative flex items-center justify-start gap-2"
+        onClick={() => onClick(name, image_path, details || "", chatId)}
+      >
         <img
           src={image_path}
           alt="Character"

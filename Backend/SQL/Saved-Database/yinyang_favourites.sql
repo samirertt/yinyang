@@ -33,7 +33,7 @@ CREATE TABLE `favourites` (
   KEY `character_id` (`character_id`),
   CONSTRAINT `favourites_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   CONSTRAINT `favourites_ibfk_2` FOREIGN KEY (`character_id`) REFERENCES `characters` (`char_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `favourites` (
 
 LOCK TABLES `favourites` WRITE;
 /*!40000 ALTER TABLE `favourites` DISABLE KEYS */;
-INSERT INTO `favourites` VALUES (1,1,5,'2025-04-09 01:47:52'),(2,1,2,'2025-04-09 01:47:52');
+INSERT INTO `favourites` VALUES (5,4,5,'2025-04-14 09:06:52'),(8,4,2,'2025-04-14 09:27:01'),(10,1,5,'2025-04-30 01:04:48'),(11,1,6,'2025-04-30 01:04:50');
 /*!40000 ALTER TABLE `favourites` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-11 15:41:47
+-- Dump completed on 2025-05-06 22:26:09

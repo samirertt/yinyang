@@ -80,10 +80,26 @@ export default function Chat() {
   const [list, setList] = useState<
     { name: string; image: string; details: string; chatId: number }[]
   >([]);
-  const [chatId, setChatId] = useState<number>(
-    location.state?.chatId || id?  parseInt(id? id:"0",10) : 0
-  );
+  const [chatId, setChatId] = useState<number>(() => {
+    // First check URL parameter
+    if (id) {
+      return parseInt(id, 10);
+    }
+    // Then check location state
+    if (location.state?.chatId) {
+      return location.state.chatId;
+    }
+    // Default to 0 for new chats
+    return 0;
+  });
   const [firstRender, setFirstRender] = useState(true);
+
+  // Load messages when chatId changes
+  useEffect(() => {
+    if (chatId !== 0) {
+      retrieveMessages(chatId);
+    }
+  }, [chatId]);
 
   //Checks Shared Id
   useEffect(()=>
@@ -238,7 +254,7 @@ export default function Chat() {
 
           const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
           console.log(modelBody);
-          const modelResponse = await fetch("https://qt8960e9abdedb851f8101ff2b98.free.beeceptor.com", {
+          const modelResponse = await fetch("https://qtfe388fc116dcf2c9c1a1c1d6f5.free.beeceptor.com/chat", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -364,7 +380,7 @@ export default function Chat() {
         const stringUserId = "" + userId;
 
         const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
-        const modelResponse = await fetch("https://qt8960e9abdedb851f8101ff2b98.free.beeceptor.com", {
+        const modelResponse = await fetch("https://qtfe388fc116dcf2c9c1a1c1d6f5.free.beeceptor.com/chat", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
