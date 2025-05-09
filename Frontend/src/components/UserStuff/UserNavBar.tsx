@@ -2,7 +2,6 @@ import UserAvatar from "../UserStuff/UserAvatar";
 import UserRecentChats from "../UserStuff/UserRecentChats";
 import UserSearchBar from "./UserSearch";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useCharacterContext } from "./CharacterContext";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";

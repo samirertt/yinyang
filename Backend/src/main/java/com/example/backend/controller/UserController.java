@@ -12,6 +12,7 @@ import com.example.backend.service.FavouriteService;
 import com.example.backend.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,17 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
+    @GetMapping("/{userId}/all")
+    public User getUserInfo(@PathVariable Long userId) {
+        Optional<User> user = userService.getUserById(userId);
+
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new NullPointerException("Cannot find user in database");
+        }
+    }
 
     @GetMapping("/{username}/profile-image")
     public String getProfileImage(@PathVariable String username) {
@@ -107,14 +119,11 @@ public class UserController {
     public ResponseEntity<Object> getCharacter(@RequestBody Map<String, Integer> credentials) {
         Integer charId = credentials.get("charId");
 
-        Optional<Character> character =  userService.searchCharactersById(charId);
+        Optional<Character> character = userService.searchCharactersById(charId);
 
-        if(character.isPresent())
-        {
+        if (character.isPresent()) {
             return ResponseEntity.ok(character.get());
-        }
-        else
-        {
+        } else {
             return ResponseEntity.status(404).body("Character not found");
         }
 
@@ -149,5 +158,55 @@ public class UserController {
 //
 
         return ResponseEntity.ok("Character usage updated successfully!");
+    }
+
+    @PutMapping("/{username}/update-firstName")
+    public ResponseEntity<?> updateFirstName(@PathVariable String username, @RequestBody Map<String, String> body) {
+        String newFirstName = body.get("firstName");
+        return userService.updateUserField(username, newFirstName, "firstName");
+    }
+
+    // Update Surname
+    @PutMapping("/{username}/update-surname")
+    public ResponseEntity<?> updateSurname(@PathVariable String username, @RequestBody Map<String, String> body) {
+        String newSurname = body.get("surname");
+        return userService.updateUserField(username, newSurname, "surname");
+    }
+
+    // Update Username
+    @PutMapping("/{username}/update-username")
+    public ResponseEntity<?> updateUsername(@PathVariable String username, @RequestBody Map<String, String> body) {
+        Optional<User> user = userService.getUserByUsername(body.get("username"));
+        if (user.isPresent())
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
+        }else {
+            return userService.updateUserField(username, body.get("username"), "username");
+        }
+    }
+
+    // Update Email
+    @PutMapping("/{username}/update-email")
+    public ResponseEntity<?> updateEmail(@PathVariable String username, @RequestBody Map<String, String> body) {
+        String newEmail = body.get("email");
+        return userService.updateUserField(username, newEmail, "email");
+    }
+
+    // Update Password
+    @PutMapping("/{username}/update-password")
+    public ResponseEntity<?> updatePassword(@PathVariable String username, @RequestBody Map<String, String> body) {
+        String oldPassword = body.get("oldPassword");
+        String newPassword = body.get("newPassword");
+
+        Optional<User> optionalUser = userService.getUserByUsername(username);
+        if (optionalUser.isEmpty()) return ResponseEntity.notFound().build();
+
+        User user = optionalUser.get();
+        if (user.getPassword().equals(oldPassword)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect old password");
+        }
+
+        userService.updateUserField(username,newPassword,"password");
+        return ResponseEntity.ok().body("Password updated successfully");
     }
 }

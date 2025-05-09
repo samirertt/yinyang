@@ -7,6 +7,7 @@ import com.example.backend.repository.CharacterRepository;
 import com.example.backend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.backend.models.User;
@@ -27,7 +28,10 @@ public class UserService {
 
     public Optional<User> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
 
+    public Optional<User> getUserById(Long userId){
+        return userRepository.findById(userId);
     }
 
     public List<Character> getAllCharacters() {
@@ -63,10 +67,10 @@ public class UserService {
         if (userModel.isPresent()) {
             User user = userModel.get();
 //REMOVE THE NEXT IF STATEMENT BEFORE PRESENTATION
-            if (passwordEncoder.matches( rawPassword,passwordEncoder.encode(user.getPassword()) ) ) {
+            if (passwordEncoder.matches(rawPassword, passwordEncoder.encode(user.getPassword()))) {
                 return user;
             }
-            if (passwordEncoder.matches( rawPassword,user.getPassword() ) ) {
+            if (passwordEncoder.matches(rawPassword, user.getPassword())) {
                 return user;
             }
         }
@@ -136,6 +140,27 @@ public class UserService {
         character.setCharUsage(character.getCharUsage() + 1);
         characterRepository.save(character);
 
+    }
+
+    public ResponseEntity<?> updateUserField(String username, String newValue, String fieldName) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            switch (fieldName) {
+                case "firstName" -> user.setFirstName(newValue);
+                case "surname" -> user.setSurname(newValue);
+                case "username" -> user.setUsername(newValue);
+                case "email" -> user.setEmail(newValue);
+                case "password" -> user.setPassword(newValue);
+                default -> throw new IllegalArgumentException("Invalid field name");
+            }
+
+            userRepository.save(user);
+            return ResponseEntity.ok().body(fieldName + " updated");
+        } else {
+            throw new NullPointerException("User not found");
+        }
     }
 
 

@@ -156,6 +156,7 @@ const colors = [
   "#6f42c1",
 ];
 
+
 const getRandomColor = () => {
   return colors[Math.floor(Math.random() * colors.length)];
 };

@@ -29,15 +29,14 @@ export const goToChat = (
   user: {
     username: string;
     userId: number;
-},
-navigate: NavigateFunction,
-chatList: {
+  },
+  navigate: NavigateFunction,
+  chatList: {
     name: string;
     image: string;
     details: string;
-}[]
+  }[]
 ) => {
-    
   addChat(character.name, character.img, character.details, Id);
 
   if (!chatList.some((chat) => chat.name === character.name)) {

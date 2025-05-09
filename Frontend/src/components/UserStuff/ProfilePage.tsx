@@ -1,21 +1,19 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useRef } from "react";
-import { ArrowLeft, Camera, Edit } from "lucide-react";
+import { ArrowLeft, Camera } from "lucide-react";
 import { motion } from "framer-motion";
 import Footer from "../Footer";
 import ProfileImage from "../profileimg";
 import { useCharacterContext } from "./CharacterContext";
 import NavigationTabs from "./NavigationsTab";
+import EditFields, { User } from "./EditFields";
 
 const Profile = () => {
   const location = useLocation();
-  const { name, image_path } = location.state || {};
+  const { image_path } = location.state || {};
   const { avatar, setAvatar } = useCharacterContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-
-  const [editableName, setEditableName] = useState(name);
-  const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -24,9 +22,9 @@ const Profile = () => {
     image_path || avatar || ""
   );
   const [newImage, setNewImage] = useState<File | null>(null);
-
   const token = localStorage.getItem("jwtToken");
-  console.log(window.history.length);
+
+  const { user } = useCharacterContext();
 
   const checkToken = async () => {
     if (!token) {
@@ -59,7 +57,6 @@ const Profile = () => {
       setIsError(false);
     }
   };
-  const { chatList } = useCharacterContext();
 
   const handleImageUpload = async () => {
     if (!newImage) return;
@@ -104,17 +101,6 @@ const Profile = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditableName(event.target.value);
-  };
-
-  const saveName = async () => {
-    setIsEditing(false);
-
-    // Here you would typically make an API call to update the username
-    // For now, we'll just update the local state
   };
 
   return (
@@ -213,23 +199,30 @@ const Profile = () => {
 
       <div className="relative">
         {imagePreview ? (
-          <img
-            src={imagePreview}
-            alt={editableName}
-            className="mt-23 rounded-full w-50 h-50 object-cover"
-          />
+          <div>
+            <img
+              src={imagePreview}
+              alt={user.username}
+              className="mt-23 rounded-full w-50 h-50 object-cover"
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute bottom-2 right-2 bg-gray-800 text-white p-2 rounded-full border-white shadow-lg hover:bg-gray-700 transition"
+            >
+              <Camera size={20} />
+            </button>
+          </div>
         ) : (
           <div className="">
-            <ProfileImage name={editableName} />
+            <ProfileImage name={user.username} />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute bg-gray-800 text-white p-2 rounded-full border-white shadow-lg hover:bg-gray-700 transition"
+            >
+              <Camera size={20} />
+            </button>
           </div>
         )}
-
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          className="absolute bottom-2 right-2 bg-gray-800 text-white p-2 rounded-full border-white shadow-lg hover:bg-gray-700 transition"
-        >
-          <Camera size={20} />
-        </button>
 
         <input
           type="file"
@@ -240,28 +233,9 @@ const Profile = () => {
         />
       </div>
 
-      <div className="flex items-center mt-4 space-x-2">
-        {isEditing ? (
-          <input
-            type="text"
-            value={editableName}
-            onChange={handleNameChange}
-            onBlur={saveName}
-            onKeyDown={(e) => e.key === "Enter" && saveName()}
-            className="bg-transparent text-white text-2xl border-b border-white outline-none"
-            autoFocus
-          />
-        ) : (
-          <h2 className="text-white text-2xl">{editableName}</h2>
-        )}
+      <div className="flex items-center mt-4 space-x-2 flex-col"></div>
 
-        <button onClick={() => setIsEditing(true)}>
-          <Edit
-            className="text-gray-400 hover:text-white cursor-pointer"
-            size={20}
-          />
-        </button>
-      </div>
+      <EditFields user={user} />
 
       {newImage && (
         <button
@@ -272,7 +246,7 @@ const Profile = () => {
           {isLoading ? "Saving..." : "Save Changes"}
         </button>
       )}
-      <NavigationTabs chatList={chatList} />
+      <NavigationTabs />
 
       <Footer />
     </div>

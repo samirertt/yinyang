@@ -1,22 +1,69 @@
 import { useState } from "react";
+import { useCharacterContext } from "./CharacterContext";
+import { useNavigate } from "react-router-dom";
+import { Character } from "./CharacterGrid";
 
 interface NavItem {
   label: string;
   key: string;
 }
 
-const NavigationTabs = ({
-  chatList,
-}: {
-  chatList: { name: string; image: string }[];
-}) => {
+const NavigationTabs = () => {
   const [activeTab, setActiveTab] = useState<string>("history");
-  const [likedItems] = useState<string[]>([]);
+  const navigate = useNavigate();
+
+  const { favourite, addChat, user, chatList } = useCharacterContext();
 
   const tabs: NavItem[] = [
     { key: "history", label: "History" },
     { key: "favourite", label: "Favourite" },
   ];
+
+  const mappingCharacterInfo = (character: Character) => {
+    return {
+      charImg: character.charImg,
+      charName: character.charName,
+      charDescription: character.charDescription,
+      charUsage: character.charUsage,
+      charId: character.charId,
+    };
+  };
+  const goToChat = (
+    character: {
+      charImg: string;
+      charName: string;
+      charId: number; // Using uppercase "Id" to match your format
+      charDescription: string;
+      charUsage: number;
+    },
+    id: number
+  ) => {
+    addChat(
+      character.charName,
+      character.charImg,
+      character.charDescription,
+      id
+    );
+
+    if (!chatList.some((chat) => chat.name === character.charName)) {
+      const temp = chatList;
+      temp.push({
+        name: character.charName,
+        image: character.charImg,
+        details: character.charDescription,
+      });
+    }
+
+    navigate("/Chat", {
+      state: {
+        character: character,
+        historyList: chatList,
+        user: user, // Pass user data here
+        chatId: 0, // Pass chatId data here (if it's 0 then a new chat is created)
+      },
+      replace: true,
+    });
+  };
 
   return (
     <div className="w-[300px] max-w-4xl mx-auto p-6 mb-10">
@@ -56,15 +103,31 @@ const NavigationTabs = ({
         )}
 
         {activeTab === "favourite" && (
-          <div className="text-center py-12">
-            {likedItems.length === 0 ? (
+          <div className="space-y-4">
+            {(favourite?.length ?? 0) === 0 ? (
               <div className="space-y-2">
                 <p className="text-lg font-medium text-white">
                   You haven't liked any Characters yet.
                 </p>
               </div>
             ) : (
-              <div>Liked items list</div>
+              <div className="space-y-4">
+                <ul className="space-y-4">
+                  {favourite.map((character) => (
+                    <li
+                      key={character.charId}
+                      onClick={() =>
+                        goToChat(mappingCharacterInfo(character), 0)
+                      }
+                    >
+                      <ChatCard
+                        name={character.charName}
+                        image_path={character.charImg}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
           </div>
         )}
