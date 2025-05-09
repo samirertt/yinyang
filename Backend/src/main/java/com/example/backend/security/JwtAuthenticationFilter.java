@@ -50,12 +50,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } else {
-            if (token == null) {
-                System.out.println("[JwtAuthFilter] No token found in request");
-            } else {
-                System.out.println("[JwtAuthFilter] Token validation failed");
-            }
         }
 
         filterChain.doFilter(request, response);
