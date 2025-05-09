@@ -81,14 +81,6 @@ const EditFields = ({
         onUpdate={refreshData}
       />
 
-      <EditableField
-        label="Email"
-        name="email"
-        value={userData.email}
-        username={user.username}
-        onUpdate={refreshData}
-      />
-
       <PasswordField username={user.username} onUpdate={refreshData} />
     </div>
   );

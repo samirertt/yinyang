@@ -26,15 +26,6 @@ const Profile = () => {
 
   const { user } = useCharacterContext();
 
-  const checkToken = async () => {
-    if (!token) {
-      navigate("/login");
-      return;
-    } else {
-      navigate(-1);
-    }
-  };
-
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -108,11 +99,9 @@ const Profile = () => {
       <ArrowLeft
         className="absolute left-15 top-1/10 transform -translate-y-1/2 text-white cursor-pointer"
         onClick={() => {
-          if (!token) {
-            navigate("/");
-          } else {
-            navigate("/Login");
-          }
+          navigate("/");
+
+          // navigate("/Login");
         }}
       />
       <h1 className="text-2xl sm:text-3xl text-white pb-4 sm:pb-5 sm:pt-8 text-center">
