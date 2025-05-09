@@ -11,8 +11,8 @@ public class ScheduledTasks {
     @Autowired
     private AdminService adminService;
 
-    // Run every 30 seconds
-    @Scheduled(fixedRate = 30000)
+    // Run every minute
+    @Scheduled(fixedRate = 60000)
     public void updateCharacterUsageCounts() {
         adminService.updateCharacterUsageCounts();
     }

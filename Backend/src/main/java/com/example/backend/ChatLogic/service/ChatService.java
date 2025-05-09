@@ -94,6 +94,14 @@ public class ChatService {
         return chatRepository.existsById(Id);
     }
 
+    public boolean deleteChat(int chatId) {
+        if (chatRepository.existsById(chatId)) {
+            chatRepository.deleteById(chatId);
+            return true;
+        }
+        return false;
+    }
+
     @Transactional
     public void updateCharacterUsageCounts() {
         List<Object[]> usageCounts = chatRepository.countChatsPerCharacter();

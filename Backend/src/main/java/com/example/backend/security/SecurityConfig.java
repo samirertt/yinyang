@@ -50,7 +50,8 @@ public class SecurityConfig {
                         .requestMatchers("/ResetPassword").permitAll()
                         .requestMatchers("/api/password/**").permitAll()
                         .requestMatchers("/**").authenticated()
-                        .requestMatchers("/admin/**").hasAuthority("admin")// Allow authentication endpoints
+                        .requestMatchers("/chat/deleteChat").authenticated()
+                        .requestMatchers("/admin/**").hasAuthority("admin")
                         .requestMatchers("/moderator/**").hasAuthority("moderator")
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

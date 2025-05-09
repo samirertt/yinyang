@@ -254,7 +254,7 @@ export default function Chat() {
 
           const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
           console.log(modelBody);
-          const modelResponse = await fetch("https://qt263a7f3144e8f3f7c0b4c6ee63.free.beeceptor.com/chat", {
+          const modelResponse = await fetch("https://qtdc99921033c1b230c8e1aabb3d.free.beeceptor.com/chat", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -380,7 +380,7 @@ export default function Chat() {
         const stringUserId = "" + userId;
 
         const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
-        const modelResponse = await fetch("https://qt263a7f3144e8f3f7c0b4c6ee63.free.beeceptor.com/chat", {
+        const modelResponse = await fetch("https://qtdc99921033c1b230c8e1aabb3d.free.beeceptor.com/chat", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -491,7 +491,7 @@ export default function Chat() {
         <div className="flex flex-col flex-1 h-full w-full relative p-4 overflow-y-auto space-y-4 items-center">
           {/* Pass username to ChatNav */}
           <ChatNav user={user} />
-          <div className="pt-15 mb-20 w-89 md:min-w-[10px] lg:min-w-[850px] items-center">
+          <div className="pt-15 mb-20 w-89 md:min-w-[10px] lg:min-w-[850px] items-center pb-5">
             {messages.map((msg, index) => (
               <MessageBubble key={index} text={msg.text} sender={msg.sender} image={activeCharacter.charImg} anim={!firstRender} />
             ))}

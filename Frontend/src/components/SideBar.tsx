@@ -6,9 +6,11 @@ import History from "../assets/History.svg";
 import SendIcon from "../assets/SendIcon.svg";
 import Cross from "../assets/Cross.svg";
 import Info from "../assets/info.svg";
+import Trash from "../assets/Delete.svg"
 import { useNavigate } from "react-router-dom";
 import { Character } from "./UserStuff/CharacterGrid";
 import ShareWindow from "./ShareWindow";
+import { jwtDecode } from "jwt-decode";
 
 
 interface SidebarProps {
@@ -35,6 +37,7 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
   // Retrieve token from localStorage
   const token = localStorage.getItem("jwtToken");
   const [shareWindow, setShareWindow] = useState(false);
+  const [showInfoBarDeleteConfirm, setShowInfoBarDeleteConfirm] = useState(false);
   
 
   const toggleCollapse = () => {
@@ -99,10 +102,22 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
     }
   }
 
+  const getUserIdFromToken = () => {
+    if (!token) return null;
+    try {
+      const decoded = jwtDecode<{ userId: number }>(token);
+      return decoded.userId;
+    } catch {
+      return null;
+    }
+  };
+
   const getUserChats = async ()=>
     {
-        const body = {userId:user.userId};
-        console.log(user.userId)
+        const userId = getUserIdFromToken();
+        if (!userId) return;
+        const body = {userId};
+        console.log(userId)
         
         try 
         {
@@ -183,6 +198,27 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
     
     
   
+  const handleDeleteChat = async (chatId: number) => {
+    const token = localStorage.getItem("jwtToken");
+    try {
+      const response = await fetch("http://localhost:8080/chat/deleteChat", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({ chatId }),
+      });
+      if (response.ok) {
+        getUserChats();
+      } else {
+        alert("Failed to delete chat");
+      }
+    } catch (e) {
+      alert("Error deleting chat");
+    }
+  };
+
   return (
     <div className="flex relative h-screen">
       {isCollapsed && (
@@ -272,7 +308,7 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
       )}
 
       <button
-        className="fixed z-50 right-[calc(220px+10px)] top-16 rounded-lg px-1 text-token-text-secondary transition-all duration-1000 ease-in-out cursor-pointer"
+        className={`fixed z-50 transition-all duration-300 rounded-lg px-1 text-token-text-secondary cursor-pointer ${isInfoCollapsed ? 'right-2' : 'right-[calc(220px+10px)]'} top-16`}
         aria-label="Toggle info Bar"
         data-testid="toggle-infoBar-button"
         onClick={toggleInfoBar}
@@ -317,6 +353,43 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
                   className="w-6 h-6 transition-transform duration-200 group-hover:scale-110"
                 />
                 <span>History</span>
+              </button>
+              <button
+                className="flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer relative"
+                onClick={() => setShowInfoBarDeleteConfirm(true)}
+              >
+                <img
+                  src={Trash}
+                  alt="Delete Icon"
+                  className="w-6 h-6 transition-transform duration-200 group-hover:scale-110"
+                />
+                <span>Delete Chat</span>
+                {showInfoBarDeleteConfirm && (
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-950 text-white text-sm p-2 rounded shadow-lg flex gap-2 items-center z-50">
+                    <span>Delete this chat?</span>
+                    <button
+                      className="bg-red-500 px-2 py-1 rounded hover:bg-red-700"
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleDeleteChat(props.chatId as number);
+                        setShowInfoBarDeleteConfirm(false);
+                        navigate("/");
+                        window.location.reload();
+                      }}
+                    >
+                      Yes
+                    </button>
+                    <button
+                      className="bg-gray-500 px-2 py-1 rounded hover:bg-gray-700"
+                      onClick={e => {
+                        e.stopPropagation();
+                        setShowInfoBarDeleteConfirm(false);
+                      }}
+                    >
+                      No
+                    </button>
+                  </div>
+                )}
               </button>
               <button className="flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer" onClick={()=>{
                     props.chatId==0 ? "" : setShareWindow(!shareWindow)

@@ -12,7 +12,7 @@ interface GridItem {
   color: string;
 }
 
-const FilterPage: React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
+const FilterPage: React.FC<UserNavBarProps> = ({ chatList }) => {
   const [categories, setCategories] = useState<GridItem[]>([]);
 
   useEffect(() => {
@@ -80,7 +80,6 @@ const FilterPage: React.FC<UserNavBarProps> = ({ chatList, handleDelete }) => {
     <div className="bg-[#212121] min-h-screen pt-5 px-4 sm:px-6 md:px-10 lg:px-40">
       <UserNavBar
         chatList={chatList}
-        handleDelete={handleDelete}
         username={username}
       />
       <div className="w-auto mx-auto pl-20 pr-20 pb-20 mt-10">

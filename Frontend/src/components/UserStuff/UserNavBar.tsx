@@ -5,16 +5,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useCharacterContext } from "./CharacterContext";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 export interface UserNavBarProps {
   chatList: { name: string; image: string; chatId: number }[];
-  handleDelete: (buttonName: string) => void;
   username: string;
 }
 
-const UserNavBar: React.FC<UserNavBarProps> = ({
+const UserNavBar: React.FC<Omit<UserNavBarProps, 'handleDelete'>> = ({
   chatList,
-  handleDelete,
   username,
 }) => {
   const { avatar, setAvatar, user } = useCharacterContext();
@@ -77,9 +76,21 @@ const UserNavBar: React.FC<UserNavBarProps> = ({
     }
   };
 
+  const getUserIdFromToken = () => {
+    const token = localStorage.getItem("jwtToken");
+    if (!token) return null;
+    try {
+      const decoded = jwtDecode<{ userId: number }>(token);
+      return decoded.userId;
+    } catch {
+      return null;
+    }
+  };
+
   useEffect(() => {
     const getUserChats = async () => {
-      if (!user?.userId) return;
+      const userId = getUserIdFromToken();
+      if (!userId) return;
       const token = localStorage.getItem("jwtToken");
       try {
         const response = await fetch("http://localhost:8080/chat/getUserChats", {
@@ -88,7 +99,7 @@ const UserNavBar: React.FC<UserNavBarProps> = ({
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
           },
-          body: JSON.stringify({ userId: user.userId }),
+          body: JSON.stringify({ userId }),
         });
 
         if (response.ok) {
@@ -117,7 +128,30 @@ const UserNavBar: React.FC<UserNavBarProps> = ({
       }
     };
     getUserChats();
-  }, [user?.userId]);
+  }, []);
+
+  // Delete handler that refreshes the chat list
+  const handleDelete = async (chatId: number) => {
+    const token = localStorage.getItem("jwtToken");
+    try {
+      const response = await fetch("http://localhost:8080/chat/deleteChat", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({ chatId }),
+      });
+      if (response.ok) {
+        // Refresh the chat list
+        (window as any).getUserChats();
+      } else {
+        alert("Failed to delete chat");
+      }
+    } catch (e) {
+      alert("Error deleting chat");
+    }
+  };
 
   return (
     <div className="mt-5 flex flex-col md:flex-row items-center justify-between bg-[#212121] ml-5 h-auto w-full">

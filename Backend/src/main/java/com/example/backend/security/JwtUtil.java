@@ -63,6 +63,14 @@ public class JwtUtil {
                 .getSubject();
     }
 
+    public Integer getUserIdFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.get("userId", Integer.class);
+    }
 
     public boolean validateJwtToken(String token) {
         try {

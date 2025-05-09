@@ -71,7 +71,7 @@ function UsersSmallBoxesBox({ users, moderator, onRoleToggle }: UsersSmallBoxesB
                         key={user.userId}
                         img={
                             user.userImg ||
-                            "https://cmsassets.rgpub.io/sanity/images/dsfx7636/game_data_live/2acb7715797d4183b09fdbfb902ff52a0aa4e0cf-496x560.jpg?auto=format&fit=fill&q=80&w=352"
+                            "https://res.cloudinary.com/dx8qt8hiz/image/upload/v1746803321/Def_otuzdo.jpg"
                         }
                         name={user.username}
                         Id={user.userId}

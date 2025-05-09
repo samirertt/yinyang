@@ -1,13 +1,14 @@
 import Logo from '../assets/logo.png';
 import ProfileImage from '../components/profileimg';
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
   user:{username:string, userId:number};
+  onDelete?: () => void;
 }
 
-const Navbar = ({ user }: NavbarProps) => {
+const Navbar = ({ user, onDelete }: NavbarProps) => {
   const navigate = useNavigate();
   
   const handleBack = () => {
@@ -20,7 +21,7 @@ const Navbar = ({ user }: NavbarProps) => {
       <div className="container mx-auto flex items-center px-4 md:px-10">
         <ArrowLeft
           className="mr-4 cursor-pointer flex-shrink-0"
-          onClick={handleBack} // Updated onClick
+          onClick={handleBack}
         />
 
         <div className="flex items-center flex-grow justify-center flex-1">
@@ -31,8 +32,17 @@ const Navbar = ({ user }: NavbarProps) => {
         </div>
 
         <div className="flex items-center gap-3 ml-4">
+          {onDelete && (
+            <button
+              onClick={onDelete}
+              className="p-2 hover:bg-red-600 rounded-full transition-colors"
+              title="Delete Chat"
+            >
+              <Trash2 size={20} className="text-white" />
+            </button>
+          )}
           {user.username !== "guest" ? (
-            <div className="flex justify-center items-center w-10 h-10  text-white font-bold text-lg rounded-full">
+            <div className="flex justify-center items-center w-10 h-10 text-white font-bold text-lg rounded-full">
               <ProfileImage name={user.username} />
             </div>
           ) : (

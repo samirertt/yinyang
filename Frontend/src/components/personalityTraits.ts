@@ -19,5 +19,7 @@ export const personalityTraits = [
   "Adventurous",
   "Hostile",
   "Crazy",
-  "Flirty"
+  "Flirty",
+  "Sarcastic",
+  "Manipulative"
 ]; 

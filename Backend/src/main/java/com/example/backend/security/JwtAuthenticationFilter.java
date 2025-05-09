@@ -31,13 +31,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = parseJwt(request);
+        System.out.println("[JwtAuthFilter] Incoming token: " + (token != null ? token : "<none>"));
 
         if (token != null && jwtUtil.validateJwtToken(token)) {
+            System.out.println("[JwtAuthFilter] Token is valid");
             String username = jwtUtil.getUsernameFromToken(token);
             List<String> roles = jwtUtil.extractRoles(token);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
+                System.out.println("[JwtAuthFilter] Setting authentication for user: " + username);
                 List<SimpleGrantedAuthority> authorities = roles.stream()
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
@@ -47,6 +49,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        } else {
+            if (token == null) {
+                System.out.println("[JwtAuthFilter] No token found in request");
+            } else {
+                System.out.println("[JwtAuthFilter] Token validation failed");
             }
         }
 

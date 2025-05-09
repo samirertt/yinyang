@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from "react";
 import Copy from "../assets/Copy.svg";
-// import Emi from "../assets/Emi.jpg";
 
 
 interface MessageProps {
@@ -13,6 +12,7 @@ interface MessageProps {
 export default function MessageBubble({ text, sender,image,anim }: MessageProps) {
   const messageRef = useRef<HTMLDivElement>(null);
   const [displayedText, setDisplayedText] = useState(sender === "user" ? text : ""); 
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (sender === "ai") {
@@ -50,6 +50,12 @@ export default function MessageBubble({ text, sender,image,anim }: MessageProps)
     }
   }, [displayedText]);
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
   return (
     <div className={`flex lg:max-w-[770px] min-w-[200px] md:min-w-[500px] lg:min-w-[800px] flex-col items-${sender === "user" ? "end" : "start"}`}>
       <div className={`flex items-center gap-2 pt-2 ${sender === "ai" ? "justify-start" : "justify-end"}`}>
@@ -80,8 +86,13 @@ export default function MessageBubble({ text, sender,image,anim }: MessageProps)
         </div>
       </div>
       {sender === "user" && (
-        <div className="flex justify-end mt-2 gap-4">
-          <img src={Copy} alt="Copy icon" className="w-4 h-4 cursor-pointer" />
+        <div className="flex justify-end mt-2 gap-4 relative">
+          <img src={Copy} alt="Copy icon" className="w-4 h-4 cursor-pointer" onClick={handleCopy} />
+          {copied && (
+            <span className="absolute -top-6 right-0 bg-black text-white text-xs rounded px-2 py-1 shadow-lg z-50">
+              Copied!
+            </span>
+          )}
         </div>
       )}
     </div>

@@ -19,6 +19,11 @@ export default function InputBar({ sendMessage }: InputBarProps) {
     if (message.trim() === "") return;
     sendMessage(message);
     setMessage("");
+    // Scroll to bottom after sending message
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+    });
   };
 
   const handleVoiceToText = () => {
@@ -101,7 +106,7 @@ export default function InputBar({ sendMessage }: InputBarProps) {
 
   return (
     <div
-      className="fixed bottom-4 p-2 min-h-[60px] max-w-[800px] w-[360px] md:min-w-[500px] lg:min-w-[800px] flex items-center rounded-xl shadow-lg"
+      className="fixed bottom-4 p-2 min-h-[60px] max-w-[800px] w-[360px] md:min-w-[500px] lg:min-w-[800px] flex items-center rounded-xl shadow-lg z-50"
       style={{
         backgroundColor: "var(--gray-even-darker)",
         color: "var(--gray-light)",
@@ -110,14 +115,15 @@ export default function InputBar({ sendMessage }: InputBarProps) {
     >
       <textarea
         ref={textareaRef}
-        className="flex-1 rounded-xl min-h-[20px] outline-none resize-none overflow-hidden"
+        className="flex-1 rounded-xl min-h-[20px] outline-none resize-none overflow-y-auto"
         placeholder="Type a message..."
         style={{
           position: "relative",
           backgroundColor: "var(--Black)",
           color: "var(--white)",
           border: "1px solid var(--gray-even-darker)",
-          maxHeight: "40px",
+          maxHeight: "80px",
+          minHeight: "40px",
           padding: "4px",
           textAlign: "left",
           verticalAlign: "top",

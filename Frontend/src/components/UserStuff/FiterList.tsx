@@ -8,7 +8,7 @@ import { useCharacterContext } from "./CharacterContext";
 import { jwtDecode } from "jwt-decode";
 import { goToChat, mappingCharacterInfo } from "./constants";
 
-const FilterList: React.FC<UserNavBarProps> = ({ handleDelete }) => {
+const FilterList: React.FC<UserNavBarProps> = ({ }) => {
   const { user, chatList, addChat, favourite } = useCharacterContext();
   const location = useLocation();
   const { icon, title, bgColor } = location.state;
@@ -79,7 +79,6 @@ const FilterList: React.FC<UserNavBarProps> = ({ handleDelete }) => {
     <div className="bg-[#212121] min-h-screen pt-5 px-4 sm:px-6 md:px-10 lg:px-40">
       <UserNavBar
         chatList={chatList}
-        handleDelete={handleDelete}
         username={username}
       />
       <div

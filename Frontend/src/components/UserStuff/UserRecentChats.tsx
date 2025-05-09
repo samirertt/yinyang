@@ -16,13 +16,14 @@ const UserRecentChats = ({
   updateActive,
 }: {
   chatList: { name: string; image: string; chatId: number; details?: string }[];
-  handleDelete: (name: string) => void;
+  handleDelete: (chatId: number) => void;
   name: string;
   user_image: string;
   user?: { userId: number };
   updateActive: (character: any, newChatId: number) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
 
   const changeCharacter = (nameP: string, imageP: string, detailsP: string, chatIdP: number) => {
     const character = {
@@ -95,7 +96,13 @@ const UserRecentChats = ({
                 key={index}
                 name={chat.name}
                 image_path={chat.image}
-                onDelete={() => handleDelete(chat.name)}
+                onDelete={() => setConfirmDeleteId(chat.chatId)}
+                onConfirmDelete={() => {
+                  handleDelete(chat.chatId);
+                  setConfirmDeleteId(null);
+                }}
+                onCancelDelete={() => setConfirmDeleteId(null)}
+                showConfirm={confirmDeleteId === chat.chatId}
                 onClick={changeCharacter}
                 details={chat.details}
                 chatId={chat.chatId}
@@ -118,6 +125,9 @@ const ChatCard = ({
   name,
   image_path,
   onDelete,
+  onConfirmDelete,
+  onCancelDelete,
+  showConfirm,
   onClick,
   details,
   chatId,
@@ -125,21 +135,20 @@ const ChatCard = ({
   name: string;
   image_path: string;
   onDelete: () => void;
+  onConfirmDelete: () => void;
+  onCancelDelete: () => void;
+  showConfirm: boolean;
   onClick: (name: string, image: string, details: string, chatId: number) => void;
   details?: string;
   chatId: number;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
 
   return (
     <div
       className="relative w-full"
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
-        setIsHovered(false);
-        setShowConfirm(false);
-      }}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <button 
         className="w-full text-left p-2 text-[var(--white)] rounded hover:bg-[#3a3a3a] relative flex items-center justify-start gap-2"
@@ -155,7 +164,7 @@ const ChatCard = ({
 
       {isHovered && !showConfirm && (
         <button
-          onClick={() => setShowConfirm(true)}
+          onClick={onDelete}
           className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-700 p-1 rounded-full hover:bg-red-600 transition-all"
         >
           <Trash2 size={16} className="text-white" />
@@ -163,11 +172,20 @@ const ChatCard = ({
       )}
 
       {showConfirm && (
-        <div
-          className="absolute top-0 bg-gray-800 text-white text-sm p-2 rounded shadow-lg ml-2 cursor-pointer"
-          onClick={onDelete}
-        >
-          <p>You will remove your chat with this character.</p>
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 bg-gray-950 text-white text-sm p-2 rounded shadow-lg flex gap-2 items-center z-50">
+          <span>Delete this chat?</span>
+          <button
+            className="bg-red-500 px-2 py-1 rounded hover:bg-red-700"
+            onClick={onConfirmDelete}
+          >
+            Yes
+          </button>
+          <button
+            className="bg-gray-500 px-2 py-1 rounded hover:bg-gray-700"
+            onClick={onCancelDelete}
+          >
+            No
+          </button>
         </div>
       )}
     </div>

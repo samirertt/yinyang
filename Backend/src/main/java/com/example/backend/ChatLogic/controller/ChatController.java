@@ -2,24 +2,26 @@ package com.example.backend.ChatLogic.controller;
 
 import com.example.backend.ChatLogic.service.ChatService;
 import com.example.backend.models.ChatModel;
+import com.example.backend.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-
 @RestController
 @RequestMapping("/chat")
 @CrossOrigin(origins = "http://localhost:5173")
-
 public class ChatController {
 
     @Autowired
     private ChatService chatService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("/getUserChats")
     public ResponseEntity<Object> getUserChats(@RequestBody Map<String, Integer> credentials) {
@@ -96,6 +98,45 @@ public class ChatController {
             return ResponseEntity.status(404).body("Chat not found");
         }
 
+    }
+
+    @DeleteMapping("/deleteChat")
+    public ResponseEntity<String> deleteChat(@RequestBody Map<String, Integer> credentials, HttpServletRequest request) {
+        Integer chatId = credentials.get("chatId");
+        
+        // Get token from request
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        } else {
+            return ResponseEntity.status(401).body("No valid token provided");
+        }
+
+        // Get userId from token
+        Integer userId = jwtUtil.getUserIdFromToken(token);
+        if (userId == null) {
+            return ResponseEntity.status(401).body("Invalid token");
+        }
+        
+        // First check if the chat exists and belongs to the user
+        Optional<ChatModel> chat = chatService.getChatById(chatId);
+        if (!chat.isPresent()) {
+            return ResponseEntity.status(404).body("Chat not found");
+        }
+        
+        // Verify the chat belongs to the user
+        ChatModel chatModel = chat.get();
+        if (chatModel.getUserId() != userId) {
+            return ResponseEntity.status(403).body("You don't have permission to delete this chat");
+        }
+        
+        boolean deleted = chatService.deleteChat(chatId);
+        
+        if (deleted) {
+            return ResponseEntity.ok("Chat deleted successfully");
+        } else {
+            return ResponseEntity.status(404).body("Chat not found");
+        }
     }
 
 }
