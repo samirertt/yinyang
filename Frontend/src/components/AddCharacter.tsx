@@ -18,13 +18,8 @@ const AddCharacter = () => {
 
   // Handle trait selection
   const handleTraitToggle = (trait: string) => {
-    setSelectedTraits(prev => {
-      const newTraits = prev.includes(trait)
-        ? prev.filter(t => t !== trait)
-        : [...prev, trait];
-      setCharacteristics(newTraits.join(", "));
-      return newTraits;
-    });
+    setSelectedTraits([trait]); // Only allow one trait to be selected
+    setCharacteristics(trait);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,11 +1,12 @@
 import { SetStateAction, useState } from "react";
-import { useLocation,Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import "./Styles/NavBar.css";
 import "../MaginifyingGlass.png";
 
 function NavBar(props: {logged: any; admin: any }) {
   const [isLogged, setIsLogged] = useState(props.logged);
   const [isAdmin, setIsAdmin] = useState(props.admin);
+  const navigate = useNavigate();
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -28,6 +29,12 @@ function NavBar(props: {logged: any; admin: any }) {
     setInputValue(e.target.value);
   };
 
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    localStorage.removeItem("jwtToken");
+    navigate("/");
+  };
+
   return (
     <div
       className="navBarContainer"
@@ -39,8 +46,8 @@ function NavBar(props: {logged: any; admin: any }) {
       }}
     >
       <a
-        style={{ color: "white", fontWeight: "bolder", fontSize: "24px" }}
-        href="http://localhost:5173"
+        style={{ color: "white", fontWeight: "bolder", fontSize: "24px", cursor: "pointer" }}
+        onClick={handleLogoClick}
       >
         Yinyang
       </a>

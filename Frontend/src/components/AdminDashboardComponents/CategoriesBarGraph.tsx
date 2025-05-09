@@ -147,7 +147,7 @@ const personalityData = Object.entries(personalityCountMap).map(([title, count])
         <ResponsiveContainer>
           <PieChart margin={{ top: 10, right: 0, left: 0, bottom: 10 }}>
             <Pie
-              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+              label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
               labelLine={true}
               data={usageData}
               dataKey="usage"
@@ -165,10 +165,10 @@ const personalityData = Object.entries(personalityCountMap).map(([title, count])
             </Pie>
             <Tooltip
               contentStyle={{
-                backgroundColor: '#2F2F2F',
+                backgroundColor: '#ffffff',
                 border: 'none',
                 borderRadius: '8px',
-                color: '#ffffff'
+                color: '#000000',
               }}
             />
           </PieChart>

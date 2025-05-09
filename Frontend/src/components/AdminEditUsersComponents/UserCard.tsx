@@ -13,7 +13,13 @@ function UserCard({ img, name, Id, role, onRoleToggle }: UserCardProps) {
     return (
         <div className="gap-4 bg-[#2F2F2F] text-[#acacaf] p-6 rounded-xl shadow-md hover:bg-[#3A3A3A] transition flex flex-col items-center">
             <div className="flex flex-col items-center">
-                <img src={img} className="mb-4 rounded-full" alt={name} />
+                <div className="w-[300px] h-[300px] rounded-full overflow-hidden mb-4">
+                    <img 
+                        src={img} 
+                        alt={name} 
+                        className="w-full h-full object-cover"
+                    />
+                </div>
                 <h3 className="text-xl font-bold text-[clamp(80%,16px,100%)]">{name}</h3>
                 <p className="text-sm text-gray-400">ID: {Id}</p>
                 <button 

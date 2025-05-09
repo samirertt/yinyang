@@ -22,7 +22,7 @@ function SmallBoxesBox(props: { inputValue: any; characters:Array<{ img: string;
     const searchVal= props.inputValue;
     
     const characters = props.characters;
-    const numPerPage = 6;
+    const numPerPage = 8;
     
     const [page,setPage] = useState(0);
 

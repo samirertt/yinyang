@@ -173,7 +173,13 @@ const RemoveCharacter = () => {
               setIsPopupOpen(true);
             }}
           >
-            <img src={character.charImg} alt={character.charName} className="w-28 h-28 rounded-full mb-4" />
+            <div className="w-[112px] h-[112px] rounded-full overflow-hidden mb-4">
+              <img 
+                src={character.charImg} 
+                alt={character.charName} 
+                className="w-full h-full object-cover"
+              />
+            </div>
             <h3 className="text-xl font-bold">{character.charName}</h3>
             <p className="text-sm text-gray-400">ID: {character.charId}</p>
           </div>
@@ -184,7 +190,13 @@ const RemoveCharacter = () => {
       {isPopupOpen && selectedCharacter && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-[#1A1A1A] p-6 rounded-lg shadow-lg w-96 text-center">
-            <img src={selectedCharacter.charImg} alt={selectedCharacter.charName} className="w-24 h-24 mx-auto rounded-full mb-4" />
+            <div className="w-[96px] h-[96px] rounded-full overflow-hidden mx-auto mb-4">
+              <img 
+                src={selectedCharacter.charImg} 
+                alt={selectedCharacter.charName} 
+                className="w-full h-full object-cover"
+              />
+            </div>
             <h3 className="text-xl font-semibold text-white mb-2">
               Delete Character: {selectedCharacter.charName}?
             </h3>

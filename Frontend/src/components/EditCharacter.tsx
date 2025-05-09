@@ -68,13 +68,8 @@ const EditCharacter = () => {
 
   // Handle trait selection
   const handleTraitToggle = (trait: string) => {
-    setSelectedTraits(prev => {
-      const newTraits = prev.includes(trait)
-        ? prev.filter(t => t !== trait)
-        : [...prev, trait];
-      setNewCharacteristics(newTraits.join(", "));
-      return newTraits;
-    });
+    setSelectedTraits([trait]); // Only allow one trait to be selected
+    setNewCharacteristics(trait);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -287,7 +282,13 @@ const EditCharacter = () => {
               setIsPopupOpen(true);
             }}
           >
-            <img src={character.charImg} alt={character.charName} className="w-28 h-28 rounded-full mb-4" />
+            <div className="w-[112px] h-[112px] rounded-full overflow-hidden mb-4">
+              <img 
+                src={character.charImg} 
+                alt={character.charName} 
+                className="w-full h-full object-cover"
+              />
+            </div>
             <h3 className="text-xl font-bold">{character.charName}</h3>
             <p className="text-sm text-gray-400">ID: {character.charId}</p>
           </div>
@@ -298,11 +299,13 @@ const EditCharacter = () => {
       {isPopupOpen && selectedCharacter && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center pt-12">
           <div className="bg-[#1A1A1A] p-6 rounded-lg shadow-lg w-140 text-center max-h-[87vh] overflow-y-auto">
-            <img 
-              src={imagePreview || selectedCharacter.charImg} 
-              alt={newName} 
-              className="w-24 h-24 mx-auto rounded-full mb-4 object-cover" 
-            />
+            <div className="w-[96px] h-[96px] rounded-full overflow-hidden mx-auto mb-4">
+              <img 
+                src={imagePreview || selectedCharacter.charImg} 
+                alt={newName} 
+                className="w-full h-full object-cover"
+              />
+            </div>
             <h3 className="text-xl font-semibold text-white mb-2">
               Editing: {selectedCharacter.charName}
             </h3>

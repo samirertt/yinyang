@@ -254,7 +254,7 @@ export default function Chat() {
 
           const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
           console.log(modelBody);
-          const modelResponse = await fetch("https://qtfe388fc116dcf2c9c1a1c1d6f5.free.beeceptor.com/chat", {
+          const modelResponse = await fetch("https://qt263a7f3144e8f3f7c0b4c6ee63.free.beeceptor.com/chat", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -380,7 +380,7 @@ export default function Chat() {
         const stringUserId = "" + userId;
 
         const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
-        const modelResponse = await fetch("https://qtfe388fc116dcf2c9c1a1c1d6f5.free.beeceptor.com/chat", {
+        const modelResponse = await fetch("https://qt263a7f3144e8f3f7c0b4c6ee63.free.beeceptor.com/chat", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
