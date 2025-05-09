@@ -106,7 +106,7 @@ export default function InputBar({ sendMessage }: InputBarProps) {
 
   return (
     <div
-      className="fixed bottom-4 p-2 min-h-[60px] max-w-[800px] w-[360px] md:min-w-[500px] lg:min-w-[800px] flex items-center rounded-xl shadow-lg z-50"
+      className="fixed bottom-4 p-2 min-h-[60px] max-w-[800px] w-[360px] md:min-w-[500px] lg:min-w-[800px] flex items-center rounded-xl shadow-lg z-5"
       style={{
         backgroundColor: "var(--gray-even-darker)",
         color: "var(--gray-light)",

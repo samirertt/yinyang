@@ -213,7 +213,6 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
         getUserChats();
       }
     } catch (e) {
-      alert("Error deleting chat: " + (e instanceof Error ? e.message : ""));
     }
   };
 
