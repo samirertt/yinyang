@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@clerk/react-router": "^1.1.0"
+    "@clerk/react-router": "^1.1.0",
+    "@tsmx/string-crypto": "^1.0.6"
   }
 }

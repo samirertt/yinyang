@@ -18,16 +18,14 @@ interface SidebarProps {
   historyList:{ name: string; image: string,details:string,chatId:number }[],
   updateActive:any,
   user:{username:string, userId:number},
-  chatId:number
+  chatId:Promise<number> | number
 }
 
-const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:number}, character:Character ,historyList:{ name: string; image: string,details:string,chatId:number }[],updateActive:any,chatId:Number }) => {
+const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:number}, character:Character ,historyList:{ name: string; image: string,details:string,chatId:number }[],updateActive:any,chatId:Promise<number> | number }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isInfoCollapsed, setIsInfoCollapsed] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  
-  
   
   const [activeCharacter,setActiveCharacter] = useState(props.character);
 
@@ -39,6 +37,9 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
   const [shareWindow, setShareWindow] = useState(false);
   const [showInfoBarDeleteConfirm, setShowInfoBarDeleteConfirm] = useState(false);
   
+  useEffect(() => {
+  setActiveCharacter(props.character);
+}, [props.character])
 
   const toggleCollapse = () => {
     setIsCollapsed((prev) => !prev);
@@ -178,7 +179,6 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
           console.error("Error:", error);
         }
 
-        
         return;
     }
 
@@ -192,12 +192,39 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
         
       },[props.chatId]);
     
-      
-    const key = "YinYang"
-    let shareUrl = "http://localhost:5173/Chat/Share/"+props.chatId;
-    
-    
-  
+    async function encrypt(toEncrypt:string)
+  {
+    try {
+        console.log("Encrypting....");
+        const token = localStorage.getItem("jwtToken");
+        const response = await fetch(`http://localhost:8080/crypt/encrypt/${toEncrypt}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`, // Send the JWT token for authorization
+          },
+        });
+
+        if (response.ok) {
+
+          const data = await response.json();
+          console.log(data.encrypted);
+          return data.encrypted;
+          
+        }
+      } catch (error) {
+        console.error("Error:", error);
+
+      }
+  }
+  const [shareUrl,setShareUrl] = useState("");
+  async function generateShareUrl()
+  {
+    setShareUrl("http://localhost:5173/Chat/Share/"+ await encrypt(props.chatId.toString()));
+    console.log(shareUrl);
+
+  } 
+
   const handleDeleteChat = async (chatId: number) => {
     const token = localStorage.getItem("jwtToken");
     try {
@@ -390,7 +417,7 @@ const Sidebar: React.FC<SidebarProps> = (props: {user:{username:string, userId:n
               </button>
               <button className="flex items-center gap-3 w-full px-4 py-2 hover:bg-[var(--gray-almost-black)] rounded-xl cursor-pointer" onClick={()=>{
                     props.chatId==0 ? "" : setShareWindow(!shareWindow)
-                    
+                    generateShareUrl();
                   }}>
                 <img
                   src={SendIcon}

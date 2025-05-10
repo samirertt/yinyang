@@ -65,7 +65,36 @@ export default function Chat() {
   // Create a user object from decoded data
   const user = { username, userId };
   const { id } = useParams();
-  
+
+  async function decrypt(toDecrypt:string):Promise<string>
+  {
+    try {
+        console.log("Decrypting....");
+        const token = localStorage.getItem("jwtToken");
+        const response = await fetch(`http://localhost:8080/crypt/decrypt/${toDecrypt}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`, // Send the JWT token for authorization
+          },
+        });
+
+        if (response.ok) {
+
+          const data = await response.json();
+          return data.decrypted;
+          
+          
+        } else {
+          setError("Couldn't Encrypt");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        setError("Connection Error");
+        
+      }
+      return "";
+  }
 
   // Getting the username from location.state if available (optional)
   const location = useLocation();
@@ -76,35 +105,16 @@ export default function Chat() {
     charDescription: "",
     charUsage: 0
   });
+  
 
   const [list, setList] = useState<
     { name: string; image: string; details: string; chatId: number }[]
   >([]);
-  const [chatId, setChatId] = useState<number>(() => {
-    // First check URL parameter
-    if (id) {
-      return parseInt(id, 10);
-    }
-    // Then check location state
-    if (location.state?.chatId) {
-      return location.state.chatId;
-    }
-    // Default to 0 for new chats
-    return 0;
-  });
+  const [chatId, setChatId] = useState<number>(
+    location.state?.chatId || id?  -1 : 0
+  );
   const [firstRender, setFirstRender] = useState(true);
-
-  // Load messages when chatId changes
-  useEffect(() => {
-    if (chatId !== 0) {
-      retrieveMessages(chatId);
-    }
-  }, [chatId]);
-
-  //Checks Shared Id
-  useEffect(()=>
-    {
-      const getCharFromId = async (charId:number)=>
+  const getCharFromId = async (charId:number)=>
       {
         const body = { charId: charId };
 
@@ -133,18 +143,25 @@ export default function Chat() {
         }
       }
       
-      const fetchCharId = async ()=>
-        {
-          const charId = await retrieveMessages(chatId);
-          const sharedChar = await getCharFromId(charId);
-          
-          setCharacter(sharedChar);
-        }
+  const fetchCharId = async ()=>
+    {
+      const charId = await retrieveMessages(chatId,true);
+      const sharedChar = await getCharFromId(charId);
+      
+      setCharacter(sharedChar);
+    }
+
+  //Checks Shared Id
+  useEffect(()=>
+    {
+      const setDecryptedChatId = async (id:string)=>{
+        const decryptedID = await decrypt(id);
+        setChatId(parseInt(decryptedID,10));
+      }
+      
       if(id)
       {  
-        setChatId(parseInt(id,10));
-        
-        fetchCharId();
+        setDecryptedChatId(id);
       }
       else
       {
@@ -152,9 +169,16 @@ export default function Chat() {
       }
     },[]);
     
+    useEffect(()=>{
+      if(chatId>0)
+      {
+        if(!character.charName)
+          fetchCharId();
+      }
+    },[chatId])
+
     useEffect(() => {
       setActiveCharacter(character);
-      console.log(character);
     }, [character]);
 
   function separateMessages(chatText: string): void {
@@ -169,7 +193,7 @@ export default function Chat() {
     setMessages(msgs);
   }
 
-  const retrieveMessages = async (chatId: number) => {
+  const retrieveMessages = async (chatId: number,gettingCharId?:boolean) => {
     if (chatId === 0) {
       setMessages([{ text: "Hello! How can I help you today?", sender: "ai" }]);
       return;
@@ -190,11 +214,23 @@ export default function Chat() {
         
         const data = await response.json();
         
-        separateMessages(data.chatText);
+        
         if(id)
         {
-
-          return data.charId;
+          if(gettingCharId)
+          {
+            return data.charId;
+          }
+          else
+          {
+            separateMessages(data.chatText);
+            return data.charId;
+          }
+          
+        }
+        else
+        {
+          separateMessages(data.chatText);
         }
         
       } else {
@@ -254,7 +290,7 @@ export default function Chat() {
 
           const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
           console.log(modelBody);
-          const modelResponse = await fetch("https://qtdc99921033c1b230c8e1aabb3d.free.beeceptor.com/chat", {
+          const modelResponse = await fetch("https://qt8960e9abdedb851f8101ff2b98.free.beeceptor.com", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -380,7 +416,7 @@ export default function Chat() {
         const stringUserId = "" + userId;
 
         const modelBody = {user_id: stringUserId,chat_id: stringId, message:message, char_id:stringCharId};
-        const modelResponse = await fetch("https://qtdc99921033c1b230c8e1aabb3d.free.beeceptor.com/chat", {
+        const modelResponse = await fetch("https://qt8960e9abdedb851f8101ff2b98.free.beeceptor.com", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -491,10 +527,10 @@ export default function Chat() {
         <div className="flex flex-col flex-1 h-full w-full relative p-4 overflow-y-auto space-y-4 items-center">
           {/* Pass username to ChatNav */}
           <ChatNav user={user} />
-          <div className="pt-15 mb-20 w-89 md:min-w-[10px] lg:min-w-[850px] items-center pb-5">
-            {messages.map((msg, index) => (
+          <div className="pt-15 mb-20 w-89 md:min-w-[10px] lg:min-w-[850px] items-center">
+            { activeCharacter?.charImg ? (messages.map((msg, index) => (
               <MessageBubble key={index} text={msg.text} sender={msg.sender} image={activeCharacter.charImg} anim={!firstRender} />
-            ))}
+            ))) :<div>Loading character...</div> }
             <InputBar sendMessage={sendMessage} />
           </div>
           {typing && <Typing />}

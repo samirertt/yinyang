@@ -46,6 +46,8 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPointJwt))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/crypt/**").permitAll()
+                        .requestMatchers("/chat/getMessages").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/ResetPassword").permitAll()
                         .requestMatchers("/api/password/**").permitAll()
